@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <menuitem name="Vimeo Integration"
+                  id="vimeo_root_menu"
+                  web_icon="vimeo_configuration,static/description/logo.png"
+                  sequence="1" />
+
+        <menuitem name="Vimeo Config"
+                  action="action_vimeo_config"
+                  id="menu_action_vimeo_config"
+                  parent="vimeo_root_menu"
+                  sequence="1"/>
+    </data>
+</odoo>

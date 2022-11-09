@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="vimeo_tree_view" model="ir.ui.view">
+            <field name="name">Vimeo Configuration</field>
+            <field name="model">vimeo.config</field>
+            <field name="arch" type="xml">
+                <tree string="Configuration">
+                    <field name="client_id"/>
+                    <field name="client_secret"/>
+                    <field name="access_token"/>
+                    <field name="folder_name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="vimeo_form_view" model="ir.ui.view">
+            <field name="name">Vimeo Configuration</field>
+            <field name="model">vimeo.config</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group col="4">
+                            <field name="company_id"/>
+                        </group>
+                        <group string="Authentication" colspan="4">
+                            <group>
+                                <field name="client_id" required="1"/>
+                                <field name="client_secret" required="1"/>
+                                <field name="access_token" required="1"/>
+                                <field name="folder_name" required="1"/>
+                                <field name="user_id"/>
+                                <field name="school_code" readonly='1'/>
+                                <field name="timeline"/>
+                                <field name="e_learning"/>
+                                <button name="upload_video" type="object" string="Upload" icon="fa-cloud-upload"/>
+                                <button name="delete_single_video" type="object" string="Delete Single Video" icon="fa-trash"/>
+                                <button name="delete_folder" type="object" string="Delete folder" icon="fa-folder"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_vimeo_config" model="ir.actions.act_window">
+            <field name="name">Vimeo Configuration</field>
+            <field name="res_model">vimeo.config</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

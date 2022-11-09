@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <menuitem
+                id="daily_exam_custom.main_menu_custom_daily_exam"
+                name="Daily Exam"
+                action="menu_custom_daily_exams"
+                parent="smartschool_exam.menu_smart_exam_root"
+                sequence="3" />
+    </data>
+</odoo>

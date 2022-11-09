@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_dropbox_settings" model="ir.ui.view">
+        <field name="name">dropbox.settings.form</field>
+        <field name="model">dropbox.settings</field>
+        <field name="arch" type="xml">
+            <form string="Dropbox Settings">
+                <sheet>
+                    <group col="4">
+                        <field name="company_id"/>
+                    </group>
+                    <group col="4" string="Connection Information">
+                        <field name="dropbox_url" widget="url"/>
+                        <field name="dropbox_api_key"/>
+                        <field name="dropbox_secret_key" />
+                        <field name="message"/>
+                        <field name="homework"/>
+                        <field name="assignment"/>
+                        <field name="timeline"/>
+                    </group>
+                    <group string="Authentication" colspan="4">
+                        <group>
+                            <field name="dropbox_access_token"/>
+                            <field name="dropbox_refresh_token"/>
+                            <button name="test_connection" type="object" string="Test Connection" icon="fa-television"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="dropbox_config_tree_view">
+        <field name="model">dropbox.settings</field>
+        <field name="arch" type="xml">
+            <tree string="Dropbox Settings">
+                <field name="dropbox_url"/>
+                <field name="dropbox_api_key"/>
+                <field name="dropbox_secret_key"/>
+                <field name="dropbox_access_token"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_dropbox_settings" model="ir.actions.act_window">
+        <field name="name">Dropbox Settings</field>
+        <field name="res_model">dropbox.settings</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+
+</odoo>

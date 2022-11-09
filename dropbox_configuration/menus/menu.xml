@@ -1,0 +1,15 @@
+<odoo>
+
+    <menuitem id="dropbox_configuration_main_menu"
+              name="Dropbox"
+              web_icon="dropbox_configuration,static/description/icon.png"
+              sequence="1"/>
+
+
+    <menuitem id="menu_dropbox_settings"
+              name="Dropbox Settings"
+              parent="dropbox_configuration_main_menu"
+              sequence="3"
+              action="action_dropbox_settings"/>
+
+</odoo>
