@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_session_summary_by_config_template">
+        <t t-call="web.internal_layout">
+            <t t-set="doc" t-value="doc.with_context(lang=lang)" />
+            <div class="page">
+                <div class="oe_structure"/>
+                <t t-set="config_sessions" t-value="sessions.filtered(lambda r: r.config_id.id == doc.id)" />
+                <h3>
+                    Scheduler:
+                    <span t-field="doc.name"/>
+                </h3>
+                <div style="font-size: 20px;">Payment Methods Summary</div>
+                <table class="table table-condensed table-striped o_main_table">
+                    <thead>
+                        <tr>
+                            <th width="80%">Journal</th>
+                            <!-- <th class="text-right">Currency</th> -->
+                            <th class="text-right">Amount Received</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="payments" t-value="config_sessions.mapped('payment_ids').filtered(lambda p: p.state in ('posted', 'reconciled')" />
+                        <t t-set="journals" t-value="payments.mapped('journal_id')" />
+                        <t t-set="tot_payment" t-value="0" />
+                        <tr t-foreach="journals" t-as="journal">
+                            <td>
+                                <span t-field="journal.name" />
+                            </td>
+                            <!-- <td class="text-right">
+                                <span t-esc="journal.currency_id.name or doc.currency_id.name" />
+                            </td> -->
+                            <t t-set="amount" t-value="sum(payments.filtered(lambda p: p.journal_id.id == journal.id).mapped('amount'))" />
+                            <t t-set="tot_payment" t-value="tot_payment + amount" />
+                            <td class="text-right">
+                                <span t-esc="amount" t-options="{'widget': 'float', 'precision': 3}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Total</th>
+                            <th class="text-right"><t t-esc="tot_payment" t-options="{'widget': 'float', 'precision': 3}"/></th>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="font-size: 20px;" class="mt32">Payments</div>
+                <table class="table table-condensed table-striped o_main_table">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Reference</th>
+                            <th>Journal</th>
+                            <th>Employee</th>
+                            <th>Memo</th>
+                            <th class="text-right">Amount</th>
+                            <th>State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="tot_payment" t-value="0" />
+                        <tr t-foreach="config_sessions.mapped('payment_ids')" t-as="payment">
+                            <td>
+                                <span t-field="payment.partner_id.name" />
+                            </td>
+                            <td>
+                                <span t-field="payment.payment_date" />
+                            </td>
+                            <td>
+                                <span t-field="payment.name" />
+                            </td>
+                            <td>
+                                <span t-field="payment.journal_id.name" />
+                            </td>
+                            <td>
+                                <span t-field="payment.med_employee_id" />
+                            </td>
+                            <td>
+                                <span t-field="payment.communication" />
+                            </td>
+                            <td class="text-right">
+                                <span t-field="payment.amount" />
+                                <t t-set="tot_payment" t-value="tot_payment + payment.amount" />
+                            </td>
+                            <td>
+                                <span t-field="payment.state" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="6" class="text-right">Total</th>
+                            <th class="text-right"><t t-esc="tot_payment" t-options="{'widget': 'float', 'precision': 3}"/></th>
+                            <th />
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="font-size: 20px;" class="mt32">Invoices</div>
+                <table class="table table-condensed table-striped o_main_table">
+                    <thead>
+                        <tr>
+                            <th>Number</th>
+                            <th>Customer</th>
+                            <th>Appointment</th>
+                            <th>Employee</th>
+                            <th class="text-right">Total Amount</th>
+                            <th class="text-right">Due Amount</th>
+                            <th>State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="tot_amount" t-value="0" />
+                        <t t-set="tot_residual" t-value="0" />
+                        <tr t-foreach="config_sessions.mapped('invoice_ids')" t-as="inv">
+                            <td>
+                                <span t-field="inv.name" />
+                            </td>
+                            <td>
+                                <span t-field="inv.partner_id.name" />
+                            </td>
+                            <td>
+                                <span t-field="inv.medical_order_id.name" />
+                            </td>
+                            <td>
+                                <span t-field="inv.med_employee_id" />
+                            </td>
+                            <td class="text-right">
+                                <t t-set="tot_amount" t-value="tot_amount + inv.amount_total" />
+                                <span t-field="inv.amount_total" />
+                            </td>
+                            <td class="text-right">
+                                <t t-set="tot_residual" t-value="tot_residual + inv.amount_residual" />
+                                <span t-field="inv.amount_residual" />
+                            </td>
+                            <td>
+                                <span t-field="inv.state" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="4" class="text-right">Total</th>
+                            <th class="text-right"><t t-esc="tot_amount" t-options="{'widget': 'float', 'precision': 3}"/></th>
+                            <th class="text-right"><t t-esc="tot_residual" t-options="{'widget': 'float', 'precision': 3}"/></th>
+                            <th />
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <template id="session_summary_by_config_report_template">
+        <t t-call="web.html_container">
+            <t t-foreach="configs" t-as="doc">
+                <t t-set="lang" t-value="doc.env.user.partner_id.lang"/>
+                <t t-call="medical_js.report_session_summary_by_config_template" t-lang="lang"/>
+            </t>
+        </t>
+    </template>
+
+    <report
+        id="medical_session_by_config_report_action"
+        model="medical.session.summary"
+        string="Session Statement Summary By Config"
+        report_type="qweb-pdf"
+        name="medical_js.session_summary_by_config_report_template"
+        file="medical_js.session_summary_by_config_report_template"
+    />
+</odoo>

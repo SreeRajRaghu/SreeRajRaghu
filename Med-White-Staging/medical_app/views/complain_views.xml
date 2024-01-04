@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_patient_complain_form" model="ir.ui.view">
+        <field name="name">view.patient.complain.form</field>
+        <field name="model">patient.complain</field>
+        <field name="arch" type="xml">
+            <form string="Complain">
+                <header>
+                    <field name="state" widget="statusbar" clickable="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <field name="complain"/>
+                        <field name="resolution"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="appointment_id"/>
+                            <field name="clinic_id"/>
+                            <field name="complain_date"/>
+                            <field name="create_eid"/>
+                            <field name="visit_date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="complain_type_id"/>
+                            <field name="partner_id"/>
+                            <field name="is_customer_satisfied"/>
+                            <field name="resolved_eid"/>
+                            <field name="resolved_on"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_patient_complain_tree" model="ir.ui.view">
+        <field name="name">view.patient.complain.tree</field>
+        <field name="model">patient.complain</field>
+        <field name="arch" type="xml">
+            <tree string="Complain">
+                <field name="name"/>
+                <field name="complain_type_id"/>
+                <field name="complain_date"/>
+                <field name="appointment_id"/>
+                <field name="clinic_id"/>
+                <field name="partner_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_patient_complain" model="ir.actions.act_window">
+        <field name="name">Complain</field>
+        <field name="res_model">patient.complain</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_patient_complain"
+        name="Complain"
+        parent="medical_app.menu_medical_misc_menu"
+        action="action_patient_complain"
+        groups="medical_app.group_manage_complain"/>
+
+    <!-- Complain Type -->
+    <record id="view_complain_type_tree" model="ir.ui.view">
+        <field name="name">Complain Type</field>
+        <field name="model">complain.type</field>
+        <field name="arch" type="xml">
+            <tree string="Complain Type" editable="top">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_complain_type" model="ir.actions.act_window">
+        <field name="name">Complain Type</field>
+        <field name="res_model">complain.type</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem
+        id="menu_complain_type"
+        name="Complain Type"
+        parent="medical_app.menu_medical_misc_menu"
+        action="action_complain_type"
+        groups="medical_app.group_manage_complain"/>
+</odoo>

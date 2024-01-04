@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <report
+        id="action_employee_leave_accural_balance"
+        string="Employee Accural Balance"
+        model="employee.accural.balance.wizard"
+        report_type="qweb-pdf"
+        name="boutiqaat_reports.report_employee_leave_accural_balance"
+        file="boutiqaat_reports.report_employee_leave_accural_balance"
+        print_report_name="Employee Accural Balance"
+        />
+
+    <template id="report_employee_leave_accural_balance">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <strong>Print date</strong>: <t t-esc="datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')"/>
+                    <h3 class="text-center">Employee Accural Balance</h3>
+
+                    <table class="table table-condensed">
+                       <thead>
+                            <tr style="background-color:#f9f9f9;">
+                                <td class="text-center" style="background-color:#C0C0C0;"><strong>Employee</strong></td>
+                                <td class="text-center" style="background-color:#C0C0C0;"><strong>Holiday Status</strong></td>
+                                <td class="text-center" style="background-color:#C0C0C0;"><strong>Date</strong></td>
+                                <td class="text-center" style="background-color:#C0C0C0;"><strong>Allocation Value</strong></td>
+                                <td class="text-center" style="background-color:#C0C0C0;"><strong>Current Total Balance</strong></td>
+                                <td class="text-center" style="background-color:#C0C0C0;"><strong>Working Days Balance</strong></td>
+                                <td class="text-center" style="background-color:#C0C0C0;"><strong>Total Accural Balance</strong></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span t-esc="employee_data['employee']"/></td>
+                                <td><span t-esc="employee_data['holiday_status']"/></td>
+                                <td><span t-esc="employee_data['date']" t-options='{"widget": "date"}'/></td>
+                                <td class="text-right"><span t-esc="employee_data['allocation_value']"/>
+                                 <span t-esc="employee_data['alloc_type']"/></td>
+                                <td class="text-right"><span t-esc="employee_data['current_total_balance']"/></td>
+                                <td class="text-right"><span t-esc="employee_data['working_days_balance']"/></td>
+                                <td class="text-right"><span t-esc="employee_data['total_accured_balance']"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

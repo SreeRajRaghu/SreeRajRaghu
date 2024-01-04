@@ -1,0 +1,672 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="InvoiceRefundPopupWidget">
+        <div role="dialog" class="modal-dialog">
+            <div class="popup" style="width: 80%">
+                <header class="title">
+                    Generate Refund
+                    <!-- <div class="cancel pull-right" style="cursor: pointer">
+                    <span class="fa fa-times" />
+                </div> -->
+                </header>
+                <div class="row m-0" style="font-size: 15px;">
+                    <div class="col-7" style="border-right: 1px solid black;" t-if="widget.options.refund_lines">
+                        <table class="table-sm table table-stripped">
+                            <thead>
+                                <th class="text-right">#</th>
+                                <th>Description</th>
+                                <th class="text-right">Refundable</th>
+                                <th class="text-right">Refund</th>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="widget.options.refund_lines or []" t-as="line">
+                                    <th class="text-right">
+                                        <t t-esc="line_index + 1" />
+                                    </th>
+                                    <th class="text-left">
+                                        <t t-esc="line['product'].display_name" />
+                                    </th>
+                                    <th class="text-right">
+                                        <t t-esc="widget.format_currency_no_symbol(line['paid'])" />
+                                    </th>
+                                    <th>
+                                        <input type="number" name="refund" class="form-control v-line-refund" style="height: 35px; min-height:35px; width:120px" t-att-data-line_id="line.aml_id" t-att-data-paid="line.paid" t-att-data-product="line.product.id" t-att-max="line['paid']" min="0" />
+                                    </th>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <th></th>
+                                <th colspan="2" class="text-right">
+                                    Total
+                                </th>
+                                <th>
+                                    <span class="v-tot-refund">
+                                        0.000
+                                    </span>
+                                </th>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="col-5">
+                        <t t-foreach="widget.medical.cashregisters or []" t-as="journal">
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <t t-esc="journal.name" />
+                                        </span>
+                                    </div>
+                                    <input style="width: 30%" type="number" min="0" t-att-name="journal.id" class="form-control text-left v-cash-register" />
+                                </div>
+                            </div>
+                        </t>
+                        <div class="p-2">
+                            <span type="button" class="btn btn-success v-payment-register">
+                                Confirm Refund
+                            </span>
+                            <span type="button" class="btn btn-danger v-payment-reset">
+                                Reset
+                            </span>
+                            <span type="button" class="btn btn-info cancel">
+                                Close
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="footer">
+                <div class="button confirm">
+                    Confirm
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div> -->
+            </div>
+        </div>
+    </t>
+    <t t-name="InvoiceScreenWidget">
+        <div class="invoice-screen screen p-1">
+            <div class="container-fluid">
+                <t t-set="invoice" t-value="widget.invoice" />
+                <t t-set="order" t-value="widget.order" />
+                <t t-set="partner" t-value="widget.partner or (invoice and invoice.partner)" />
+                <t t-set="analytic_tags" t-value="invoice and invoice.analytic_tag_ids or {}" />
+                <t t-set="medical_config" t-value="widget.medical.config or {}" />
+                <t t-set="allow_refund" t-value="medical_config.allow_refund" />
+                <div class="row" t-if="invoice">
+                    <t t-set="invoice_data" t-value="invoice.invoice_data" />
+                    <t t-set="allow_payment" t-value="invoice_data.state == 'posted' and invoice_data.amount_residual != 0" />
+                    <div class="col-9 v-invoice">
+                        <div class='v-payment-actions mb-2'>
+                            <div class="row">
+                                <div class="col-2">
+                                    <button class='go_back btn btn-secondary'>
+                                        <i class='fa fa-angle-double-left'></i>
+                                        Back
+                                    </button>
+                                </div>
+                                <div class="col-5">
+                                    <h3>Invoice: <small class="badge badge-warning">
+                                            <t t-esc="invoice_data.name" /></small></h3>
+                                </div>
+                                <div class="col-5">
+                                    <div style="display: inline-block;">
+                                        <t t-call="ReportSelection" />
+                                    </div>
+                                    <span class="pull-right badge badge-primary text-capitalize ml-2" style="font-size: 16px;">
+                                        <t t-esc="invoice_data.state" />
+                                    </span>
+                                    <span class="pull-right badge badge-dark text-capitalize invoice-pay-status" style="font-size: 16px;">
+                                        <t t-esc="invoice_data.invoice_payment_state.split('_').join(' ')" />
+                                    </span>
+                                </div>
+                                <div class="col-2">
+                                    <button class='a-consume-product btn btn-secondary'>
+                                        Consume
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container v-customer-details">
+                            <!-- Initial Heading - Partner Details -->
+                            <t t-call="InvoicePartnerDetails" />
+                            <!-- UnInvoiced Orders -->
+                            <t t-if="medical_config.suggest_uninvoiced_orders and invoice_data.state == 'draft'">
+                                <div class="btn btn-sm v-fetch-uninvoiced btn-warning">
+                                    Suggest UnInvoiced Orders
+                                </div>
+                            </t>
+                        </div>
+                        <div class="mt-2" id="js_uninvoiced_order_suggestion">
+                        </div>
+                        <t t-set="allow_analytic" t-value="medical_config.enable_line_analytics" />
+                        <div class="mt-2">
+                            <table class="table table-hover v-invoice-lines">
+                                <thead>
+                                    <tr class="btn-info">
+                                        <th width="20px">#</th>
+                                        <th>Description</th>
+                                        <th t-if="widget.medical.config.enable_qty" width="20px">Qty</th>
+                                        <th> Pay <input type="checkbox" class="size-18 tick_all_pays" title="To tick/untick on all lines" /></th>
+                                        <th>Paid Amount</th>
+                                        <th t-if="invoice.has_insurance">Actual Price</th>
+                                        <th t-if="invoice.has_insurance">Approved Price</th>
+                                        <th t-if="invoice.has_insurance">Unit Price</th>
+                                        <th>
+                                            <t t-esc="widget.label_list['partner_id']" /> Share</th>
+                                        <th t-if="invoice.has_insurance">Ins.Net Claim</th>
+                                        <th t-if="widget.medical.config.enable_line_consumable">Inventory</th>
+                                        <th width="40px">Discount</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="tot_actual" t-value="0" />
+                                    <t t-set="tot_approved" t-value="0" />
+                                    <t t-set="tot_paid" t-value="0" />
+                                    <t t-foreach="invoice.order_lines" t-as="line">
+                                        <t t-set="medical_line" t-value="line.medical_line" />
+                                        <tr class="invoice-line" t-att-data-line_id="line.id">
+                                            <td class="text-center">
+                                                <t t-esc="line_index + 1" />
+                                            </td>
+                                            <td>
+                                                <t t-esc="line.product_id and line.product_id[1] or ''" />
+                                                <div t-if="line.analytic_account_id and allow_analytic">
+                                                    <strong>
+                                                        <t t-esc="widget.label_list['resource_id']" />:</strong>
+                                                    <t t-esc="line.analytic_account_id[1] or ''" />
+                                                </div>
+                                                <div t-if="(line.analytic_tag_ids or []).length and allow_analytic">
+                                                    <strong>Analytic Tag:</strong>
+                                                    <t t-foreach="line.analytic_tag_ids" t-as="tag_id">
+                                                        <span class="badge badge-pill badge-secondary p-1">
+                                                            <t t-esc="analytic_tags[tag_id]" /></span>
+                                                    </t>
+                                                </div>
+                                                <div t-if="medical_config.enable_line_select_emp and line.employee_id">
+                                                    <strong>Doctor:</strong>
+                                                    <t t-esc="line.employee_id[1] or ''" />
+                                                </div>
+                                            </td>
+                                            <td t-if="widget.medical.config.enable_qty" class="text-center">
+                                                <t t-esc="line.quantity or 0" />
+                                            </td>
+                                            <td class="td-pay-checkbox">
+                                                <t t-if="line.amount_pay_status != 'paid' and invoice_data.state != 'draft'">
+                                                    <input type="checkbox" class="size-18 pay-checkbox" t-att-data-line_id="line.id" t-att-data-paid="line.amount_paid" t-att-data-pricelist="medical_line.pricelist_item_id and medical_line.pricelist_item_id[0] or ''" t-att-data-subtotal="line.price_subtotal" />
+                                                    <!-- Please don't add anything between these both input
+                                                    # Check JS
+                                                -->
+                                                    <input type="number" step="0.5" min="0" t-att-max="line.price_subtotal" class="form-control pay-amount text-right" style="display: inline-block; width: 70px" t-att-data-line_id="line.id" t-att-data-paid="line.amount_paid" t-att-data-subtotal="line.price_subtotal" />
+                                                </t>
+                                            </td>
+                                            <t t-set="tot_actual" t-value="tot_actual + medical_line.price_unit_orig" />
+                                            <t t-set="tot_approved" t-value="tot_approved + medical_line.approved_price_unit" />
+                                            <td class="td-amount-pay text-right">
+                                                <t t-esc="widget.medical.chrome.format_currency_no_symbol(line.amount_paid)" />
+                                                <t t-if="line.amount_paid > 0 and allow_refund">
+                                                    <t t-set="tot_paid" t-value="tot_paid + line.amount_paid" />
+                                                    <input type="checkbox" title="Refund this line" class="size-18 refund-checkbox" t-att-data-line_id="line.id" t-att-data-paid="line.amount_paid" t-att-data-refund="line.refund_amount" t-att-data-product="line.product_id[0]" />
+                                                </t>
+                                                <t t-if="line.refund_amount > 0">
+                                                    <span class="badge badge-pill">Refund:
+                                                        <t t-esc="widget.format_currency(line.refund_amount)" /></span>
+                                                </t>
+                                            </td>
+                                            <td class="text-right" t-if="invoice.has_insurance">
+                                                <t t-esc="widget.medical.chrome.format_currency_no_symbol(medical_line.price_unit_orig)" />
+                                            </td>
+                                            <td class="text-right" t-if="invoice.has_insurance">
+                                                <t t-esc="widget.medical.chrome.format_currency_no_symbol(medical_line.approved_price_unit)" />
+                                            </td>
+                                            <td class="text-right" t-if="invoice.has_insurance">
+                                                <t t-esc="widget.medical.chrome.format_currency_no_symbol(medical_line.price_unit)" />
+                                            </td>
+                                            <td class="text-right">
+                                                <t t-esc="widget.medical.chrome.format_currency_no_symbol(medical_line.payable_price_unit)" />
+                                            </td>
+                                            <td class="text-right" t-if="invoice.has_insurance">
+                                                <t t-esc="widget.medical.chrome.format_currency_no_symbol(medical_line.ins_price_unit)" />
+                                            </td>
+                                            <td t-if="widget.medical.config.enable_line_consumable">
+                                                <t t-if="line.medical_line">
+                                                    <t t-set="cons_klass" t-value="'btn btn-outline-success v-line-consumable'" />
+                                                    <t t-if="line.amount_pay_status != 'paid'">
+                                                        <t t-set="cons_klass" t-value="cons_klass + ' v-line-consumable'" />
+                                                    </t>
+                                                    <div t-att-class="cons_klass" t-att-data-mol_id="line.medical_line.id">
+                                                        <!-- <t t-set="empty_msg" t-value="False" /> -->
+                                                        <span class="count" t-esc="line.medical_line and line.medical_line.consumable_ids and line.medical_line.consumable_ids.length" />
+                                                        Inventory
+                                                    </div>
+                                                </t>
+                                            </td>
+                                            <td class="text-right">
+                                                <t t-if="line.discount">
+                                                    <t t-esc="(line.discount) ? line.discount + ' %' : '-'" />
+                                                </t>
+                                                <t t-else="line.discount_fixed">
+                                                    <t t-esc="widget.medical.chrome.format_currency_no_symbol(line.discount_fixed)" />
+                                                </t>
+                                            </td>
+                                            <td class="text-right">
+                                                <t t-esc="widget.medical.chrome.format_currency_no_symbol(line.price_subtotal)" />
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="background: #efd6b5;">
+                                        <th />
+                                        <th />
+                                        <th />
+                                        <th />
+                                        <th>
+                                            <t t-if="allow_refund and tot_paid">
+                                                <div class="btn btn-info v-refund-popup">
+                                                    Refund
+                                                </div>
+                                            </t>
+                                        </th>
+                                        <th class="text-right" t-if="invoice.has_insurance">
+                                            <t t-esc="widget.medical.chrome.format_currency_no_symbol(tot_actual)" />
+                                        </th>
+                                        <th class="text-right" t-if="invoice.has_insurance">
+                                            <t t-esc="widget.medical.chrome.format_currency_no_symbol(tot_approved)" />
+                                        </th>
+                                        <th t-if="invoice.has_insurance"></th>
+                                        <th />
+                                        <th />
+                                        <th />
+                                        <th />
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <div class="row">
+                                <div class="col-7">
+                                </div>
+                                <div class="col-5 section-total-amount">
+                                    <table class="table table-borderless">
+                                        <tr t-if="invoice.ins_tot_price">
+                                            <th class="">
+                                                Total Insurance Claim
+                                            </th>
+                                            <th class="text-right">
+                                                <span class="v-total-discount v-line-details">
+                                                    <t t-esc="widget.medical.chrome.format_currency(invoice.ins_tot_price)" />
+                                                </span>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th class="">
+                                                Total Amount
+                                            </th>
+                                            <th class="text-right">
+                                                <span class="v-total-amount v-line-details">
+                                                    <t t-esc="widget.medical.chrome.format_currency(invoice_data.amount_total)" />
+                                                </span>
+                                            </th>
+                                        </tr>
+                                        <tr t-if="invoice.discount">
+                                            <th class="">
+                                                Total Discount
+                                            </th>
+                                            <th class="text-right">
+                                                <span class="v-total-discount v-line-details">
+                                                    <t t-esc="widget.medical.chrome.format_currency(invoice.discount)" />
+                                                </span>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th class="">
+                                                Amount to Pay
+                                            </th>
+                                            <th class="text-right">
+                                                <span class="v-total-pay v-line-details">
+                                                    <t t-esc="widget.medical.chrome.format_currency(invoice_data.amount_total)" />
+                                                </span>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-success text-white">
+                                                Amount Paid
+                                            </th>
+                                            <th class="text-danger text-right bg-warning">
+                                                <span class="v-total-paid v-line-details">
+                                                    <t t-esc="widget.medical.chrome.format_currency(invoice_data.amount_total - invoice_data.amount_residual)" />
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <h3 t-if="invoice.refund_invoices and invoice.refund_invoices[0]">Refunded Invoices</h3>
+                            <div class="mt-2" t-if="invoice.refund_invoices">
+                                <div class="card col-4 pull-left collapsed-card" t-foreach="invoice.refund_invoices or []" t-as="refund_inv">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            <div>
+                                                <t t-esc="refund_inv.name" />
+                                                <span class="badge badge-pill">
+                                                    <t t-esc="widget.format_date(refund_inv.invoice_date)" /></span>
+                                            </div>
+                                            <div>
+                                                <small>Total :
+                                                    <t t-esc="widget.format_currency(refund_inv.amount_total)" /></small>
+                                                <span class="pull-right btn btn-info v-refund-print" t-att-data-invoice="refund_inv.id">Print</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-tools">
+                                            <div type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                                <i class="fa fa-plus"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <ol style="padding-left: 10px;">
+                                            <li t-foreach="refund_inv.invoice_lines" t-as="o_line">
+                                                <span>
+                                                    <t t-esc="o_line.name" /></span>
+                                                <span class="pull-right">
+                                                    <t t-esc="widget.format_currency_no_symbol(o_line.price_subtotal)" /></span>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3 v-rightbar" style="background: white">
+                        <div class="card mt-2">
+                            <div class="card-header v-invoice-controls bg-gray-light">
+                                <t t-call="BtnInvoiceControls" />
+                                <!-- <div class="card-tools">
+                                <div type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                    <i class="fa fa-minus"></i>
+                                </div>
+                            </div> -->
+                            </div>
+                            <!-- <div class="card-body pt-1 pb-2" t-if="invoice.state != 'paid'">
+                        </div> -->
+                        </div>
+                        <div class="card v-payment-method mt-2">
+                            <div class="card-header bg-gray-light">
+                                <div class="mb-0 card-title">
+                                    Register Payment
+                                    <span class="fa fa-angle-double-down" />
+                                    <div class="pull-right">
+                                        <span class="v-to-pay-amount badge-pill">0.00</span>
+                                        <strong>/</strong>
+                                        <span class="v-to-pay badge-pill">0.00</span>
+                                    </div>
+                                </div>
+                                <div class="card-tools">
+                                    <div type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body pt-1 pb-2" t-if="invoice.state != 'paid'">
+                                <div class="mt-2 mb-2">
+                                    <div class="row" style="font-size: 17px;">
+                                        <div class="col-7 bg-info">
+                                            Amount Paid
+                                        </div>
+                                        <div class="col-5 bg-success">
+                                            <span class="v-total-paid v-line-details">
+                                                <t t-esc="widget.medical.chrome.format_currency(invoice_data.amount_total - invoice_data.amount_residual)" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="font-size: 17px;">
+                                        <div class="col-7 bg-warning">
+                                            Amount Due
+                                        </div>
+                                        <div class="col-5 bg-danger">
+                                            <span class="v-total-due v-line-details">
+                                                <t t-esc="widget.medical.chrome.format_currency(invoice_data.amount_residual)" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <t t-set="info" t-value="widget.invoice and widget.invoice.outstanding or {}" />
+                                <t t-set="lines" t-value="info.content or []" />
+                                <t t-set="outstanding" t-value="info.outstanding" />
+                                <t t-set="title" t-value="info.title" />
+                                <div class="v-outstanding mt-2">
+                                    <t t-call="ShowPaymentInfo" />
+                                </div>
+                                <br />
+                                <div class="v-cash-register-container" t-if="allow_payment">
+                                    <t t-foreach="widget.medical.cashregisters" t-as="cashregister">
+                                        <div class="row">
+                                            <div class="input-group v-payment-line">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <t t-esc="cashregister.name" />
+                                                    </span>
+                                                </div>
+                                                <input type="number" t-att-name="cashregister.id" class="form-control v-cash-register" placeholder="Amount" />
+                                                <input t-if="cashregister.need_ref" type="text" class="form-control v-cash-ref" placeholder="Reference" />
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                            <t t-if="allow_payment">
+                                <div class="row mt-2 mb-2 text-center" style="display: inline-block;">
+                                    <!-- <span type="button" t-if="medical_config.enable_prepaid_card" class="btn btn-info v-prepaid-payment">Use Prepaid Card</span> -->
+                                    <span type="button" class="btn btn-success v-payment-register">Register Payment</span>
+                                    <span type="button" class="btn btn-danger v-payment-reset">Reset</span>
+                                </div>
+                            </t>
+                        </div>
+                        <!-- <div class="card v-payments mt-2">
+                        <div class="card-header bg-gray-light">
+                            <div class="mb-0 card-title">
+                                Payments <span class="fa fa-angle-double-down" />
+                            </div>
+                            <div class="card-tools">
+                                <div type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                    <i class="fa fa-minus"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body pt-1 pb-2 payment-lines" style="font-size: 14px;">
+                            <t t-call="PaymentLines"/>
+                        </div>
+                    </div> -->
+                        <div class="card v-unreconciled-payments mt-2">
+                            <div class="card-header bg-gray-light">
+                                <div class="mb-0 card-title">
+                                    Payments <span class="fa fa-angle-double-down" />
+                                </div>
+                                <div class="card-tools">
+                                    <div type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body pt-1 pb-2 payment-lines" style="font-size: 14px;">
+                                <t t-call="PaymentLines" />
+                                <!-- <t t-call="PaymentMethod-Info" /> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    <t t-name="PendinInvoiceSuggestion">
+        <div class="mt-2">
+            <div class="card col-4 pull-left collapsed-card" t-foreach="uninvoiced_orders" t-as="order">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <t t-esc="order.name" />
+                        <br />
+                        <small>Total :
+                            <t t-esc="widget.format_currency(order.net_total)" /></small>
+                    </h3>
+                    <div class="card-tools">
+                        <div class="btn-sm btn-success v-add-uninvoiced-order" t-att-data-order="order.id" style="cursor: pointer">
+                            <span class="fa fa-file-text"> Add</span>
+                        </div>
+                        <div type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ol style="padding-left: 10px;">
+                        <li t-foreach="order.orderlines" t-as="o_line">
+                            <span>
+                                <t t-esc="o_line.product_id[1]" /></span>
+                            <span class="pull-right">
+                                <t t-esc="widget.format_currency_no_symbol(o_line.subtotal)" /></span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </t>
+    <t t-name="BtnInvoiceControls">
+        <div class="mb-0 card-title v-inv-control-btn">
+            <!-- t-if="invoice_data.state != 'cancel'" -->
+            <button class="btn btn-block btn-warning mb-1 v-validate" t-if="invoice_data.state == 'draft'">
+                Validate
+            </button>
+            <button class="btn btn-danger v-cancel" t-if="invoice_data.state != 'cancel' and invoice_data.invoice_payment_state != 'paid' and widget.medical.user.is_reset_invoice == 'true'">
+                Cancel Invoice
+            </button>
+            <!--  t-if="invoice_data.state == 'cancel'" -->
+            <button class="btn btn-info v-reset" t-if="invoice_data.invoice_payment_state != 'paid' and widget.medical.user.is_reset_invoice == 'true'">
+                Reset to Draft
+            </button>
+        </div>
+    </t>
+    <t t-name="InvoicePartnerDetails">
+        <div class="row" t-if="partner" style="font-size: 15px;">
+            <table class="v-tip-table col-6">
+                <tr>
+                    <th style="width: 30%">
+                        <span class="mr-1 fa fa-user-o" />
+                        Name :
+                    </th>
+                    <td>
+                        <span t-esc="partner.name or '-'" />
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 30%">
+                        <span class="mr-1 fa fa-file-powerpoint-o" />
+                        <t t-esc='widget.get_file_label()' />:
+                    </th>
+                    <td>
+                        <span t-esc="partner[widget.get_config_file_key()] or '-'" />
+                    </td>
+                </tr>
+                <tr>
+                    <th><span class="mr-1 fa fa-phone" />
+                        Phone :</th>
+                    <td><span t-esc="partner.phone or '-'" /></td>
+                </tr>
+                <tr>
+                    <th><span class="mr-1 fa fa-mobile" />
+                        Mobile :</th>
+                    <td><span t-esc="partner.mobile or '-'" /></td>
+                </tr>
+                <tr>
+                    <th><span class="mr-1 fa fa-address-card" />
+                        Civil ID :</th>
+                    <td><span t-esc="partner.civil_code or '-'" /></td>
+                </tr>
+            </table>
+            <table class="v-tip-table col-6">
+                <tr>
+                    <th style="width: 35%">
+                        <span class="mr-1 fa fa-bookmark-o" />
+                        Appointment :
+                    </th>
+                    <td>
+                        <span t-esc="invoice_data.medical_order_id and invoice_data.medical_order_id[1] or '-'" />
+                    </td>
+                </tr>
+                <tr t-if="invoice.has_insurance">
+                    <th style="width: 35%">
+                        <span class="mr-1 fa fa-bookmark" />
+                        Insurance Invoice :
+                    </th>
+                    <td>
+                        <t t-if="invoice_data.ref_invoice_id">
+                            <span t-esc="invoice_data.ref_invoice_id[1] or '-'" />
+                        </t>
+                        <t t-else="">
+                            <strong>No Insurance (Cash Customer)</strong>
+                        </t>
+                    </td>
+                </tr>
+                <t t-set="insurance_data" t-value="invoice.insurance_data" />
+                <tr t-if="invoice.has_insurance">
+                    <th style="width: 35%">
+                        <span class="mr-1 fa fa-bookmark" />
+                        Ins. Scheme :
+                    </th>
+                    <td>
+                        <t t-esc="insurance_data.pricelist_id and insurance_data.pricelist_id[1] or '-'" />
+                    </td>
+                </tr>
+                <tr t-if="invoice.has_insurance">
+                    <th style="width: 35%">
+                        <span class="mr-1 fa fa-bookmark" />
+                        Ins. Company :
+                    </th>
+                    <td>
+                        <t t-esc="insurance_data.insurance_company_id and insurance_data.insurance_company_id[1]" />
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 35%">
+                        <span class="mr-1 fa fa-user-md" />
+                        <t t-esc="widget.label_list['resource_id']" /> :
+                    </th>
+                    <td>
+                        <span t-esc="invoice_data.resource_id and invoice_data.resource_id[1] or '-'" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <span class="mr-1 fa fa-calendar" />
+                        Date/Time :</th>
+                    <td><span t-esc="widget.medical.chrome.format_datetime(new Date(order.start_time), true) or ''" /></td>
+                </tr>
+            </table>
+        </div>
+    </t>
+    <t t-name="PaymentLines">
+        <t t-foreach="(invoice.payments or {'content': []}).content" t-as="pline">
+            <div class="row mt-2 p-2 text-bold row-striped">
+                <div class="col-7">
+                    <div><span class="fa fa-book" />
+                        <t t-esc="pline.journal_name" />
+                    </div>
+                    <div>
+                        <span class="fa fa-clock-o" />
+                        <t t-esc="widget.medical.chrome.format_date(pline.date)" />
+                    </div>
+                </div>
+                <div class="col-5 text-right">
+                    <t t-esc="widget.medical.chrome.format_currency(pline.amount)" />
+                    <div t-att-data-pid="pline.payment_id" t-att-data-move_id="pline.move_id" t-att-data-aml="pline.aml_ids" class="badge badge-dark p-1 payment-line-unreconcile cursor-pointer" t-if="widget.medical.user.role == 'manager' and widget.medical.user.is_edit_paid_invoice == 'true'">
+                        <i class="fa fa-chain-broken" />
+                        <span>Unreconcile</span>
+                    </div>
+                    <div t-att-data-pid="pline.payment_id" t-att-data-move_id="pline.move_id" class="badge badge-danger p-1 payment-line-cancel cursor-pointer" t-if="widget.medical.user.role == 'manager' and widget.medical.user.is_edit_paid_invoice == 'true'">
+                        <i class="fa fa-chain-broken" />
+                        <span>Cancel Payment</span>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </t>
+</templates>

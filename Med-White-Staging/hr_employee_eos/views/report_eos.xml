@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+<template id="report_hr_eos">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 class="text-center" style="color: red;">
+                        End of Service Settlement
+                    </h2>
+                    <div class="w-100" style="border: 1px solid black;" />
+                    <h2 class="text-center">
+                        <span t-field="doc.job_end_reason" />
+                    </h2>
+                    <t t-set="contract" t-value="doc.contract_id" />
+                    <t t-set="currency" t-value="doc.company_id.currency_id" />
+                    <div class="w-100" style="border: 1px solid black;" />
+                    <table class="table table-sm">
+                        <tr>
+                            <th width="20%">Emp. No. <span class="pull-right">:</span></th>
+                            <td width="30%"><span t-field="doc.identification_id" /></td>
+                            <th width="20%">Civil ID <span class="pull-right">:</span></th>
+                            <td><span t-field="doc.civil_id" /></td>
+                        </tr>
+                        <tr>
+                            <th>Emp. Name <span class="pull-right">:</span></th>
+                            <td><span t-field="doc.name" /></td>
+                            <th>Job Position <span class="pull-right">:</span></th>
+                            <td><span t-field="doc.job_id.name" /></td>
+                        </tr>
+                        <tr>
+                            <th>Basic Salary <span class="pull-right">:</span></th>
+                            <td style="padding-right: 20px;" class="text-right"><span t-field="contract.wage" /></td>
+                            <th>Department <span class="pull-right">:</span></th>
+                            <td><span t-field="doc.department_id.name" /></td>
+                        </tr>
+                        <tr>
+                            <th>Allowances <span class="pull-right">:</span></th>
+                            <td style="padding-right: 20px;" class="text-right"><span t-esc="contract.total_salary - contract.wage" t-options="{'widget': 'monetary', 'display_currency': currency}"/></td>
+                            <th></th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Total Salary <span class="pull-right">:</span></th>
+                            <td style="padding-right: 20px;" class="text-right"><span t-field="contract.total_salary" t-options="{'widget': 'monetary', 'display_currency': currency}"/></td>
+                            <th></th>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <div class="w-100" style="border: 1px solid black;" />
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th class="text-center">Day</th>
+                                <th class="text-center">Month</th>
+                                <th class="text-center">Year</th>
+                                <th class="text-center">Days</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>EOS Opening Balance Days</th>
+                                <th class="text-center"></th>
+                                <th class="text-center"></th>
+                                <th class="text-center"></th>
+                                <th class="text-center"><span t-esc="doc.eos_opening_balance_days" /></th>
+                            </tr>
+                            <tr>
+                                <th>Service End Date</th>
+                                <th class="text-center"><t t-if="doc.date_job_end"><span t-esc="doc.date_job_end.day" /></t></th>
+                                <th class="text-center"><t t-if="doc.date_job_end"><span t-esc="doc.date_job_end.month" /></t></th>
+                                <th class="text-center"><t t-if="doc.date_job_end"><span t-esc="doc.date_job_end.year" /></t></th>
+                                <th class="text-center"></th>
+                            </tr>
+                            <tr>
+                                <th>Joining Date</th>
+                                <th class="text-center"><t t-if="doc.date_joining"><span t-esc="doc.date_joining.day" /></t></th>
+                                <th class="text-center"><t t-if="doc.date_joining"><span t-esc="doc.date_joining.month" /></t></th>
+                                <th class="text-center"><t t-if="doc.date_joining"><span t-esc="doc.date_joining.year" /></t></th>
+                                <th class="text-center"></th>
+                            </tr>
+                            <t t-set="eos_detail" t-value="doc.get_eos_report_details()" />
+                            <tr>
+                                <t t-set="total_year_days" t-value="doc.eos_tot_year_days + eos_detail['eos_opening_balance_days']"/>
+                                <th style="border-top: 1px solid black;">Total Period</th>
+                                <th style="border-top: 1px solid black;" class="text-center"><span t-esc="eos_detail['diff_period'].days" /></th>
+                                <th style="border-top: 1px solid black;" class="text-center"><span t-esc="eos_detail['diff_period'].months" /></th>
+                                <th style="border-top: 1px solid black;" class="text-center"><span t-esc="eos_detail['diff_period'].years" /></th>
+                                <th style="border-top: 1px solid black;" class="text-center"><span t-esc="total_year_days" /></th>
+                            </tr>
+                            <tr>
+                                <th>Unreserved Period</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th class="text-center"><span t-esc="doc.eos_tot_leaves" /></th>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th style="border-top: 1px solid black;border-bottom: 1px solid black;">
+                                    Service Period
+                                </th>
+                                <th style="border-top: 1px solid black;border-bottom: 1px solid black;"/>
+                                <th style="border-top: 1px solid black;border-bottom: 1px solid black;"/>
+                                <th style="border-top: 1px solid black;border-bottom: 1px solid black;"/>
+                                <th class="text-center" style="border-top: 1px solid black;border-bottom: 1px solid black;">
+                                    <span t-esc="doc.eos_net_days" />
+                                </th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th colspan="2" class="text-right">Annual Leave Balance</th>
+                                <th class="text-center"><span t-esc="eos_detail['leave_bal']" /></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <div class="w-100" style="border: 1px solid black;" />
+
+                    <t t-set="per_day_salary" t-value="contract.get_per_day_salary()" />
+
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th style="border-top: 1px solid black;border-bottom: 1px solid black; !important" colspan="2" class="text-center">
+                                    Entitlements
+                                </th>
+                                <th style="width: 20%; border-top: 1px solid black;border-bottom: 1px solid black; !important" class="text-center">
+                                    <span t-field="currency.name" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr>
+                                <td>Additional Work</td>
+                                <td style="width: 20%" class="text-right"></td>
+                                <th class="text-right"><span t-field="doc.eos_additional_work" t-options="{'widget': 'monetary', 'display_currency': currency}"/></th>
+                            </tr>
+                            <tr>
+                                <t t-set="amount_leave" t-value="per_day_salary * eos_detail['leave_bal']"/>
+                                <td>Annual Leave Balance</td>
+                                <td class="text-right"><span t-esc="eos_detail['leave_bal']" /> days</td>
+                                <th class="text-right"><span t-esc="amount_leave" t-options="{'widget': 'monetary', 'display_currency': currency}"/></th>
+                            </tr>
+                            <tr>
+                                <t t-set="amount_indemnity" t-value="per_day_salary * doc.eos_deserved" />
+                                <td>Indemnity Balance</td>
+                                <td class="text-right"><span t-field="doc.eos_deserved"/> days</td>
+                                <th class="text-right"><span t-esc="amount_indemnity"  t-options="{'widget': 'monetary', 'display_currency': currency}"/></th>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr>
+                                <th style="border-top: 1px solid black;border-bottom: 1px solid black;" colspan="2" class="text-center">Deductions</th>
+                                <th style="width: 20%; border-top: 1px solid black;border-bottom: 1px solid black;">
+                                </th>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr>
+                                <td>Loan Balance</td>
+                                <td style="width: 20%" class="text-right"></td>
+                                <th class="text-right">
+                                    <span t-field="doc.loan_balance" t-options="{'widget': 'monetary', 'display_currency': currency}" />
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>EOS Deduction Amount</td>
+                                <td style="width: 20%" class="text-right"></td>
+                                <th class="text-right">
+                                    <span t-field="doc.eos_deduction_amount" t-options="{'widget': 'monetary', 'display_currency': currency}" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr>
+                                <th style="border-top: 1px solid black;border-bottom: 1px solid black;!important" colspan="2" class="text-center">
+                                    Net Entitlements
+                                </th>
+                                <th style="border-top: 1px solid black;border-bottom: 1px solid black;!important" class="text-right">
+                                    <t t-set="amount_total" t-value="amount_leave + amount_indemnity + doc.eos_additional_work"/>
+                                    <span t-esc="amount_total - (doc.loan_balance + doc.eos_deduction_amount)" t-options="{'widget': 'monetary', 'display_currency': currency}" />
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="w-100" style="border: 1px solid black;" />
+
+                    <div class="row mt16">
+                        <div class="col-2">
+                            <strong>Notes: </strong>
+                        </div>
+                        <div class="col-8">
+                            <p t-field="doc.job_end_desc" />
+                        </div>
+                    </div>
+
+                    <div class="row mt32" style="padding-bottom: 30px">
+                        <div class="col-4">
+                            <strong>Payroll Officer</strong>
+                        </div>
+                        <div class="col-4">
+                            <strong>Assistant HR Manager</strong>
+                        </div>
+                        <div class="col-4">
+                            <strong>Chief HR Officer</strong>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+
+<report
+    id="action_hr_eos_report"
+    string="Print EOS Report"
+    model="hr.employee"
+    report_type="qweb-pdf"
+    name="hr_employee_eos.report_hr_eos"
+    file="hr_employee_eos.report_hr_eos"
+    print_report_name="'EOS Report'"
+    attachment="False"
+/>
+
+</odoo>

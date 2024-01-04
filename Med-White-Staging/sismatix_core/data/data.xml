@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<odoo>
+    <function model="res.lang" name="write">
+        <value model="res.lang" search="[('iso_code', 'like', 'en'),('code', 'like', 'en_US')]"/>
+        <value eval="{'date_format': '%d/%m/%Y'}"/>
+    </function>
+</odoo>

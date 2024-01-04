@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="discount_reason_tree">
+        <field name="name">Discount Reasons</field>
+        <field name="model">discount.reason</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string='Discount Reasons' editable="bottom">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+    <record id="discount_reason_action" model="ir.actions.act_window">
+        <field name="name">Discount Reasons</field>
+        <field name="res_model">discount.reason</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="view_id" eval="False" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new discount reason.
+            </p>
+        </field>
+    </record>
+    <menuitem action="discount_reason_action" id="menu_discount_reason"
+        parent="medical_app.menu_medical_app_config" sequence="50" />
+</odoo>

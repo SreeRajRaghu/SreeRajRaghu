@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_boutiqaat_report_wizard_form" model="ir.ui.view">
+        <field name="name">view.boutiqaat.report.wizarad.form</field>
+        <field name="model">boutiqaat.report.wizarad</field>
+        <field name="arch" type="xml">
+            <form string="Boutiqaat Report">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="name_ar" readonly="1" force_save="1"/>
+                        <field name="employee_id" required="1"/>
+                        <field name="print_date" required="1"/>
+                        <field name="company_id" attrs="{
+                            'invisible': [('name', 'not in', ['salary_certificate', 'salary_continous_certificate', 'experience_certificate', 'warning_letter'])],
+                            'required': [('name', 'in', ['salary_certificate', 'salary_continous_certificate', 'experience_certificate', 'warning_letter'])]
+                        }"/>
+                        <field name="last_work_date" attrs="{
+                            'invisible': [('name', 'not in', ['experience_certificate', 'end_of_service_3_months', 'termination_during_probation_period', 'resignation_during_probation_period'])],
+                            'required': [('name', 'in', ['experience_certificate', 'end_of_service_3_months', 'termination_during_probation_period', 'resignation_during_probation_period'])]
+                        }"/>
+                        <field name="last_date" attrs="{
+                            'invisible': [('name', 'not in', ['end_of_service_3_months', 'termination_during_probation_period', 'resignation_during_probation_period'])],
+                            'required': [('name', 'in', ['end_of_service_3_months', 'termination_during_probation_period', 'resignation_during_probation_period'])]
+                        }"/>
+                        <!-- <field name="employee_sign_id" attrs="{
+                            'invisible': [('name', 'in', ['payment_request', 'warning_letter'])],
+                            'required': [('name', 'not in', ['payment_request', 'warning_letter'])]
+                        }"/> -->
+                        <field name="end_of_service_date" attrs="{
+                            'invisible': [('name', 'not in', ['end_of_service_3_months', 'dismissal_order_article_41A3', 'dismissal_order_article_41B1', 'dismissal_order_article_41B2'])],
+                            'required': [('name', 'in', ['end_of_service_3_months', 'dismissal_order_article_41A3', 'dismissal_order_article_41B1', 'dismissal_order_article_41B2'])]
+                        }"/>
+                        <!-- <field name="signature" widget="signature" attrs="{
+                            'invisible': [('name', 'not in', ['end_of_service_3_months', 'termination_during_probation_period', 'resignation_during_probation_period'])],
+                            'required': [('name', 'in', ['end_of_service_3_months', 'termination_during_probation_period', 'resignation_during_probation_period'])]
+                        }"/> -->
+                        <field name="notice_period_start_date" attrs="{
+                            'invisible': [('name', 'not in', ['resignation_with_notice_period'])],
+                            'required': [('name', 'in', ['resignation_with_notice_period'])]
+                        }"/>
+                        <field name="notice_period_end_date" attrs="{
+                            'invisible': [('name', 'not in', ['resignation_with_notice_period'])],
+                            'required': [('name', 'in', ['resignation_with_notice_period'])]
+                        }"/>
+                        <field name="resignation_acceptance_date" attrs="{
+                            'invisible': [('name', 'not in', ['resignation_with_notice_period', 'resignation_with_out_notice_period'])],
+                            'required': [('name', 'in', ['resignation_with_notice_period', 'resignation_with_out_notice_period'])]
+                        }"/>
+                        <field name="break_from_work_start_date" attrs="{
+                            'invisible': [('name', 'not in', ['dismissal_order'])],
+                            'required': [('name', 'in', ['dismissal_order'])]
+                        }"/>
+                        <field name="break_from_work_end_date" attrs="{
+                            'invisible': [('name', 'not in', ['dismissal_order'])],
+                            'required': [('name', 'in', ['dismissal_order'])]
+                        }"/>
+                        <field name="warning_date" attrs="{
+                            'invisible': [('name', 'not in', ['warning_letter'])],
+                            'required': [('name', 'in', ['warning_letter'])]
+                        }"/>
+                        <field name="dismissal_date" attrs="{
+                            'invisible': [('name', 'not in', ['dismissal_order', 'dismissal_order_article_41A3', 'dismissal_order_article_41B1', 'dismissal_order_article_41B2'])],
+                            'required': [('name', 'in', ['dismissal_order', 'dismissal_order_article_41A3', 'dismissal_order_article_41B1', 'dismissal_order_article_41B2'])]
+                        }"/>
+                        <field name="arabic_reason" attrs="{
+                            'invisible': [('name', 'not in', ['subj_suspension', 'payment_request'])],
+                            'required': [('name', 'in', ['subj_suspension', 'payment_request'])]
+                        }"/>
+                        <field name="english_reason" attrs="{
+                            'invisible': [('name', 'not in', ['warning_letter', 'subj_suspension'])],
+                            'required': [('name', 'in', ['warning_letter', 'subj_suspension'])]
+                        }"/>
+                        <field name="suspension_date" attrs="{
+                            'invisible': [('name', 'not in', ['subj_suspension'])],
+                            'required': [('name', 'in', ['subj_suspension'])]
+                        }"/>
+                        <field name="amount" attrs="{
+                            'invisible': [('name', 'not in', ['salary_increment', 'payment_request'])],
+                            'required': [('name', 'in', ['salary_increment', 'payment_request'])]
+                        }"/>
+                        <field name="increment_date" attrs="{
+                            'invisible': [('name', 'not in', ['salary_increment'])],
+                            'required': [('name', 'in', ['salary_increment'])]
+                        }"/>
+                        <field name="payment_method" attrs="{
+                            'invisible': [('name', 'not in', ['payment_request'])],
+                            'required': [('name', 'in', ['payment_request'])]
+                        }"/>
+                        <field name="cost_center" attrs="{
+                            'invisible': [('name', 'not in', ['payment_request'])],
+                            'required': [('name', 'in', ['payment_request'])]
+                        }"/>
+                        <field name="title_id" required="True"/>
+                        
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="print_report" type="object" string="Print" class="ml-2 btn btn-primary" icon="fa-print"/>
+                    <button string="Close" class="btn btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_boutiqaat_report_wizarad" model="ir.actions.act_window">
+        <field name="name">Reports</field>
+        <field name="res_model">boutiqaat.report.wizarad</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="boutiqaat_reports.view_boutiqaat_report_wizard_form"/>
+    </record>
+
+    <menuitem id="menu_all_reports" name="All Reports" parent="hr.hr_menu_hr_reports" action="action_boutiqaat_report_wizarad"/>
+</odoo>

@@ -1,0 +1,150 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <record id="view_employee_form" model="ir.ui.view">
+            <field name="name">hr.employee.form.inherit.medical.app</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="after">
+                    <field name="is_technician" />
+                </field>
+            </field>
+        </record>
+
+        <!-- Product -->
+        <record id="view_category_form_inherit_medical_app" model="ir.ui.view">
+            <field name="name">product.category.form.inherit.medical.app</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <group name="first" position="after">
+                    <group string="Medical">
+                        <field name="company_id" options="{'no_create_edit': True, 'no_create': True}"/>
+                        <field name="publish" />
+                        <field name="auto_sequence"/>
+                        <field name="code"/>
+                        <field name="machine_code" />
+                    </group>
+                </group>
+            </field>
+        </record>
+
+        <record id="product_template_form_view" model="ir.ui.view">
+            <field name="name">inherit.template.tree.view</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Lab Test Types" groups="medical_lab.group_medical_physician,medical_lab.group_medical_manager">
+                        <field name="medical_labtest_types_ids">
+                            <tree editable="bottom">
+                                <field name="name"/>
+                                <field name="code"/>
+                                <field name="info"/>
+                                <field name="lab_department_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_template_form_view1" model="ir.ui.view">
+            <field name="name">inherit.template.tree.view</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="medical_app.product_template_only_form_view_inherit_medical_app"/>
+            <field name="arch" type="xml">
+                <field name="is_medical_service" position="after">
+                    <field name="prod_profile_id" />
+                </field>
+            </field>
+        </record>
+
+        <!-- Lab Tests -->
+        <record id="act_test_lab" model="ir.actions.act_window">
+            <field name="name">Lab Tests</field>
+            <field name="res_model">medical.lab.test</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_appointment_id': active_id, 'default_appointment_id': active_id}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Record a new Lab Test
+                </p>
+            </field>
+        </record>
+
+        <!-- Medical Order -->
+
+        <record id="inherit_medical_order_view_job" model="ir.ui.view">
+            <field name="name">inherit.medical.order.view</field>
+            <field name="model">medical.order</field>
+            <field name="inherit_id" ref="medical_app.view_medical_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button attrs="{'invisible': [('lab_test_count', '=', 0)]}" confirm="Are you sure you want to create the Medical Lab test?" name="create_lab_test" groups="medical_lab.group_medical_physician,medical_lab.group_medical_manager" states="draft,confirmed,arrived,late,in,out" string="Lab test" type="object" class="oe_highlight"/>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                    <button class="oe_stat_button"  groups="medical_lab.group_medical_physician,medical_lab.group_medical_manager" name="%(medical_lab.act_test_lab)d" type="action"
+                        icon="fa-pencil-square-o" help="Lab Tests">
+                        <field string="Lab Tests" name="lab_test_count" widget="statinfo"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- MedicalOrderLine -->
+
+        <record id="inherit_medical_order_form" model="ir.ui.view">
+            <field name="name">inherit.medical.order.line.view</field>
+            <field name="model">medical.order.line</field>
+            <field name="inherit_id" ref="medical_app.view_medical_order_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <notebook groups="medical_lab.group_medical_physician,medical_lab.group_medical_manager">
+                        <page string="Medical lab test">
+                            <field name="medical_lab_test_ids"/>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+
+
+        <!-- Product Profile -->
+        <record id="view_medical_product_profile_filter" model="ir.ui.view">
+            <field name="name">Product Profile</field>
+            <field name="model">product.profile</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Search Units">
+                    <field name="name" />
+                </search>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="medical_product_profile_tree">
+            <field name="name">Product Profile</field>
+            <field name="model">product.profile</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string='Product Profile' editable="bottom">
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+        <record id="medical_product_profile_action" model="ir.actions.act_window">
+            <field name="name">Product Profile</field>
+            <field name="res_model">product.profile</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False" />
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to add a new lab test Product Profile.
+                </p>
+            </field>
+        </record>
+        <menuitem action="medical_product_profile_action" id="medical_lab_product_profile_conf_list" name="Product Profile" parent="medical_app.menu_medical_app_config" sequence="52" />
+    </data>
+</odoo>

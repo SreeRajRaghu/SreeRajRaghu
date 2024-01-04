@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id='view_medical_patient_attachment_tree' model='ir.ui.view'>
+        <field name='name'>view.medical.patient.attachment.tree</field>
+        <field name='model'>medical.patient.attachment</field>
+        <field name='arch' type='xml'>
+            <tree string='Patient Attachment'>
+                <field name='name'/>
+                <field name='partner_id'/>
+                <field name='attachment_type_id'/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_medical_patient_attachment_form" model="ir.ui.view">
+        <field name="name">view.medical.patient.attachment.form</field>
+        <field name="model">medical.patient.attachment</field>
+        <field name="arch" type="xml">
+            <form string="Patient Attachment">
+                <sheet>
+                    <widget name="web_ribbon" text="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <group>
+                        <field name="active" invisible="1"/>
+                        <field name="name"/>
+                        <field name="partner_id"/>
+                        <field name="attachment_type_id"/>
+                        <field name="ir_attachment_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_medical_patient_attachment" model="ir.actions.act_window">
+        <field name="name">Attachments</field>
+        <field name="res_model">medical.patient.attachment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_medical_patient_attachment" name="Attachments" parent="medical_app.menu_medical_misc_menu" action="medical_app.action_medical_patient_attachment" sequence="20"/>
+</odoo>

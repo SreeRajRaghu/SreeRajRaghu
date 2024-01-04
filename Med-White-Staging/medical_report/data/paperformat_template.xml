@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_template" model="report.paperformat">
+        <field name="name">Med-White Paperformat</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10.00</field>
+        <field name="margin_bottom">18.00</field>
+        <field name="margin_left">7.00</field>
+        <field name="margin_right">7.00</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">48</field>
+        <field name="dpi">80</field>
+    </record>
+    <record id="paperformat_template_invoice" model="report.paperformat">
+        <field name="name">Med-White Paperformat</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10.00</field>
+        <field name="margin_bottom">15.00</field>
+        <field name="margin_left">7.00</field>
+        <field name="margin_right">7.00</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">48</field>
+        <field name="dpi">80</field>
+    </record>
+</odoo>

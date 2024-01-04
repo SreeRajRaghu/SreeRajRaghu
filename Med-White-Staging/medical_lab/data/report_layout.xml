@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="madical_layout">
+         <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"></t>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"></t>
+            </t>
+
+            <t t-call="medical_report.medical_header" />
+
+            <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <t t-call="web.address_layout"/>
+                <t t-raw="0"/>
+            </div>
+            <div class="footer o_standard_footer">
+                <div class="text-left">
+                    <div name="financial_infos">
+                        <span t-field="company.report_footer"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-6" style="font-size: 12px;">
+                            Printed On : <span t-esc="datetime.datetime.now()" t-options="{'widget': 'datetime'}" />
+                        </div>
+                        <div class="col-6">
+                            <div t-if="report_type == 'pdf'" class="text-muted text-right">
+                                Page: <span class="page"/> of <span class="topage"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </data>
+</odoo>

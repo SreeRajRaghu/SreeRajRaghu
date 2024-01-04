@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+<t t-name="WaitingApp">
+    <li class="nav-item dropdown v-waiting">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+            <i class="fa fa-users"></i>
+            <span class="badge badge-danger navbar-badge v-waiting-count">0</span>
+        </a>
+    </li>
+</t>
+
+<t t-name="WaitingAddCallNotePopup">
+    <div class="modal-dialog">
+        <div class="popup">
+            <p class="title">After Call Note</p>
+            <input type="hidden" name="id"/>
+            <br/>
+            <textarea name="after_call_note" style="width:80%;height:25%"/>
+            <div class="footer">
+                <div class="button confirm">
+                    Save
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="WaitingAddPopup">
+    <div class="modal-dialog">
+        <div class="popup waiting-edit-popup" style="height: 70%">
+            <p class="title"><t t-esc="widget.options.title or 'Waiting List'"/></p>
+            <t t-set="order" t-value="widget and widget.options and widget.options.order"/>
+            <div class="ml-2 mr-2">
+                <table class="table table-sm text-left">
+                <tr>
+                    <th width="30%">Date</th>
+                    <td>
+                        <input type="hidden" name="id" t-att-value="order and order.id or ''"/>
+                        <!-- <input type="hidden" name="employee_id" t-att-value="order and order.employee_id and order.employee_id[0] or ''"/> -->
+                        <input type="hidden" name="branch_id" t-att-value="order and order.branch_id and order.branch_id[0] or ''"/>
+                        <input type="hidden" name="medical_order_id" t-att-value="order and order.medical_order_id or ''"/>
+                        <input type="date" name="date" class="form-control" t-att-value="order and order.date"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th><t t-esc="widget.label_list['resource_id']" /></th>
+                    <td>
+                        <select name="resource_id" class="form-control">
+                            <option></option>
+                            <t t-foreach="widget.medical.resource_by_id" t-as="resource">
+                                <option t-att-data-id="resource" t-att-value="resource_value['name']"> <t t-esc="resource_value['name']"/> </option>
+                            </t>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th><t t-esc="widget.label_list['partner_id']" /></th>
+                    <td>
+                        <select name="partner_id" class="form-control">
+                            <option></option>
+                            <t t-foreach="widget.medical.db.partner_by_id" t-as="patient">
+                                <option t-att-data-id="patient" t-att-value="patient_value['name']"> <t t-esc="patient_value['name']"/> </option>
+                            </t>
+                        </select>
+                    </td>
+                </tr>
+                <!-- <tr class="d-none">
+                    <th>Mobile</th>
+                    <td>
+                        <input type="text" name="patient_mobile" class="form-control" placeholder="Mobile"/>
+                    </td>
+                </tr> -->
+                <tr>
+                    <th>Service</th>
+                    <td>
+                        <select name="service_ids" class="form-control" multiple="multiple">
+                            <option value="all">Select All</option>
+                            <t t-if="order and order.order_lines">
+                                <t t-foreach="order.order_lines" t-as="oline">
+                                    <option t-att-data-line-id="oline.id" t-att-data-id="oline.product_id[0]" t-att-value="oline.display_name"> <t t-esc="oline.display_name"/> </option>
+                                </t>
+                            </t>
+                            <t t-else="">
+                                <t t-foreach="_.where(widget.medical.db.product_by_id, {'is_medical_service': true})" t-as="service">
+                                    <option t-att-data-id="service['id']" t-att-value="service['id']"> <t t-esc="service['display_name']"/> </option>
+                                </t>
+                            </t>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Note</th>
+                    <td>
+                        <textarea name="note" class="form-control" placeholder="Note"></textarea>
+                    </td>
+                </tr>
+            </table>
+            </div>
+            <div class="mb-1">
+                <div class="button confirm">
+                    Save
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="WaitingLine">
+    <tr t-att-data-id="line.id" t-attf-class="{line.state == 'cancel' and 'bg-gradient-danger' or ''}">
+        <t t-set="w_created" t-value="widget.toUserTZ(line.create_date, true)" />
+        <td class="v-date">
+            <t t-esc="widget.format_date(new Date(line.date))" />
+            <span class='badge badge-primary v-waiting-time' t-att-title="widget.format_datetime(w_created)" t-att-data-created='widget.get_server_datetime(w_created)'>00:00</span>
+        </td>
+        <td><t t-esc="line.partner_id and line.partner_id[1] or ''" /></td>
+        <td>
+            <t t-foreach="line.service_ids or []" t-as="pid">
+                <span class="badge badge-info">
+                    <t t-set="prod" t-value="widget.medical.db.get_product_by_id(pid)" />
+                    <span><t t-esc="prod and prod.display_name || ''" /></span>
+                </span>
+            </t>
+        </td>
+        <td><t t-esc="line.resource_id[1] or ''" /></td>
+        <td><t t-esc="line.patient_mobile or ''" /></td>
+        <td><t t-esc="line.note or ''" /></td>
+        <td><t t-esc="line.after_call_note or ''"/></td>
+        <td style="text-transform: capitalize;"><t t-esc="line.state or ''" /></td>
+        <td>
+            <button class='v-btn-edit' t-if="line.state != 'done'">Edit</button>
+            <!-- <button class='v-btn-restore'>Restore</button> -->
+            <button class='v-btn-new-appointment' t-if="line.state != 'done'">Appointment</button>
+            <button class='v-btn-cancel'>Cancel</button>
+            <button class='v-btn-call-note'>Call Note</button>
+        </td>
+    </tr>
+</t>
+
+<t t-name="WaitingListScreen">
+    <div class="container">
+        <table class="table table-striped table-bordered v-data-table" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th><t t-esc="widget.label_list['partner_id']" /></th>
+                    <th>Service</th>
+                    <th>Resource</th>
+                    <th>Mobile</th>
+                    <th>Note</th>
+                    <th>Call Note</th>
+                    <th>State</th>
+                    <th>
+                        <button class="button v-add-new">
+                            <span class="fa fa-plus" /> Add New
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="WaitingListBody">
+            </tbody>
+        </table>
+    </div>
+</t>
+<t t-name="WaitingListTBody">
+    <t t-if="widget.medical.waiting_list">
+        <t t-foreach="widget.medical.waiting_list" t-as="line">
+            <t t-call="WaitingLine" />
+        </t>
+    </t>
+</t>
+</templates>

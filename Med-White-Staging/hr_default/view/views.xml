@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="act_article_type" model="ir.actions.act_window">
+        <field name="name">Article Type</field>
+        <field name="res_model">article.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_article_type" name="Article Type" action="act_article_type" parent="hr.menu_human_resources_configuration"/>
+
+</odoo>

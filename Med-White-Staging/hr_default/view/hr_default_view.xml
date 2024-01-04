@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="hr_employee_more_fields_form" model="ir.ui.view">
+        <field name="name">hr.employee.more.fields.inherited.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='personal_information']//group" position="inside">
+                <group string="Other Info">
+                    <field name="civil_id"/>
+                    <field name="iban_no" />
+                    <field name="civil_start_date"/>
+                    <field name="civil_end_date"/>
+                    <field name="religion" />
+                    <field name="residency_expiry_date"/>
+                    <field name="residency_number"/>
+                </group>
+            </xpath>
+            <xpath expr="//page[@name='hr_settings']" position="after">
+                <page string="Employee Settlement">
+                    <group>
+                        <group string="Joining Details" name="joining_dt_group">
+                            <field name="date_joining" />
+                            <field name="date_job_end" />
+                            <field name="job_end_reason" attrs="{'required': [('date_job_end','!=',False)]}"/>
+                            <field name="job_end_desc" attrs="{'required': [('job_end_reason','=','other')]}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <field name="permit_no" position="after">
+                <field name="work_permit_expiry" />
+            </field>
+            <field name="date_joining" position="after">
+                <field name="work_start_issue_date"/>
+            </field>
+
+            <field name="passport_id" position="after">
+                <field name="passport_start_date" />
+                <field name="passport_end_date" />
+                <field name="passport_country_id" />
+                <field name="passport_type" />
+                <field name="sponsorship_id" />
+            </field>
+            <xpath expr="//group[@groups='base.group_no_one']" position="attributes">
+                <attribute name="groups">hr.group_hr_manager</attribute>
+            </xpath>
+            <notebook position="inside">
+                <page string="Personal Docs">
+                    <group>
+                        <field name="file_civil_id" />
+                        <field name="file_driving_lic" />
+                        <field name="file_passport" />
+                        <field name="article_type_id" />
+                        <field name="file_attachment" />
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <record id="hr_contract_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.form.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <field name="job_id" position="after">
+                <field name="contract_type"/>
+            </field>
+            <xpath expr="//div[@name='wage']" position="after">
+                <label for="permit_wage"/>
+                <div class="o_row" name="permit_wage">
+                    <field name="permit_wage" nolabel="1"/>
+                    <span>/ month</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

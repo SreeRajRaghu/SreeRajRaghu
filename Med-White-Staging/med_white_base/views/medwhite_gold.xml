@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Medwhite Gold Parent Menu -->
+    <menuitem id="menu_medical_medwhite_gold_parent" name="Med Gold" sequence="20" />
+
+    <!-- Gold Scheduler -->
+    <record id="action_medical_scheduler" model="ir.actions.act_window">
+        <field name="name">Scheduler</field>
+        <field name="res_model">medical.config</field>
+        <field name="view_mode">kanban,form,tree</field>
+        <field name="domain">[('company_code', '=', 'gold')]</field>
+    </record>
+    <menuitem id="menu_med_gold_scheduler" name="Scheduler" parent="med_white_base.menu_medical_medwhite_gold_parent" action="med_white_base.action_medical_scheduler" sequence="2" />
+
+    <menuitem id="menu_med_gold_appointments_lbl" name="Appointments" parent="med_white_base.menu_medical_medwhite_gold_parent" sequence="20" />
+
+    <!-- Gold Appointments-->
+    <record id="action_medical_order" model="ir.actions.act_window">
+        <field name="name">Appointments</field>
+        <field name="res_model">medical.order</field>
+        <field name="context">{'default_search_by_resource': True}</field>
+        <field name="view_mode">calendar,gantt,tree,form,kanban,pivot,graph</field>
+        <field name="domain">[('company_code', '=', 'gold')]</field>
+    </record>
+    <menuitem id="menu_md_gold_medical_order" name="Appointments" parent="med_white_base.menu_med_gold_appointments_lbl" action="med_white_base.action_medical_order" sequence="3" />
+
+
+
+    view_medical_order_line_tree
+
+     <!-- Gold Session -->
+    <record id="action_medical_session" model="ir.actions.act_window">
+        <field name="name">Session</field>
+        <field name="res_model">medical.session</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('company_code', '=', 'gold')]</field>
+    </record>
+    <menuitem id="menu_med_gold_session" name="Sessions" parent="med_white_base.menu_med_gold_appointments_lbl" action="med_white_base.action_medical_session" sequence="1" />
+
+
+     <!-- Gold Appointment Service -->
+    <record id="action_medical_appointment_service" model="ir.actions.act_window">
+        <field name="name">Appointment Service</field>
+        <field name="res_model">medical.order.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('order_id.company_code', '=', 'gold')]</field>
+    </record>
+    <menuitem id="menu_med_gold_appoitment_service" name="Appointment Service" parent="med_white_base.menu_med_gold_appointments_lbl" action="med_white_base.action_medical_appointment_service" sequence="4" />
+
+    <!-- Gold Invoice -->
+    <record id="action_move_patient_out_invoice_type" model="ir.actions.act_window">
+        <field name="name">Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_id" ref="account.view_invoice_tree" />
+        <field name="search_view_id" ref="account.view_account_invoice_filter" />
+        <field name="domain">[('type', '=', 'out_invoice'), ('is_patient_invoice','=',True), ('company_code', '=', 'gold')]</field>
+        <field name="context">{'default_type': 'out_invoice', 'default_is_patient_invoice': True, 'default_company_code': 'gold'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create an Invoice
+            </p>
+            <p>
+                Create invoices, register payments and keep track of the discussions with your patients.
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_medical_patient_invoices" name="Invoices" parent="med_white_base.menu_med_gold_appointments_lbl" groups="medical_app.group_medical_cashier" action="med_white_base.action_move_patient_out_invoice_type" sequence="100" />
+
+    <!-- Gold Payments -->
+    <record id="action_account_payments" model="ir.actions.act_window">
+        <field name="name">Payments</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">tree,kanban,form,graph</field>
+        <field name="context">{
+            'default_payment_type': 'inbound',
+            'default_partner_type': 'customer',
+            'search_default_inbound_filter': 1,
+            'res_partner_search_mode': 'customer',
+            }</field>
+        <field name="view_id" ref="account.view_account_payment_tree" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Register a payment
+            </p>
+            <p>
+                Payments are used to register liquidity movements. You can process those payments by your own means or by using installed facilities.
+            </p>
+        </field>
+        <field name="domain">[('company_code', '=', 'gold')]</field>
+        <field name="context">{'default_company_code': 'gold'}</field>
+    </record>
+    <menuitem id="menu_medical_payment" name="Payments" parent="med_white_base.menu_med_gold_appointments_lbl" groups="medical_app.group_medical_cashier" action="med_white_base.action_account_payments" sequence="100" />
+
+    <menuitem id="menu_med_gold_master_lbl" name="Master Data" parent="med_white_base.menu_medical_medwhite_gold_parent" sequence="30" />
+  
+    <!-- Company Code in Product Template -->
+    <record id="product_template_only_form_view_inherit_medical_app" model="ir.ui.view">
+        <field name="name">product.template.product.form.inherit.medical.app</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <field name="barcode" position="after">
+                <field name="company_code" />
+                <field name="dr_cost" />
+            </field>
+        </field>
+    </record>
+    
+    <!-- Company Code in Product Product -->
+    <record id="view_product_product_form" model="ir.ui.view">
+        <field name="name">product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <field name="barcode" position="after">
+                <field name="company_code" />
+                <field name="dr_cost" />
+            </field>
+        </field>
+    </record>
+
+    <!-- Gold Product Template -->
+    <record id="product_template_action" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,tree,form,activity</field>
+        <field name="view_id" ref="product.product_template_kanban_view"/>
+        <field name="search_view_id" ref="product.product_template_search_view"/>
+        <field name="context">{"search_default_filter_to_sell":1, "sale_multi_pricelist_product_template": 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new product
+            </p><p>
+                You must define a product for everything you sell or purchase,
+                whether it's a storable product, a consumable or a service.
+            </p>
+        </field>
+        <field name="domain">[('company_code', '=', 'gold')]</field>
+        <field name="context">{'default_company_code': 'gold'}</field>
+    </record>
+
+    <menuitem action="med_white_base.product_template_action" id="menu_product_template_action" parent="med_white_base.menu_med_gold_master_lbl"/>
+
+    <!-- Gold Product Variants -->
+    <record id="product_normal_action" model="ir.actions.act_window">
+            <field name="name">Product Variants</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_mode">tree,form,kanban,activity</field>
+            <field name="search_view_id" ref="product.product_search_form_view"/>
+            <field name="view_id" eval="False"/> <!-- Force empty -->
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new product variant
+              </p><p>
+                You must define a product for everything you sell or purchase,
+                whether it's a storable product, a consumable or a service.
+              </p>
+            </field>
+            <field name="domain">[('company_code', '=', 'gold')]</field>
+            <field name="context">{'default_company_code': 'gold'}</field>
+        </record>
+
+    <menuitem id="menu_medical_product" name="Product Variants" action="med_white_base.product_normal_action" parent="med_white_base.menu_med_gold_master_lbl"/>
+
+
+    <!-- Gold Stock Location -->
+    <record id="view_location_form_inherit" model="ir.ui.view">
+        <field name="name">stock.location.form.inherit</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_form"/>
+        <field name="arch" type="xml">
+            <field name="usage" position="after">
+                <field name="company_code" />
+            </field>
+        </field>
+    </record>
+
+    <!-- Gold Location -->
+
+    <record id="action_location_form" model="ir.actions.act_window">
+        <field name="name">Locations</field>
+        <field name="res_model">stock.location</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_id" ref="stock.view_location_tree2"/>
+        <field name="search_view_id" ref="stock.view_location_search"/>
+        <field name="context">{'search_default_in_location':1}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Add a new location
+          </p><p>
+            Define your locations to reflect your warehouse structure and
+            organization. Odoo is able to manage physical locations
+            (warehouses, shelves, bin, etc), partner locations (customers,
+            vendors) and virtual locations which are the counterpart of
+            the stock operations like the manufacturing orders
+            consumptions, inventories, etc.
+          </p><p>
+            Every stock operation in Odoo moves the products from one
+            location to another one.  For instance, if you receive products
+            from a vendor, Odoo will move products from the Vendor
+            location to the Stock location. Each report can be performed on
+            physical, partner or virtual locations.
+          </p>
+        </field>
+        <field name="context">{'default_company_code': 'gold'}</field>
+        <field name="domain">[('company_code', '=', 'gold')]</field>
+    </record>
+    <menuitem action="med_white_base.action_location_form" id="menu_action_location_form"
+        parent="med_white_base.menu_med_gold_master_lbl" sequence="2" groups="stock.group_stock_multi_locations"/>
+
+    <record id="action_medical_patient" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('file_no2', '!=', False)]</field>
+        <field name="context">{'search_default_type_patient': 1}</field>
+    </record>
+    <menuitem id="menu_medical_gold_patient" name="Patients" parent="med_white_base.menu_med_gold_master_lbl" action="med_white_base.action_medical_patient" sequence="5"/>
+
+    <!-- Company code in Purchase Order -->
+    <record id="purchase_order_form" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+          <field name="date_approve" position="after">
+                <field name="company_code" />
+          </field>
+        </field>
+    </record>
+
+    <record id="gold_purchase_order_action" model="ir.actions.act_window">
+        <field name="name">Purchases</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+        <field name="domain">[('company_code', '=', 'gold')]</field>
+        <field name="context">{'default_company_code': 'gold'}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a request for quotation
+          </p><p>
+            The quotation contains the history of the discussion
+            you had with your vendor.
+          </p>
+        </field>
+    </record>
+
+    <menuitem action="med_white_base.gold_purchase_order_action" id="menu_md_gold_purchase_order" parent="med_white_base.menu_medical_medwhite_gold_parent" sequence="30"/>
+
+    <!-- Company Code in Picking -->
+    <record id="view_picking_company_code" model="ir.ui.view">
+        <field name="name">delivery.stock.picking_company_code</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <field name="origin" position="before">
+                <field name="company_code" />
+            </field>
+        </field>
+    </record>
+
+    <record id="action_picking_tree_all" model="ir.actions.act_window">
+        <field name="name">Transfers</field>
+        <field name="res_model">stock.picking</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,kanban,form,calendar</field>
+        <field name="domain">[('company_code', '=', 'gold')]</field>
+        <field name="context">{'contact_display': 'partner_address', 'default_company_id': allowed_company_ids[0], 'default_company_code': 'gold', 'search_default_picking_type': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new transfer
+            </p><p>
+                Transfers allow you to move products from one location to another.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_gold_transfers" name="Transfers" parent="med_white_base.menu_med_gold_appointments_lbl" sequence="105" action="action_picking_tree_all" groups="stock.group_stock_manager,stock.group_stock_user"/>
+
+
+    <!-- Med Gold Dashboard -->
+
+    <record id="dashboard_gold_action" model="ir.actions.act_window">
+        <field name="name">Med Gold Dashboard</field>
+        <field name="res_model">dashboard.dashboard</field>
+        <field name="view_mode">kanban</field>
+        <field name="context">{'dashboard_visibility': 'med_gold'}</field>
+    </record>
+    <menuitem id="dashboard_menu_gold" name="Dashboard" parent="med_white_base.menu_medical_medwhite_gold_parent" action="med_white_base.dashboard_gold_action" sequence="1"/>
+
+
+    <menuitem id="menu_med_gold_master_report" name="Gold Reporting" parent="med_white_base.menu_medical_medwhite_gold_parent" />
+
+    
+    <record id="action_cash_gold_report" model="ir.actions.act_window">
+        <field name="name">Cash Gold Report</field>
+        <field name="res_model">cash.report.details.wizard</field>
+        <field name="context">{'default_report_type': 'gold'}</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+    <menuitem id="menu_medical_gold_department_report" name="Department Gold Report" action="action_cash_gold_report" parent="med_white_base.menu_med_gold_master_report"/>
+
+    
+    <record id="action_department_gold_report" model="ir.actions.act_window">
+        <field name="name">Department Gold Report</field>
+        <field name="res_model">department.report.details.wizard</field>
+        <field name="context">{'default_report_type': 'gold'}</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_medical_gold_cash_report" name="Cash Gold Report" action="action_cash_gold_report" parent="med_white_base.menu_med_gold_master_report"/>
+
+    <record id="view_patient_birthday_wizard" model="ir.ui.view">
+        <field name="name">patient.birthday.wizard.form</field>
+        <field name="model">patient.birthday.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Patient Birthday">
+                <group>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Confirm" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_open_patient_birthday_wizard" model="ir.actions.act_window">
+        <field name="name">Patients Having Birthday</field>
+        <field name="res_model">patient.birthday.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_birthday_patients" name="Patients Having Birthday" parent="med_white_base.menu_med_gold_master_lbl" action="action_open_patient_birthday_wizard" sequence="6"/>
+
+</odoo>

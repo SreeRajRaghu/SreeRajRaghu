@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_document_user,employee.document.user,model_employee_document,hr.group_hr_user,1,1,1,1
+access_employee_document_history_user,employee.document.history.user,model_employee_document_history,hr.group_hr_user,1,1,1,1
+access_employee_document_emp,employee.document.emp,model_employee_document,base.group_user,1,1,1,1
+access_employee_asset_emp,employee.asset.emp,model_employee_asset,base.group_user,1,1,1,1
+access_passport_history,access_passport_history,model_passport_history,base.group_user,1,1,1,1
+access_employee_benefits,access_employee_benefits,model_employee_benefits,base.group_user,1,1,1,1
+access_hr_section,access_hr_section,model_hr_section,base.group_user,1,1,1,1
+access_hr_grade,access_hr_graade,model_hr_grade,base.group_user,1,1,1,1
+access_hr_mail_notification,access_hr_mail_notification,model_hr_mail_notification,base.group_user,1,1,1,1
+access_emp_discount_user,emp.discount.user,model_emp_discount,hr.group_hr_user,1,1,1,1
+access_hr_title,access_hr_title,model_hr_title,base.group_user,1,1,1,1

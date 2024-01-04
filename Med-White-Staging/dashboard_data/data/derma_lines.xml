@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="dash_derma_total_revenue" model="dashboard.settings.line">
+        <field name="name">Total Revenue (Gross)</field>
+        <field name="color">green</field>
+        <field name="visibility">derma</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="field_id" ref="dashboard_data.field_account_move__amount_total_gross"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">type = 'out_invoice' AND state = 'posted' AND journal_id != 53 AND amount_total_gross > 0 AND company_code = 'gold'</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_app.action_move_patient_out_invoice_type"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">invoice_date</field>
+        <field name="sequence">0</field>
+    </record>
+
+    <record id="dash_derma_total_discount" model="dashboard.settings.line">
+        <field name="name">Total Discount</field>
+        <field name="color">green</field>
+        <field name="visibility">derma</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="field_id" ref="dashboard_data.field_account_move__total_discount"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">type = 'out_invoice' AND state = 'posted' AND journal_id != 53 AND total_discount > 0 AND company_code = 'gold'</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="dashboard_data.action_move_patient_out_invoice_discount"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">invoice_date</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="dash_derma_net_revenue" model="dashboard.settings.line">
+        <field name="name">Net Revenue</field>
+        <field name="color">green</field>
+        <field name="visibility">derma</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="field_id" ref="account.field_account_move__amount_total_signed"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state = 'posted' AND journal_id != 53 AND company_code = 'gold' AND ((type = 'in_invoice' AND commission_for_move_id is not null) OR type = 'out_invoice')</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_app.action_move_patient_out_invoice_type"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">invoice_date</field>
+        <field name="sequence">3</field>
+    </record>
+
+    <record id="dash_derma_total_due" model="dashboard.settings.line">
+        <field name="name">Total Due</field>
+        <field name="color">green</field>
+        <field name="visibility">derma</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="field_id" ref="account.field_account_move__amount_residual"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">type = 'out_invoice' AND company_code = 'gold' AND state = 'posted' AND journal_id != 53 AND amount_residual > 0 AND is_insurance_invoice = false</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_app.action_move_patient_out_invoice_type"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">invoice_date</field>
+        <field name="company_id" eval="False" />
+        <field name="sequence">6</field>
+    </record>
+
+    <record id="dash_derma_insurance_revenue" model="dashboard.settings.line">
+        <field name="name">Insurance Revenue</field>
+        <field name="color">green</field>
+        <field name="visibility">derma</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="field_id" ref="account.field_account_move__amount_residual"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">type = 'out_invoice' AND company_code = 'gold' AND state = 'posted' AND journal_id != 53 AND amount_residual > 0 AND is_insurance_invoice = true</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_app.action_move_patient_out_invoice_type"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">invoice_date</field>
+        <field name="company_id" eval="False" />
+        <field name="sequence">8</field>
+    </record>
+
+    <record id="dash_derma_all_cash" model="dashboard.settings.line">
+        <field name="name">Cash</field>
+        <field name="color">green</field>
+        <field name="visibility">derma</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__amount"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state IN ('posted', 'reconciled') AND journal_id = 7 AND company_code = 'gold'</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="company_id">1</field>
+        <field name="sequence">11</field>
+    </record>
+
+    <record id="dash_derma_visa_master" model="dashboard.settings.line">
+        <field name="name">Visa / Master</field>
+        <field name="color">green</field>
+        <field name="visibility">derma</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__amount"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state IN ('posted', 'reconciled') AND journal_id = 10 AND company_code = 'gold'</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="company_id">1</field>
+        <field name="sequence">12</field>
+    </record>
+
+    <record id="dash_derma_all_knet" model="dashboard.settings.line">
+        <field name="name">KNet</field>
+        <field name="color">green</field>
+        <field name="visibility">derma</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__amount"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state IN ('posted', 'reconciled') AND journal_id = 9 AND company_code = 'gold'</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="company_id">1</field>
+        <field name="sequence">13</field>
+    </record>
+</odoo>

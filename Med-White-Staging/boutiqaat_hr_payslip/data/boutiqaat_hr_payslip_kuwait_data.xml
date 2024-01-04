@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="ToNET" model="hr.salary.rule.category">
+            <field name="name">ToNetSalary</field>
+            <field name="code">ToNET</field>
+        </record>
+
+        <record id="structure_type_kuwait" model="hr.payroll.structure.type">
+            <field name="name">Kuwait Fixed Pay</field>
+            <field name="country_id" ref="base.kw"/>
+        </record>
+
+        <!-- Salary Structure -->
+        <record id="payroll_structure_kuwait" model="hr.payroll.structure">
+            <field name="name">Kuwait Payroll</field>
+            <field name="type_id" ref="structure_type_kuwait"/>
+            <field name="regular_pay" eval="True"/>
+            <field name="country_id" ref="base.kw"/>
+            <field name="unpaid_work_entry_type_ids" eval="[(4, ref('hr_payroll.work_entry_type_unpaid_leave'))]" />
+        </record>
+
+        <!-- Salary Rules for Worker Pay-->
+        <!-- For Basic Rule apply this rule -->
+        <!-- <field name="condition_python">result = worked_days and worked_days.WORK100</field> -->
+        <!-- <record id="hr_salary_rule_basic_kuwait" model="hr.salary.rule">
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="code">BASIC</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="name">Basic Salary</field>
+            <field name="sequence" eval="1"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = payslip.calendar_working_days
+result = employee.get_pay_amount_kuwait_payroll(payslip, contract.wage, qty)
+            </field>
+        </record> -->
+
+        <record id="hr_salary_rule_houserentallowance_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.housing_allowance != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">HRA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Housing Allowance</field>
+            <field name="sequence" eval="2"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = payslip.calendar_working_days
+result = employee.get_pay_amount_kuwait_payroll(payslip, contract.housing_allowance, qty)
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_mobile_allowance_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.mobile_allowance != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">MA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Mobile Allowance</field>
+            <field name="sequence" eval="3"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = payslip.calendar_working_days
+result = employee.get_pay_amount_kuwait_payroll(payslip, contract.mobile_allowance, qty)
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_vehicle_allowance_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.motor_vehicle_allowance != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">VA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Moter Vehicle Allowance</field>
+            <field name="sequence" eval="4"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = payslip.calendar_working_days
+result = employee.get_pay_amount_kuwait_payroll(payslip, contract.motor_vehicle_allowance, qty)
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_books_allowance_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.books_allowance != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">BA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Books Allowance</field>
+            <field name="sequence" eval="5"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = payslip.calendar_working_days
+result = employee.get_pay_amount_kuwait_payroll(payslip, contract.books_allowance, qty)
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_commisson_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.commission != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">CA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Commission Allowance</field>
+            <field name="sequence" eval="6"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = payslip.calendar_working_days
+result = employee.get_pay_amount_kuwait_payroll(payslip, contract.commission, qty)
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_pf_allowance_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.pf_allowance != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">FPA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">PF Allowance</field>
+            <field name="sequence" eval="6"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = payslip.calendar_working_days
+result = employee.get_pay_amount_kuwait_payroll(payslip, contract.pf_allowance, qty)
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_transport_allowance_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.transport_allowance != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">TA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Transport Allowance</field>
+            <field name="sequence" eval="6"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = payslip.calendar_working_days
+result = employee.get_pay_amount_kuwait_payroll(payslip, contract.transport_allowance, qty)
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_meal_allowance_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.meal_allowance != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">MLA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Meal Allowance</field>
+            <field name="sequence" eval="7"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = payslip.calendar_working_days
+result = employee.get_pay_amount_kuwait_payroll(payslip, contract.meal_allowance, qty)
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_driver_fuel_allowance_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.driver_fuel_allowance != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">DFA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Driver &amp; Fuel Allowance</field>
+            <field name="sequence" eval="8"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = payslip.calendar_working_days
+result = employee.get_pay_amount_kuwait_payroll(payslip, contract.driver_fuel_allowance, qty)
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_special_other_allowance_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.special_other_allowance != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">SOA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Special Other Allowance</field>
+            <field name="sequence" eval="9"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = payslip.calendar_working_days
+result = employee.get_pay_amount_kuwait_payroll(payslip, contract.special_other_allowance, qty)
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_night_shift_allowance_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.night_shift_allowance != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">NIGHTSA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Night Shift Allowance</field>
+            <field name="sequence" eval="10"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = payslip.calendar_working_days
+result = employee.get_pay_amount_kuwait_payroll(payslip, contract.night_shift_allowance, qty)
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_emp_inputs_allowance_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = employee.get_emp_inputs(payslip, 'alw') != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">EMP_INP_ALW</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Employee Input Allowance</field>
+            <field name="sequence" eval="50"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">result = employee.get_emp_inputs(payslip, 'alw')</field>
+        </record>
+        <record id="hr_salary_rule_emp_inputs_deduction_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = employee.get_emp_inputs(payslip, 'ded') != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">EMP_INP_DED</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="name">Employee Input Deduction</field>
+            <field name="sequence" eval="105"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">result = employee.get_emp_inputs(payslip, 'ded') * -1</field>
+        </record>
+
+        <record id="hr_salary_rule_unpaid_leave_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days.LEAVE90</field>
+            <field name="amount_select">code</field>
+            <field name="code">UNPAID</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="name">Unpaid Leave Deduction</field>
+            <field name="sequence" eval="104"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = worked_days.LEAVE90.number_of_days
+tot = contract.get_all_allowance()
+result = (tot / contract.month_days) * qty * -1
+            </field>
+            <!-- <field name="active" eval="True" /> -->
+        </record>
+
+        <!-- Rules for Input -->
+        <record id="hr_salary_rule_obs1_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = inputs and inputs.OBS1 and inputs.OBS1.amount</field>
+            <field name="amount_select">code</field>
+            <field name="code">OBS1</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Other Benefit 1</field>
+            <field name="sequence" eval="8"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">result = inputs.OBS1.amount</field>
+        </record>
+
+        <record id="hr_salary_rule_obs2_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = inputs and inputs.OBS2 and inputs.OBS2.amount</field>
+            <field name="amount_select">code</field>
+            <field name="code">OBS2</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Other Benefit 2</field>
+            <field name="sequence" eval="8"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">result = inputs.OBS2.amount</field>
+        </record>
+
+        <record id="hr_salary_rule_ods1_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = inputs and inputs.ODS1 and inputs.ODS1.amount</field>
+            <field name="amount_select">code</field>
+            <field name="code">ODS1</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="name">Other Deduction 1</field>
+            <field name="sequence" eval="105"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">result = inputs.ODS1.amount if inputs.ODS1.amount &lt; 0 else -(inputs.ODS1.amount)</field>
+        </record>
+
+        <record id="hr_salary_rule_ods2_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = inputs and inputs.ODS2 and inputs.ODS2.amount</field>
+            <field name="amount_select">code</field>
+            <field name="code">ODS2</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="name">Other Deduction 2</field>
+            <field name="sequence" eval="105"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">result = inputs.ODS2.amount if inputs.ODS2.amount &lt; 0 else -(inputs.ODS2.amount)</field>
+        </record>
+
+        <!-- Sick Leave -->
+        <record id="hr_salary_rule_sick_leave_kuwait" model="hr.salary.rule">
+            <field name="name">Sick Leave</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">
+result = abs(worked_days.LEAVE110 and worked_days.LEAVE110.number_of_days)
+            </field>
+            <field name="amount_select">code</field>
+            <field name="code">SICK_LEAVE</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="sequence" eval="106"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+qty = abs(worked_days.LEAVE110 and worked_days.LEAVE110.number_of_days)
+result = employee.get_sick_leave_ded(payslip, qty, contract)
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_sick15_kuwait" model="hr.salary.rule">
+            <field name="name">Sick Leave: First 15 Days: 100%</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">
+result = worked_days and worked_days.LEAVE110 and employee.sick_leave_days_in_cur_year &lt;= 15
+            </field>
+            <field name="amount_select">code</field>
+            <field name="code">SICK_0</field>
+            <field name="active">False</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="sequence" eval="106"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">result = 0</field>
+        </record>
+
+        <record id="hr_salary_rule_sick0_kuwait" model="hr.salary.rule">
+            <field name="name">Sick Leave: 16 to 25 Days: 75%</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days.LEAVE110 and worked_days.LEAVE110.number_of_days and employee.sick_leave_days_in_cur_year &gt;= 16 and employee.sick_leave_days_in_cur_year &lt;= 25</field>
+            <field name="amount_select">code</field>
+            <field name="code">SICK_25</field>
+            <field name="active">False</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="sequence" eval="106"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+per_day = contract.get_per_day_salary()
+ded_days = worked_days.LEAVE110.number_of_days + 15
+result = ded_days * 0.25 * per_day
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_sick35_kuwait" model="hr.salary.rule">
+            <field name="name">Sick Leave: 26 to 35 Days: 50%</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days.LEAVE110 and worked_days.LEAVE110.number_of_days and employee.sick_leave_days_in_cur_year &gt;= 26 and employee.sick_leave_days_in_cur_year &lt;= 35</field>
+            <field name="amount_select">code</field>
+            <field name="code">SICK_50</field>
+            <field name="active">False</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="sequence" eval="106"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+per_day = contract.get_per_day_salary()
+ded_days = worked_days.LEAVE110.number_of_days + 25
+result = ded_days * 0.50 * per_day
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_sick45_kuwait" model="hr.salary.rule">
+            <field name="name">Sick Leave: 36 to 45 Days: 25%</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days.LEAVE110 and worked_days.LEAVE110.number_of_days and employee.sick_leave_days_in_cur_year &gt;= 36 and employee.sick_leave_days_in_cur_year &lt;= 45</field>
+            <field name="amount_select">code</field>
+            <field name="code">SICK_75</field>
+            <field name="active">False</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="sequence" eval="106"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+per_day = contract.get_per_day_salary()
+ded_days = worked_days.LEAVE110.number_of_days + 35
+result = ded_days * 0.75 * per_day
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_sick55_kuwait" model="hr.salary.rule">
+            <field name="name">Sick Leave: More than 45: Unpaid</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days.LEAVE110 and worked_days.LEAVE110.number_of_days and employee.sick_leave_days_in_cur_year &gt;= 46</field>
+            <field name="amount_select">code</field>
+            <field name="code">SICK_100</field>
+            <field name="active">False</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="sequence" eval="106"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+per_day = contract.get_per_day_salary()
+ded_days = worked_days.LEAVE110.number_of_days + 45
+result = ded_days * per_day
+            </field>
+        </record>
+
+        <!-- Overtime -->
+        <record id="hr_salary_rule_rot_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days and worked_days.ROT and worked_days.ROT.number_of_days != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">ROT</field>
+            <field name="category_id" ref="boutiqaat_hr_payslip.ToNET"/>
+            <field name="name">Overtime: Regular</field>
+            <field name="sequence" eval="101"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+tot = contract.get_all_allowance()
+per_hour = tot / contract.tot_monthly_hours
+
+result = per_hour * worked_days.ROT.number_of_hours * contract.rot_rate
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_wot_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days and worked_days.WOT and worked_days.WOT.number_of_days != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">WOT</field>
+            <field name="category_id" ref="boutiqaat_hr_payslip.ToNET"/>
+            <field name="name">Overtime: Week Off</field>
+            <field name="sequence" eval="102"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+tot = contract.get_all_allowance()
+per_hour = tot / contract.tot_monthly_hours
+
+result = per_hour * worked_days.WOT.number_of_hours * contract.wot_rate
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_pot_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days and worked_days.POT and worked_days.POT.number_of_days != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">POT</field>
+            <field name="category_id" ref="boutiqaat_hr_payslip.ToNET"/>
+            <field name="name">Overtime: Public Holiday</field>
+            <field name="sequence" eval="103"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+tot = contract.get_all_allowance()
+per_hour = tot / contract.tot_monthly_hours
+
+result = per_hour * worked_days.POT.number_of_hours * contract.pot_rate
+            </field>
+        </record>
+
+        <!-- Other Elements -->
+
+        <record id="hr_salary_rule_staff_discount_allowance_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.staff_discount != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">SDISCA</field>
+            <field name="category_id" ref="boutiqaat_hr_payslip.ToNET"/>
+            <field name="name">Staff Discount Allowance</field>
+            <field name="sequence" eval="101"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+tot_invoiced = employee.get_inv_discount(payslip)
+
+disc = tot_invoiced * contract.staff_discount
+
+result = (disc if disc &lt;= contract.staff_max_discount else contract.staff_max_discount) or 0
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_loan_installment_kuwait" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = employee.get_loan_amount(payslip) != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">LOAN</field>
+            <field name="category_id" ref="boutiqaat_hr_payslip.ToNET"/>
+            <field name="name">Loan Installment Deduction</field>
+            <field name="sequence" eval="110"/>
+            <field name="struct_id" ref="payroll_structure_kuwait"/>
+            <field name="amount_python_compute">
+result = employee.get_loan_amount(payslip) * -1
+            </field>
+        </record>
+    </data>
+
+<!--
+        <record id="hr_salary_rule_att_daily_sick15_kuwait" model="hr.salary.rule">
+            <field name="name">Sick Leave: First 15 Days: 100%</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days and worked_days.LEAVE110 and employee.sick_leave_days_in_cur_year &lt;= 15</field>
+            <field name="code">SICK_0</field>
+            <field name="category_id" ref="boutiqaat_hr_payslip.ToNET"/>
+            <field name="sequence" eval="106"/>
+            <field name="amount_select">percentage</field>
+            <field name="amount_percentage_base">categories.GROSS / contract.month_days</field>
+            <field name="quantity">worked_days.LEAVE110.number_of_days</field>
+            <field name="amount_percentage">100</field>
+            <field name="amount_python_compute">result = 0</field>
+            <field name="struct_id" ref="payroll_structure_att_pay_kuwait"/>
+        </record>
+
+        <record id="hr_salary_rule_att_daily_sick0_kuwait" model="hr.salary.rule">
+            <field name="name">Sick Leave: 16 to 25 Days: 75%</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days.LEAVE110 and worked_days.LEAVE110.number_of_days and employee.sick_leave_days_in_cur_year &gt;= 16 and employee.sick_leave_days_in_cur_year &lt;= 25</field>
+            <field name="code">SICK_25</field>
+            <field name="category_id" ref="boutiqaat_hr_payslip.ToNET"/>
+            <field name="sequence" eval="106"/>
+            <field name="amount_select">percentage</field>
+            <field name="amount_percentage_base">categories.GROSS / contract.month_days</field>
+            <field name="quantity">worked_days.LEAVE110.number_of_days</field>
+            <field name="amount_percentage">75</field>
+            <field name="amount_python_compute">result = 0</field>
+            <field name="struct_id" ref="payroll_structure_att_pay_kuwait"/>
+        </record>
+
+        <record id="hr_salary_rule_att_daily_sick35_kuwait" model="hr.salary.rule">
+            <field name="name">Sick Leave: 26 to 35 Days: 50%</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days.LEAVE110 and worked_days.LEAVE110.number_of_days and employee.sick_leave_days_in_cur_year &gt;= 26 and employee.sick_leave_days_in_cur_year &lt;= 35</field>
+            <field name="code">SICK_50</field>
+            <field name="category_id" ref="boutiqaat_hr_payslip.ToNET"/>
+            <field name="sequence" eval="106"/>
+            <field name="struct_id" ref="payroll_structure_att_pay_kuwait"/>
+            <field name="amount_select">percentage</field>
+            <field name="amount_percentage_base">categories.GROSS / contract.month_days</field>
+            <field name="quantity">worked_days.LEAVE110.number_of_days</field>
+            <field name="amount_percentage">50</field>
+            <field name="amount_python_compute">result = 0</field>
+        </record>
+
+        <record id="hr_salary_rule_att_daily_sick45_kuwait" model="hr.salary.rule">
+            <field name="name">Sick Leave: 36 to 45 Days: 25%</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days.LEAVE110 and worked_days.LEAVE110.number_of_days and employee.sick_leave_days_in_cur_year &gt;= 36 and employee.sick_leave_days_in_cur_year &lt;= 45</field>
+            <field name="code">SICK_75</field>
+            <field name="category_id" ref="boutiqaat_hr_payslip.ToNET"/>
+            <field name="sequence" eval="106"/>
+            <field name="struct_id" ref="payroll_structure_att_pay_kuwait"/>
+            <field name="amount_select">percentage</field>
+            <field name="amount_percentage_base">categories.GROSS / contract.month_days</field>
+            <field name="quantity">worked_days.LEAVE110.number_of_days</field>
+            <field name="amount_percentage">25</field>
+            <field name="amount_python_compute">result = 0</field>
+        </record>
+
+        <record id="hr_salary_rule_att_daily_sick55_kuwait" model="hr.salary.rule">
+            <field name="name">Sick Leave: More than 45: Unpaid</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days.LEAVE110 and worked_days.LEAVE110.number_of_days and employee.sick_leave_days_in_cur_year &gt;= 46</field>
+            <field name="code">SICK_100</field>
+            <field name="category_id" ref="boutiqaat_hr_payslip.ToNET"/>
+            <field name="sequence" eval="106"/>
+            <field name="struct_id" ref="payroll_structure_att_pay_kuwait"/>
+            <field name="amount_select">percentage</field>
+            <field name="amount_percentage_base">categories.GROSS / contract.month_days</field>
+            <field name="quantity">worked_days.LEAVE110.number_of_days</field>
+            <field name="amount_percentage">0</field>
+            <field name="amount_python_compute">result = 0</field>
+        </record>
+-->
+
+</odoo>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="dash_radiology_cash" model="dashboard.settings.line">
+        <field name="name">Cash</field>
+        <field name="color">green</field>
+        <field name="visibility">common</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__amount"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state IN ('posted', 'reconciled') AND journal_id = 27</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="company_id">2</field>
+        <field name="sequence">11</field>
+    </record>
+
+    <record id="dash_radiology_bank" model="dashboard.settings.line">
+        <field name="name">Visa / Master</field>
+        <field name="color">green</field>
+        <field name="visibility">common</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__amount"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state IN ('posted', 'reconciled') AND journal_id = 33</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="company_id">2</field>
+        <field name="sequence">12</field>
+    </record>
+
+    <record id="dash_radiology_knet" model="dashboard.settings.line">
+        <field name="name">KNet</field>
+        <field name="color">green</field>
+        <field name="visibility">common</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__amount"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state IN ('posted', 'reconciled') AND journal_id = 32</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="company_id">2</field>
+        <field name="sequence">12</field>
+    </record>
+
+
+    <record id="dash_radiology_med_ins" model="dashboard.settings.line">
+        <field name="name">Sheeel</field>
+        <field name="color">green</field>
+        <field name="visibility">common</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__amount"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state IN ('posted', 'reconciled') AND journal_id = 41</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="company_id">2</field>
+        <field name="sequence">12</field>
+    </record>
+
+    <record id="dash_radiology_dept_11" model="dashboard.settings.line">
+        <field name="name">MRI-SCAN</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state != 'cancelled' AND lab_department_id = 11</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id">2</field>
+        <field name="sequence">21</field>
+    </record>
+    <record id="dash_radiology_dept_12" model="dashboard.settings.line">
+        <field name="name">CT-Scan</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state != 'cancelled' AND lab_department_id = 12</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id">2</field>
+        <field name="sequence">22</field>
+    </record>
+    <record id="dash_radiology_dept_13" model="dashboard.settings.line">
+        <field name="name">BMD</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state != 'cancelled' AND lab_department_id = 13</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id">2</field>
+        <field name="sequence">23</field>
+    </record>
+    <record id="dash_radiology_dept_14" model="dashboard.settings.line">
+        <field name="name">Ultrasound</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state != 'cancelled' AND lab_department_id = 14</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id">2</field>
+        <field name="sequence">24</field>
+    </record>
+    <record id="dash_radiology_dept_15" model="dashboard.settings.line">
+        <field name="name">X-Ray</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state != 'cancelled' AND lab_department_id = 15</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id">2</field>
+        <field name="sequence">25</field>
+    </record>
+</odoo>

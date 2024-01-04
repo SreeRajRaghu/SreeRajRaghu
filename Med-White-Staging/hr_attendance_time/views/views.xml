@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="att_upload_log_form" model="ir.ui.view">
+        <field name="name">att.upload.log.more.fields</field>
+        <field name="model">att.upload.log</field>
+        <field name="arch" type="xml">
+            <form string="Attendance Upload Log" create="false" edit="false">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(hr_attendance.hr_attendance_action)s" type="action" class="oe_stat_button" icon="fa-file" context="{'search_default_att_log_id': active_id}" help="Attendance Log">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="attendance_count"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Uploaded Attendances
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+                    <label for="name" class="oe_edit_only"/>
+                    <h2>
+                        <field name="name" readonly="True"/>
+                    </h2>
+                    <field name="file" readonly="True"/>
+                    <notebook readonly="1">
+                        <page string="Employee Not Found">
+                            <label for="no_emp_count" />
+                            <field name="no_emp_count"/>
+                            <field name="no_emp_text" />
+                        </page>
+                        <page string="Skipped">
+                            <label for="skipped_count" />
+                            <field name="skipped_count"/>
+                            <field name="skipped_text" />
+                        </page>
+                        <page string="Ignored Lines">
+                            <label for="ignored_count" />
+                            <field name="ignored_count"/>
+                            <field name="ignored_text" />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="att_upload_log_tree" model="ir.ui.view">
+        <field name="name">att.upload.log.more.fields</field>
+        <field name="model">att.upload.log</field>
+        <field name="arch" type="xml">
+            <tree string="Attendance Upload Log" create="false" edit="false">
+                <field name="name"/>
+                <field name="create_date"/>
+                <field name="create_uid"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="att_upload_log_search" model="ir.ui.view">
+        <field name="name">att.upload.log.more.fields</field>
+        <field name="model">att.upload.log</field>
+        <field name="arch" type="xml">
+            <search string="Attendance Upload Log">
+                <field name="name"/>
+                <field name="create_uid"/>
+                <filter name="create_date" string="Assigned Date" date="create_date" />
+            </search>
+        </field>
+    </record>
+
+    <record id="att_upload_log_action" model="ir.actions.act_window">
+        <field name="name">Attendance Upload Log</field>
+        <field name="res_model">att.upload.log</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        action="att_upload_log_action"
+        id="menu_att_upload_log"
+        parent="hr_attendance_time.menu_hr_attendance_report_label"
+        groups="hr.group_hr_manager"
+        sequence="6"/>
+</odoo>

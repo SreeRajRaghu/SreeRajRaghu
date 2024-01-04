@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="0">
+        <template id="resignation_during_probation_period">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-set="doc" t-value="docs[0]"/>
+                    <t t-set="e" t-value="doc.employee_id"/>
+                    <div class="page" style="font-size:14px;">
+                        <!-- <h3><span t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/></h3> -->
+                        <table style="width: 100%">
+                            <colgroup>
+                                <col width="15%" class="text-left"/>
+                                <col width="30%"/>
+                                <col width="10%"/>
+                                <col width="30%"/>
+                                <col width="15%"/>
+                            </colgroup>
+                            <tr>
+                                <th style="text-align: left;">Date :</th>
+                                <td><t t-esc="doc.print_date.strftime('%d/%m/%Y')"/></td>
+                                <td/>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="doc.print_date.strftime('%d/%m/%Y')"/></td>
+                                <th style="text-align: right;" dir="rtl">التاريخ :</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Employee ID :</th>
+                                <td><t t-esc="e.identification_id"/></td>
+                                <td/>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.identification_id"/></td>
+                                <th style="text-align: right;" dir="rtl">الرقم الوظيفي:</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Name :</th>
+                                <td><t t-esc="e.name"/></td>
+                                <td/>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.arabic_name"/></td>
+                                <th style="text-align: right;" dir="rtl">الإسم:</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Department :</th>
+                                <td><t t-esc="e.department_id.name or ''"/></td>
+                                <td/>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.department_id.arabic_name or ''"/></td>
+                                <th style="text-align: right;" dir="rtl">القســـم:</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Position :</th>
+                                <td><t t-esc="e.job_id.name or ''"/></td>
+                                <td/>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.job_id.arabic_name or ''"/></td>
+                                <th style="text-align: right;" dir="rtl">الوظيفة:</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Civil ID :</th>
+                                <td><t t-esc="e.civil_id or ''"/><br/><br/></td>
+                                <td/>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.civil_id or ''"/><br/><br/></td>
+                                <th style="text-align: right;" dir="rtl">الرقم المدني:</th>
+                            </tr>
+                            <!-- <tr>
+                                <th style="text-align: left;">Last Date :</th>
+                                <td><t t-esc="doc.last_date.strftime('%d/%m/%Y')"/><br/><br/></td>
+                                <td/>
+                                <td style="text-align: right;" dir="rtl"><br/><br/></td>
+                                <th style="text-align: right;" dir="rtl"></th>
+                            </tr> -->
+                            <tr>
+                                <th colspan="2" style="text-align: center;"><u>Subj: Resignation Acceptance During Probation Period</u><br/><br/></th>
+                                <td/>
+                                <th colspan="2" style="text-align: center;" dir="rtl"><u>الموضوع/ قبول استقالة خلال فترة التجربة</u><br/><br/></th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    Reference to your resignation letter. This is to inform you that your resignation is accepted as end of <t t-if="e.date_job_end"><t t-esc="e.date_job_end.strftime('%A')"/> <t t-esc="e.date_job_end.strftime('%d/%m/%Y')"/> </t>. <br/><br/>
+                                </td>
+                                <td/>
+                                <td colspan="2" style="text-align: right;" dir="rtl">
+                                    بالإشــارة إلى الموضــوع أعــلاه ، وبناء على كتاب الاستقالة المقدم
+                                    من قبلكم يرجى العلم بأنه قد تقرر قــبـول الاسـتقــالــه إعتبارا
+                                    من نهاية دوام يــوم <t t-if="e.date_job_end"> <t t-esc="doc.get_arabic_day(e.date_job_end.weekday())"/> </t> المـوافـق <t t-if="e.date_job_end"> <t t-esc="e.date_job_end.strftime('%d/%m/%Y')"/></t>.<br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    Please make the necessary list of hand-over of all your pending jobs and refer to Admin &amp; HR Dept. for the completion of all needed formalities, such as clearance form and settlement of your account.
+                                </td>
+                                <td/>
+                                <td colspan="2" style="text-align: right;" dir="rtl">
+                                  وعــليــه يرجـى مــراجــعـة إدارة الــشئــون الإدارية والـــمــوارد البشــرية لإنهاء متعــلقــاتكم وإبراء ما يفـيــد براءة ذمتـكم في الشركة وتسوية حسابكم.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    We thank you for your services rendered to the company and we wish you best of luck in your future. <br/><br/>
+                                </td>
+                                <td/>
+                                <td colspan="2" style="text-align: right;" dir="rtl">
+                                    شـاكـرين لـكـم كـل جهد بذلــتمـوه فــي خــدمـــة الــشـركــة خلال فتـرة عملكم وخالص تمنياتنا بالتوفيق في المستقبل. <br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align: center;">
+                                    Best Regards, <br/><br/>
+                                </th>
+                                <td/>
+                                <th colspan="2" style="text-align: center;" dir="rtl">
+                                    ولكم جزيل الشكر
+                                </th>
+                            </tr>
+                            <!-- <tr style="text-align: center;">
+                                <th colspan="5">
+                                    <div style="text-align: center;" dir="rtl">مدير الموارد البشرية</div>
+                                    <div>HR &amp; Admin Manager</div>
+                                </th>
+                            </tr> -->
+                            <tr style="text-align: center;">
+                                <th colspan="5" style="padding-top:90px;">
+                                    <div><span t-field="doc.title_id.name"/></div>
+                                    <hr style="margin: 10px 35% 2px 35%; border: 1px solid #929292;"/>
+                                </th>
+                            </tr>
+                            <tr style="text-align: center;">
+                                <td colspan="2">
+                                </td>
+                                <td colspan="2">
+                                </td>
+                                <td style="text-align: right;padding-top:100px;" dir="rtl">
+                                    <div>
+                                        نسخة الى :<br/>
+                                        * المدير العام<br/>
+                                        * الإدارة المالية<br/>
+                                        * ملف الموظف<br/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <report
+            id="resignation_during_probation_period_report"
+            string="Print"
+            model="boutiqaat.report.wizarad"
+            report_type="qweb-pdf"
+            name="boutiqaat_reports.resignation_during_probation_period"
+            file="boutiqaat_reports.resignation_during_probation_period"
+            print_report_name="'Resignation during Probation Period'"
+            menu="False"
+        />
+
+    </data>
+</odoo>

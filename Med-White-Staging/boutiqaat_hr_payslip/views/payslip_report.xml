@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="paperformat_boutiqaat" model="report.paperformat">
+            <field name="name">Motor Service Paper Format</field>
+            <field name="default" eval="False" />
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">7</field>
+            <field name="margin_bottom">28</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">35</field>
+        </record>
+
+        <report
+            id="action_report_hr_normal_payslip"
+            model="hr.payslip"
+            string="Payslip Format 2"
+            report_type="qweb-pdf"
+            name="boutiqaat_hr_payslip.report_hr_normal_payslip"
+            file="boutiqaat_hr_payslip.report_hr_normal_payslip"
+        />
+
+        <record id="action_report_hr_normal_payslip" model="ir.actions.report">
+            <field name="paperformat_id" ref="boutiqaat_hr_payslip.paperformat_boutiqaat"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <menuitem id="menu_config_settings"
+                  name="Settings"
+                  parent="medical_app.menu_medical_app_config"
+                  action="action_config_settings"
+                  sequence="-1"/>
+    </data>
+</odoo>

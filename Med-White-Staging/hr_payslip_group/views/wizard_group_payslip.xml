@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="wizard_hr_emp_payslip_group" model="ir.ui.view">
+        <field name="name">emp.payslip.group.form</field>
+        <field name="model">emp.payslip.group</field>
+        <field name="arch" type="xml">
+            <form string=" Group PaySlip">
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="date_start" />
+                        <field name="date_end" />
+                    </group>
+                </group>
+                <footer>
+                    <button string="Create Payslip" class="oe_highlight" type="object"
+                        name="action_generate_payslip" />
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_hr_emp_payslip_group" model="ir.actions.act_window">
+        <field name="name">Group PaySlip</field>
+        <field name="res_model">emp.payslip.group</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wizard_hr_emp_payslip_group" />
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_hr_payslip_group"
+        action="action_wizard_hr_emp_payslip_group"
+        name="Batches Group"
+        sequence="90"
+        parent="hr_payroll.menu_hr_payroll_payslips"/>
+</odoo>

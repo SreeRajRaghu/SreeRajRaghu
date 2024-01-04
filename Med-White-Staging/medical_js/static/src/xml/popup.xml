@@ -1,0 +1,1067 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <!-- Custom -->
+<t t-name="PopupCivilExist">
+    <div class="modal-dialog">
+        <div class="popup">
+            <p class="title">Partner</p>
+            <div class="container">
+                <p>The Civil ID Exits For The Partner : <b><t t-if="widget.options.partner" t-esc="widget.options.partner.name"/></b></p>
+            </div>
+            <div class="footer">
+                <div class="button cancel">
+                    Close
+                </div>
+                <div class="button overwrite">
+                    Overwrite
+                </div>
+                <div class="button open">
+                    Open
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+
+<t t-name="NumberInputPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput">
+            <header class="title"><t t-esc=" widget.options.title || 'Input' " /></header>
+            <p class="body" t-if="widget.options.body"><t t-esc=" widget.options.body || '' "/></p>
+            <div class="col-8 offset-2 text-right">
+                <div class="input-group mb-3 text-right">
+                  <input type="number" class="form-control" t-att-value="widget.options.value || ''"/>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="button confirm">
+                    Confirm
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="DiscountPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput">
+            <header class="title">Apply Discount</header>
+            <div class="col-8 offset-2">
+                <div class="input-group mb-3 text-right">
+                    <input name="disc_perc" type="number" class="form-control" placeholder="Percentage Discount" aria-label="Percentage Discount" aria-describedby="basic-addon2"  t-att-value="widget.options.disc_perc || ''"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">%</span>
+                    </div>
+                </div>
+                <div class="input-group mb-3 text-right">
+                    <input name="disc_fix" type="number" class="form-control" placeholder="Fix Discount" aria-label="Fix Discount" aria-describedby="basic-addon3"  t-att-value="widget.options.disc_fix || ''"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon3"><fa class="fa fa-money" /></span>
+                    </div>
+                </div>
+
+                <div class="input-group mb-3 text-right" t-if="widget.medical.config.allow_global_disc and widget.options.show_reason">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">Reason</span>
+                    </div>
+                    <select class="form-control" name="disc_reason">
+                        <option value=""></option>
+                        <t t-foreach="widget.medical.discount_reasons or []" t-as="rec">
+                            <option t-att-value="rec.id"><t t-esc="rec.name" /></option>
+                        </t>
+                    </select>
+                    <!-- <input name="disc_reason" type="number" class="form-control" placeholder="Fix Discount" aria-label="Fix Discount" aria-describedby="basic-addon3"  t-att-value="widget.options.disc_reason || ''"/> -->
+                </div>
+            </div>
+            <div class="footer">
+                <div class="button confirm">
+                    Apply
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="AnalyticAccountPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput">
+            <header class="title">Analytic Account</header>
+            <div class="col-8 offset-2">
+                <div class="input-group mb-3 text-left">
+                  <select name="analytic_account_id" class="form-control">
+                    <option>Select Any</option>
+                    <t t-foreach="widget.medical.analytic_accounts" t-as="acc">
+                        <option t-att-value="acc.id"><t t-esc="acc.name" /></option>
+                    </t>
+                  </select>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="button confirm">
+                    Apply
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="AnalyticAccountTagPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput">
+            <header class="title">Analytic Tags</header>
+            <div class="col-8 offset-2">
+                <div class="input-group mb-3 text-left">
+                  <!-- <select name="analytic_tag_ids" class="form-control" multiple="multiple">
+                    <option>Select Any</option>
+                    <t t-foreach="widget.medical.analytic_tags" t-as="acc">
+                        <option t-att-value="acc.id"><t t-esc="acc.name" /></option>
+                    </t>
+                  </select> -->
+                  <input type="form-control w100" name="analytic_tag_ids" />
+                </div>
+            </div>
+            <div class="footer">
+                <div class="button confirm">
+                    Apply
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="RowConsumableLines">
+    <t t-foreach="lines" t-as="line">
+        <tr t-att-data-line_index="line_index">
+            <td><span t-esc="line_index + 1"/></td>
+            <td><span t-esc="line['product_name']"/></td>
+            <td><span t-esc="line['qty']"/></td>
+            <td><span class="fa fa-pencil text-info cursor-pointer edit"/> | <span class="fa fa-trash text-danger cursor-pointer remove"/></td>
+        </tr>
+    </t>
+</t>
+
+<t t-name="ProductConsumableWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput">
+            <header class="title bg-dark mb-0 pb-2 pt-3">Consumables</header>
+            <div class="row bg-white div-crud m-0 p-1">
+                <div class="col-7"><input class="form-control product-select" placeholder="Product"/></div>
+                <div class="col-2"><input class="form-control qty" type="number" placeholder="Qty"/></div>
+                <div class="col-3">
+                    <span class="fa fa-save text-success cursor-pointer save"></span> | <span class="fa fa-close text-danger cursor-pointer discard"></span>
+                </div>
+            </div>
+            <table class="table table-bordered table-sm table-consumable-lines">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div class="footer bg-dark">
+                <div class="button confirm bg-success">
+                    Apply
+                </div>
+                <div class="button cancel bg-warning">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="EmployeePopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput">
+            <header class="title">Doctor</header>
+            <t t-log="widget.options" />
+            <div class="col-8 offset-2">
+                <div class="input-group mb-3 text-left">
+                  <select name="Employee" class="form-control">
+                    <option>Select Any</option>
+                    <t t-foreach="(widget.options and widget.options.emp_list) or widget.medical.all_employees or []" t-as="emp">
+                        <option t-att-value="emp.id"><t t-esc="emp.name" /></option>
+                    </t>
+                  </select>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="button confirm">
+                    Apply
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="PopupMailChatter">
+    <div class="modal-dialog">
+        <div class="popup" style="width: 600px;height: 406px;overflow-y: scroll;">
+            <div class="header p-2 pull-right" style="position:absolute;top:5px;right:5px">
+                <button class="btn cancel">
+                    <span class="fa fa-times text-danger"></span>
+                </button>
+            </div>
+            <div class='h-chatter touch-scrollable scrollable-y'>
+                <h2 class="v-no-history" style="display: none">
+                    History Not Available.
+                </h2>
+            </div>
+        </div>
+    </div>
+</t>
+
+<!-- Base -->
+<t t-name="PopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-alert">
+            <p class="title"><t t-esc=" widget.options.title || 'Alert' " /></p>
+            <p class="body"><t t-raw=" widget.options.body || '' "/></p>
+            <div class="footer">
+                <div class="button cancel">
+                    Ok
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="ErrorPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-error">
+            <p class="title"><t t-esc=" widget.options.title || 'Error' " /></p>
+            <p class="body"><t t-esc=" widget.options.body || '' "/></p>
+            <div class="footer">
+                <div class="button cancel">
+                    Ok
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="SyncErrorPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-error">
+            <header class="title"><t t-esc=" widget.options.title || 'Error' " /></header>
+            <main class="body traceback"><t t-esc=" widget.options.body || '' "/></main>
+            <footer class="footer">
+                <div class="button cancel">
+                    Ok
+                </div>
+                <div class="button stop_showing_sync_errors">
+                    Don't show again
+                </div>
+            </footer>
+        </div>
+    </div>
+</t>
+
+<t t-name="ErrorTracebackPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-error">
+            <header class="title"><t t-esc=" widget.options.title || 'Error' " /></header>
+            <main class="body traceback"><t t-esc=" widget.options.body || '' "/></main>
+            <footer class="footer">
+                <div class="button cancel">
+                    Ok
+                </div>
+                <a><div class="button icon download_error_file oe_hidden">
+                    <i class="fa fa-arrow-down" role="img" aria-label="Download error" title="Download error"></i>
+                </div></a>
+                <div class="button icon download">
+                    <i class="fa fa-download" role="img" aria-label="Download" title="Download"></i>
+                </div>
+                <div class="button icon email">
+                    <i class="fa fa-link" role="img" aria-label="Send by email" title="Send by email"></i>
+                </div>
+            </footer>
+        </div>
+    </div>
+</t>
+
+<t t-name="ErrorBarcodePopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-barcode">
+            <header class="title">Unknown Barcode
+                <br />
+                <span class='barcode'><t t-esc="widget.options.barcode" /></span>
+            </header>
+            <main class="body">
+                The Point of Sale could not find any product, client, employee
+                or action associated with the scanned barcode.
+            </main>
+            <footer class="footer">
+                <div class="button cancel">
+                    Ok
+                </div>
+            </footer>
+        </div>
+    </div>
+</t>
+
+<t t-name="ConfirmPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-confirm">
+            <header class="title"><t t-esc=" widget.options.title || 'Confirm ?' " /></header>
+            <main class="body"><t t-esc="  widget.options.body || '' "/></main>
+            <footer class="footer">
+                <div class="button confirm">
+                    Confirm
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </footer>
+        </div>
+    </div>
+</t>
+
+<t t-name="YesNoPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-confirm">
+            <header class="title"><t t-esc=" widget.options.title || 'Confirm ?' " /></header>
+            <main class="body"><t t-esc="  widget.options.body || '' "/></main>
+            <footer class="footer">
+                <div class="button confirm">
+                    Yes
+                </div>
+                <div class="button cancel">
+                    No
+                </div>
+            </footer>
+        </div>
+    </div>
+</t>
+
+<t t-name="TextInputPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput">
+            <header class="title"><t t-esc=" widget.options.title || '' " /></header>
+            <input type='text' t-att-value="widget.options.value || ''"></input>
+            <div class="footer">
+                <div class="button confirm">
+                    Ok
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="TextInput2PopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput text-left">
+            <header class="title text-center"><t t-esc=" widget.options.title || '' " /></header>
+            <t t-if="widget.options and widget.options.label1">
+                <div class="ml-5"><strong><t t-esc="widget.options.label1" /></strong></div>
+            </t>
+            <input type='text' class="input1 ml-5" t-att-value="widget.options.value1 || ''" t-att-placeholder="widget.options.label1 || ''"></input>
+            <t t-if="widget.options and widget.options.label2">
+                <div class="ml-5 mt-3"><strong><t t-esc="widget.options.label2" /></strong></div>
+            </t>
+            <input type='text' class="input2 ml-5" t-att-value="widget.options.value2 || ''" t-att-placeholder="widget.options.label2 || ''"></input>
+            <div class="footer">
+                <div class="button confirm">
+                    Ok
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="PackLotLinePopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-text">
+            <header class="title"><t t-esc=" widget.options.title || '' " /></header>
+            <main class='packlot-lines'>
+                <t t-if="widget.options.pack_lot_lines">
+                    <t t-set="focus_lot_line" t-value="widget.focus_model || widget.options.pack_lot_lines.get_empty_model()"/>
+                    <t t-foreach='widget.options.pack_lot_lines.models' t-as='lot_line'>
+                        <input type="text" t-att-cid="lot_line.cid"
+                            t-att-value="lot_line.get('lot_name')"
+                            t-att-autofocus="lot_line === focus_lot_line ? 'autofocus': undefined"
+                            class="popup-input packlot-line-input"
+                            placeholder="Serial/Lot Number"/>
+                        <i class="oe_link_icon remove-lot fa fa-trash-o" role="img" aria-label="Remove" title="Remove"></i>
+                    </t>
+                </t>
+            </main>
+            <footer class="footer">
+                <div class="button confirm">
+                    Ok
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </footer>
+        </div>
+    </div>
+</t>
+
+<t t-name="TextAreaPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput">
+            <header class="title"><t t-esc=" widget.options.title || '' " /></header>
+            <textarea><t t-esc="widget.options.value" /></textarea>
+            <footer class="footer">
+                <div class="button confirm">
+                    Ok
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </footer>
+        </div>
+    </div>
+</t>
+
+<t t-name="TextAndRadioInputPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput">
+            <header class="title"><t t-esc=" widget.options.title || '' " /></header>
+            <textarea placeholder="Input here..."><t t-esc="widget.options.value" /></textarea>
+            <div>
+                <input id="checkbox" type="checkbox"></input>
+                <label for="checkbox"><t t-esc="widget.options.checkbox_title || ''"/></label>
+            </div>
+            <footer class="footer">
+                <div class="button confirm">
+                    Ok
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </footer>
+        </div>
+    </div>
+</t>
+
+<t t-name="MessagePost">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput">
+            <header class="title"><t t-esc=" widget.options.title || '' " /></header>
+            <input type="text" name="msg_to" class="form-control w-75" placeholder="Message To" t-att-value="widget.options.msg_to or ''" />
+            <textarea class="w-75 mt-2 p-1" placeholder="Your Message"><t t-esc="widget.options.value" /></textarea>
+            <footer class="footer">
+                <div class="button confirm">
+                    Send
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </footer>
+        </div>
+    </div>
+</t>
+
+<t t-name="SelectionPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-selection">
+            <header class="title"><t t-esc=" widget.options.title || 'Select' " /></header>
+            <div class='selection scrollable-y touch-scrollable'>
+                <t t-foreach="widget.list || []" t-as="item">
+                    <div t-attf-class="selection-item {{ widget.is_selected.call(widget, item.item) ? 'selected' : '' }}" t-att-data-item-index='item_index'>
+                        <t t-esc='item.label'/>
+                    </div>
+                </t>
+            </div>
+            <footer class="footer">
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </footer>
+        </div>
+    </div>
+</t>
+
+<t t-name="NumberPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-number">
+            <header class="title"><t t-esc=" widget.options.title || '' " /></header>
+            <div class='popup-input value active'>
+                <t t-esc='widget.inputbuffer' />
+            </div>
+            <div class='popup-numpad'>
+                <button class="input-button number-char" data-action='1'>1</button>
+                <button class="input-button number-char" data-action='2'>2</button>
+                <button class="input-button number-char" data-action='3'>3</button>
+                <t t-if="widget.options.cheap">
+                    <button class="mode-button add" data-action='+1'>+1</button>
+                </t><t t-if="!widget.options.cheap">
+                    <button class="mode-button add" data-action='+10'>+10</button>
+                </t>
+                <br />
+                <button class="input-button number-char" data-action='4'>4</button>
+                <button class="input-button number-char" data-action='5'>5</button>
+                <button class="input-button number-char" data-action='6'>6</button>
+                <t t-if="widget.options.cheap">
+                    <button class="mode-button add" data-action='+2'>+2</button>
+                </t><t t-if="!widget.options.cheap">
+                    <button class="mode-button add" data-action='+20'>+20</button>
+                </t>
+                <br />
+                <button class="input-button number-char" data-action='7'>7</button>
+                <button class="input-button number-char" data-action='8'>8</button>
+                <button class="input-button number-char" data-action='9'>9</button>
+                <t t-if="widget.options.cheap">
+                    <button class="mode-button add" data-action='+5'>+5</button>
+                </t><t t-if="!widget.options.cheap">
+                    <button class="mode-button add" data-action='+50'>+50</button>
+                </t>
+                <br />
+                <button class="input-button numpad-char" data-action='CLEAR' >C</button>
+                <button class="input-button number-char" data-action='0'>0</button>
+                <button class="input-button number-char dot" t-att-data-action='widget.decimal_separator'><t t-esc='widget.decimal_separator'/></button>
+                <button class="input-button numpad-backspace" data-action='BACKSPACE' >
+                    <img style="pointer-events: none;" src="/point_of_sale/static/src/img/backspace.png" width="24" height="21" alt="Backspace"/>
+                </button>
+                <br />
+            </div>
+            <footer class="footer centered">
+                <div class="button cancel">
+                    Cancel
+                </div>
+                <div class="button confirm">
+                    Ok
+                </div>
+            </footer>
+        </div>
+    </div>
+</t>
+
+<t t-name="DateInputPopupWidget">
+    <div class="modal-dialog">
+        <div class="popup popup-textinput">
+            <p class="title"><t t-esc=" widget.options.title || '' " /></p>
+            <input type='date' t-att-value="widget.options.value || ''"></input>
+
+            <div class="input-append date form_datetime">
+                <input type="text" class="v-input-date" t-att-value="widget.options.value || ''"/>
+                <span class="add-on"><i class="icon-th"></i></span>
+            </div>
+
+            <div class="footer">
+                <div class="button confirm">
+                    Ok 
+                </div>
+                <div class="button cancel">
+                    Close
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+<t t-name="DateTimeInputPopupWidget">
+    <div class="modal-dialog">
+        <div class="popup popup-textinput">
+            <p class="title"><t t-esc="widget.options.title || '' " /></p>
+
+            <input type='text' class='v-input-datetime' t-att-value="widget.options.value || ''"></input>
+
+            <div class="footer">
+                <div class="button confirm">
+                    Ok 
+                </div>
+                <div class="button cancel">
+                    Close 
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="TimeInputPopupWidget">
+    <div class="modal-dialog">
+        <div class="popup popup-textinput">
+            <p class="title"><t t-esc="widget.options.title || '' " /></p>
+            <div class="body">
+                <div class="form-group">
+                  <label for="service_time">Change Service Time:</label>
+                    <input id="service_time" type='text'
+                        class='ol-input-time' 
+                        t-att-value="widget.options.value || ''"/>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="button confirm">
+                    Ok 
+                </div>
+                <div class="button cancel">
+                    Close 
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="UniversalPopupWidget">
+    <div class="modal-dialog">
+        <div class="popup popup-info">
+            <p class="title"><t t-esc=" widget.options.title || 'Universal Popup' " /></p>
+            <p class="body"><t t-esc=" widget.options.body || '' "/></p>
+            <div class="footer">
+                <div class="button confirm">
+                    Confirm
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="PartnerAging">
+    <div class="modal-dialog">
+        <div class="popup aging-popup w-75 h-75">
+            <t t-set="aging_data" t-value="widget and widget.options and widget.options.aging_data" />
+            <t t-if="aging_data">
+                <p class="title">
+                    <i class="fa fa-user fa-2x text-info"></i>
+                    <t t-esc="aging_data.partner_name" />
+                </p>
+                <div style="font-size: 15px; overflow-y: auto; min-height: 80%">
+                    <div class="p-1">
+                        <table class="table table-light d-aging-head-table table-sm" width="100%">
+                            <colgroup>
+                                <col widget="30%" />
+                                <col widget="5%" />
+                                <col widget="30%" />
+                                <col widget="5%" />
+                                <col widget="30%" />
+                            </colgroup>
+                            <thead>
+                                <t t-set="grand_total" t-value="0" />
+                                <t t-foreach="[4, 3, 2, 1, 0]" t-as="cnt">
+                                    <t t-set="total" t-value="aging_data[cnt] and aging_data[cnt]['total'] or  0" />
+                                    <t t-set="grand_total" t-value="grand_total + total" />
+                                </t>
+                                <t t-set="remain_credit" t-value="aging_data.partner_credit - grand_total" />
+                                <tr>
+                                    <th>Advance Payment</th>
+                                    <th></th>
+                                    <th>Credit Limit</th>
+                                    <th></th>
+                                    <th>Due Balance</th>
+                                    <th></th>
+                                    <th>Remaining Credit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span t-att-class="aging_data.partner_advance >= 0 and 'text-success' or 'text-danger'">
+                                            <t t-esc="aging_data.partner_advance" /></span></td>
+                                    <td>-</td>
+                                    <td><span t-att-class="aging_data.partner_credit >= 0 and 'text-success' or 'text-danger'">
+                                            <t t-esc="aging_data.partner_credit" /></span></td>
+                                    <td>-</td>
+                                    <td><span t-att-class="grand_total >= 0 and 'text-danger' or 'text-success'">
+                                            <t t-esc="grand_total" /></span></td>
+                                    <td>-</td>
+                                    <td><span t-att-class="remain_credit >= 0 and 'text-success' or 'text-danger'">
+                                            <t t-esc="remain_credit" /></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12">
+                        <table class="d-aging-table" width="100%">
+                            <colgroup>
+                                <col width="20%" />
+                                <col width="16%" />
+                                <col width="16%" />
+                                <col width="16%" />
+                                <col width="16%" />
+                                <col width="16%"/>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Not Due</th>
+                                    <th>0-30</th>
+                                    <th>30-60</th>
+                                    <th>60-90</th>
+                                    <th>90-120</th>
+                                    <th>+120</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <t t-foreach="[5, 4, 3, 2, 1, 0]" t-as="cnt">
+                                        <td>
+                                            <span class="btn btn-outline-dark btn-block aging" t-att-data-value="cnt">
+                                                <t t-set="total" t-value="aging_data[cnt] and aging_data[cnt]['total'] or  0" />
+                                                <i class="fa fa-briefcase"></i>
+                                                <t t-esc="widget.format_currency(total)" />
+                                            </span>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-8 offset-2 mt-4 scrollable-y" style="height:175px;">
+                        <h3 class="line-title"> </h3>
+                        <table class="table table-ins-check table-form table-light aging-lines table-sm text-left" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Date</th>
+                                    <th>Due Date</th>
+                                    <th class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="footer">
+                    <div class="button cancel">
+                        Close
+                    </div>
+                </div>
+            </t>
+        </div>
+    </div>
+</t>
+
+<t t-name="AgingLine">
+    <tr t-foreach="lines or []" t-as="line">
+        <td t-att-data-invoice="line.invoice_id" t-att-data-order="line.medical_order_id">
+            <t t-esc="line.move" />
+        </td>
+        <td><t t-esc="widget.format_date(line.date)" /></td>
+        <td><t t-esc="widget.format_date(line.due_date)" /></td>
+        <td class="text-right"><t t-esc="widget.format_currency(line.amount)" /></td>
+    </tr>
+</t>
+
+<t t-name="PartnerAppointmentsDetail">
+    <div class="card card-light">
+        <div class="card-header">
+            Consumables
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th class="text-left">Product</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="event_data.consumables || []" t-as="consu">
+                        <tr>
+                            <td class="text-left"><span>
+                                    <t t-esc="consu.product_id" /></span></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card card-light">
+        <div class="card-header">
+            Invoice
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th class="text-left">Item</th>
+                        <th class="text-right">QTY</th>
+                        <th class="text-right">Price</th>
+                        <th class="text-right">Discount</th>
+                        <th class="text-right">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="event_data.lines || []" t-as="line">
+                        <tr>
+                            <td class="text-left"><span>
+                                    <t t-esc="line.product_id" /></span></td>
+                            <td class="text-right"><span>
+                                    <t t-esc="line.qty" /></span></td>
+                            <td class="text-right"><span>
+                                    <t t-esc="line.price_unit" /></span></td>
+                            <td class="text-right"><span>
+                                    <t t-esc="line.discount" /></span></td>
+                            <td class="text-right"><span>
+                                    <t t-esc="line.price_subtotal_incl" /></span></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card card-light">
+        <div class="card-header">
+            Refunds
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th class="text-left">Note</th>
+                        <th class="text-right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="event_data.refunds || []" t-as="rline">
+                        <tr>
+                            <td class="text-left"><span>
+                                    <t t-esc="rline" /></span></td>
+                            <td class="text-right"><span>
+                                    <t t-esc="rline" /></span></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card card-light">
+        <div class="card-header">
+            Payments
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th class="text-left">Type</th>
+                        <th class="text-right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="event_data.statement_ids || []" t-as="sline">
+                        <tr>
+                            <td class="text-left"><span>
+                                    <t t-esc="sline.journal_id" /></span></td>
+                            <td class="text-right"><span>
+                                    <t t-esc="widget.format_currency(sline.amount)" /></span></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card card-light">
+        <div class="card-header">
+            Account Reconciliation
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th class="text-left">Service</th>
+                        <th class="text-right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card card-light">
+        <div class="card-header">
+            Appointment Note
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped table-sm">
+            </table>
+        </div>
+    </div>
+    <div class="card card-light">
+        <div class="card-header">
+            Invoice Note
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped table-sm">
+            </table>
+        </div>
+    </div>
+    <!-- <div class="card card-light">
+        <div class="card-header">
+            States History
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th class="text-left">State</th>
+                        <th class="text-left">User</th>
+                        <th class="text-left">Datetime</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="event_data.history_ids || []" t-as="history">
+                        <tr>
+                            <td class="text-left"><span>
+                                    <t t-esc="states[history.state]" /></span></td>
+                            <td class="text-left"><span>
+                                    <t t-esc="history.modification_user_id" /></span></td>
+                            <td class="text-left"><span>
+                                    <t t-esc="moment(history.modification_dt).format(widget.datetime_format)" /></span></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+    </div> -->
+</t>
+<t t-name="PartnerAppointments">
+    <div class="modal-dialog">
+        <div class="popup partner-appointment-popup w-75" style="font-size: 15px; font-weight: normal;">
+            <t t-set="events" t-value="widget.options.events_data" />
+            <t t-if="events">
+                <div class="title">
+                    <i class="fa fa-user fa-2x text-info"></i>
+                    <t t-esc="events[0].partner_id" />
+
+                    <span class="fa fa-times btn btn-danger popup-close">
+                    </span>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-8 d-right-border">
+                            <table class="table table-striped display appointment-table" width="100%">
+                            </table>
+                        </div>
+                        <div class="col-4 scrollable-y" id="appoitment-detail">
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </div>
+</t>
+
+
+<t t-name="AskActionNotePopup">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput">
+            <header class="title">Action - Note</header>
+            <div class="col-8 offset-2">
+                <div class="input-group mb-3 text-left">
+                    <select class="action form-control">
+                        <option>Select Any</option>
+                        <t t-foreach="widget.medical.db.last_action_by_id or []" t-as="action">
+                            <t t-set="act" t-value="action_value"/>
+                            <t t-if="act.use_in_state == (widget.options.mode || false)">
+                                <option t-att-value="action"><t t-esc="act['name']" t-att="(widget.options.last_action_id and widget.options.last_action_id == action) ? 'selected' : ''"/></option>
+                            </t>
+                        </t>
+                    </select>
+                </div>
+                <textarea class="note form-control" placeholder="Note"><t t-esc="widget.options.note || ''"/></textarea>
+            </div>
+            <div class="footer">
+                <div class="button confirm">
+                    Apply
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="ComplainPopup">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup complain-popup">
+            <p class="title">Complain</p>
+            <div class="body m-2">
+                <t t-set="complain" t-value="widget.options.complain or {}"/>
+                <input name="id" type="hidden" t-att-value="complain and complain.id or false"/>
+                <input name="appointment_id" type="hidden" t-att-value="complain.appointment_id and complain.appointment_id[0] or false"/>
+                <table class="table table-sm">
+                    <tr>
+                        <th class="text-left">Complain Type</th>
+                        <td>
+                            <select name="complain_type_id" class="form-control">
+                                <t t-foreach="widget.medical.complain_types or []" t-as="ct">
+                                    <t t-if="complain.complain_type_id and complain.complain_type_id[0] == ct['id']">
+                                        <option t-att-value="ct.id" selected="selected"><t t-esc="ct.name"/></option>
+                                    </t>
+                                    <t t-else="1">
+                                        <option t-att-value="ct.id"><t t-esc="ct.name"/></option>
+                                    </t>
+                                </t>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-left">Complain</th>
+                        <td><textarea name="complain" class="form-control"><t t-esc="complain.complain"/></textarea></td>
+                    </tr>
+                    <tr>
+                        <th class="text-left">Resolution</th>
+                        <td><textarea name="resolution" class="form-control"><t t-esc="complain.resolution"/></textarea></td>
+                    </tr>
+                    <tr>
+                        <th class="text-left">Complain Status</th>
+                        <td>
+                            <select name="state" class="form-control">
+                                <t t-foreach="[['draft', 'Draft'], ['in_progress', 'In Progress'], ['resolved', 'Resolved'], ['cancel', 'Canceled'], ['not_resolved', 'Not Resolved']]" t-as="state">
+                                    <t t-if="complain.state and complain.state == state[0]">
+                                        <option t-att-value="state[0]" selected="selected"><t t-esc="state[1]"/></option>
+                                    </t>
+                                    <t t-else="1">
+                                        <option t-att-value="state[0]"><t t-esc="state[1]"/></option>
+                                    </t>
+                                </t>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-left">Is Customer Satisfied ?</th>
+                        <td>
+                            <t t-if="complain.is_customer_satisfied">
+                                <input type="checkbox" name="is_customer_satisfied" class="form-control" checked="checked"/>
+                            </t>
+                            <t t-else="">
+                                <input type="checkbox" name="is_customer_satisfied" class="form-control"/>
+                            </t>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="footer">
+                <div class="button confirm">
+                    Save
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+</templates>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+<t t-name="BtnGlobalDiscount">
+    <button class="btn btn-warning" id="js_global_discount">
+        <i class='fa fa-money' /> Discount
+    </button>
+</t>
+
+<t t-name="GlobalDiscountPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput">
+            <header class="title"><t t-esc=" widget.options.title || 'Input' " /></header>
+            <p class="body" t-if="widget.options.body"><t t-esc=" widget.options.body || '' "/></p>
+            <div class="col-8 offset-2 text-right">
+                <div class="input-group mb-3 text-right">
+                  <input type="number" name="amount" class="form-control" t-att-value="widget.options.value || ''"/>
+                </div>
+
+                <div class="input-group mb-3 text-left">
+                  <select name="employee_id" class="form-control" t-if="widget.options.current_branch_id">
+                    <option>Select Any</option>
+                    <t t-set="emps" t-value="widget.medical.employees_by_branch[widget.options.current_branch_id]" />
+                    <t t-foreach="emps or []" t-as="emp">
+                        <option t-att-value="emp.id"><t t-esc="emp.name" /></option>
+                    </t>
+                  </select>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="button confirm">
+                    Confirm
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+</templates>

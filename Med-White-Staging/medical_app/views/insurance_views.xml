@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_medical_insurance" name="Insurance"
+        parent="medical_app.menu_medical_app" groups="medical_app.group_manage_insurance" sequence="30"/>
+
+    <record id="view_insurance_card_form" model="ir.ui.view">
+        <field name="name">view.insurance.card.form</field>
+        <field name="model">insurance.card</field>
+        <field name="arch" type="xml">
+            <form string="Insurance Card">
+                <header>
+                    <button name="action_running" states="pending,paused" string="Running" type="object" class="oe_highlight"/>
+                    <button name="action_paused" states="running" string="Pause" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" text="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <div class="oe_title">
+                        <label for="name" />
+                        <h2><field name="name" /></h2>
+                    </div>
+                    <group name="main">
+                        <group>
+                            <field name="active" invisible="1"/>
+                            <field name="sequence" invisible="1"/>
+                            <field name="partner_id" domain="[('is_insurance_company','=',False)]"/>
+                            <field name="main_company_id"/>
+                            <field name="insurance_company_id"/>
+                            <field name="pricelist_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="issue_date" required='1'/>
+                            <field name="expiry_date" required='1'/>
+                            <field name="member_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_insurance_card_tree" model="ir.ui.view">
+        <field name="name">view.insurance.card.tree</field>
+        <field name="model">insurance.card</field>
+        <field name="arch" type="xml">
+            <tree string="Insurance Card" delete="false">
+                <field name="sequence" widget="handle" optional="hide"/>
+                <field name="name" />
+                <field name="partner_id"/>
+                <field name="pricelist_id"/>
+                <field name="issue_date" required='1'/>
+                <field name="expiry_date" required='1'/>
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_insurance_card_search" model="ir.ui.view">
+        <field name="name">view.insurance.card.search</field>
+        <field name="model">insurance.card</field>
+        <field name="arch" type="xml">
+            <search string="Insurance Card">
+                <field name="name"/>
+                <field name="insurance_company_id"/>
+                <field name="main_company_id"/>
+                <field name="partner_id"/>
+                <field name="pricelist_id" string="Scheme"/>
+
+                <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+
+                <separator/>
+                <filter string="Pending" name="pending_state" domain="[('state', '=', 'pending')]"/>
+                <filter string="Running" name="running_state" domain="[('state', '=', 'running')]"/>
+                <filter string="Expired" name="expired_state" domain="[('state', '=', 'expired')]"/>
+                <filter string="Paused" name="paused_state" domain="[('state', '=', 'paused')]"/>
+
+                <separator/>
+                <filter string="Issue Date" name="filter_issue_date" date="issue_date"/>
+                <filter string="Expiry Date" name="filter_expiry_date" date="expiry_date"/>
+                <group string="Group By" name="groupby">
+                    <filter name="partner_id_groupby" string="Patient" context="{'group_by': 'partner_id'}"/>
+                    <filter name="pricelist_id_groupby" string="Scheme" context="{'group_by': 'pricelist_id'}"/>
+                    <filter name="issue_date_groupby" string="Issue Date" context="{'group_by': 'expiry_date'}"/>
+                    <filter name="expiry_date_groupby" string="Expiry Date" context="{'group_by': 'expiry_date'}"/>
+                    <separator/>
+                    <filter name="insurance_company_id_groupby" string="Insurance Company" context="{'group_by': 'insurance_company_id'}"/>
+                    <filter name="main_company_id_groupby" string="Insurance Parent Company" context="{'group_by': 'main_company_id'}"/>
+                    <separator/>
+                    <filter name="state_groupby" string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_insurance_card" model="ir.actions.act_window">
+        <field name="name">Insurance Cards</field>
+        <field name="res_model">insurance.card</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_insurance_card" name="Insurance Cards" parent="medical_app.menu_medical_insurance" groups="medical_app.group_manage_insurance" action="medical_app.action_insurance_card" sequence="30"/>
+
+    <record id="action_move_insurance_invoice_type" model="ir.actions.act_window">
+        <field name="name">Insurance Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_id" ref="account.view_invoice_tree"/>
+        <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+        <field name="domain">[('type', '=', 'out_invoice'), ('is_insurance_invoice','=',True)]</field>
+        <field name="context">{'default_type': 'out_invoice', 'default_is_insurance_invoice': True}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a Insurance Bill
+          </p><p>
+            Create Insurance Bill, register payments and keep track of the discussions with your Insurance Companies.
+          </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_insurance_card_invoices" name="Insurance Invoices"
+        parent="medical_app.menu_medical_insurance"
+        groups="medical_app.group_manage_insurance"
+        action="medical_app.action_move_insurance_invoice_type" sequence="40"/>
+
+        <record id="action_medical_order_line_for_insurance" model="ir.actions.act_window">
+        <field name="name">Insurance Services</field>
+        <field name="res_model">medical.order.line</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('is_insurance_applicable','=',True),('order_id.insurance_card_id','!=',False)]</field>
+        <field name="context">{'create': False, 'edit': False, 'unlink': False}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Insurance Line Not found
+          </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_medical_order_line_insuranced" name="Insurance Services"
+        parent="medical_app.menu_medical_insurance"
+        groups="medical_app.group_manage_insurance"
+        action="medical_app.action_medical_order_line_for_insurance" sequence="100"/>
+
+</odoo>

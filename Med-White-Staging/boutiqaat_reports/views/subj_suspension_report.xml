@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="0">
+        <template id="subj_suspension">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-set="doc" t-value="docs[0]"/>
+                    <t t-set="e" t-value="doc.employee_id"/>
+                    <div class="page" style="font-size:14px;">
+                        <h3><span t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/></h3>
+                        <table style="width: 100%">
+                            <colgroup>
+                                <col width="15%" class="text-left"/>
+                                <col width="30%"/>
+                                <col width="10%"/>
+                                <col width="30%"/>
+                                <col width="15%"/>
+                            </colgroup>
+                            <tr>
+                                <th style="text-align: left;">Date :</th>
+                                <td><t t-esc="doc.print_date.strftime('%d/%m/%Y')"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="doc.print_date.strftime('%d/%m/%Y')"/></td>
+                                <th style="text-align: right;" dir="rtl">التاريخ :</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Employee ID :</th>
+                                <td><t t-esc="e.identification_id"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.identification_id"/></td>
+                                <th style="text-align: right;" dir="rtl">الرقم الوظيفي :</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Name :</th>
+                                <td><t t-esc="e.name"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.arabic_name"/></td>
+                                <th style="text-align: right;" dir="rtl">الاســم:</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Department :</th>
+                                <td style="text-align: left;"><t t-esc="e.department_id.name or ''"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.department_id.arabic_name or ''"/></td>
+                                <th style="text-align: right;" dir="rtl">القســـم:</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Position :</th>
+                                <td style="text-align: left;"><t t-esc="e.job_id.name or ''"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.job_id.arabic_name or ''"/></td>
+                                <th style="text-align: right;" dir="rtl">الوظيفة:</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Civil ID :</th>
+                                <td style="text-align: left;"><t t-esc="e.civil_id or ''"/><br/><br/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.civil_id or ''"/></td>
+                                <th style="text-align: right;" dir="rtl">الرقم المدني:</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align: center;"><u>Subj: Suspension</u><br/><br/></th>
+                                <td></td>
+                                <th colspan="2" style="text-align: center;" dir="rtl"><u>الموضوع/ إيقاف عن العمل</u></th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    Reference to the above-mentioned subject and based on the complaint filed against you regarding for <t t-esc="doc.english_reason"/> please note that you have been suspended from work as of <t t-esc="doc.suspension_date.strftime('%A')"/> <t t-esc="doc.suspension_date.strftime('%d/%m/%Y')"/> until the completion investigation.
+                                    <br/> <br/>
+                                </td>
+                                <td></td>
+                                <td colspan="2" style="text-align: right;" dir="rtl">
+                                    بالاشـــــارة إلى الــمــوضــوع أعـــلاه، وبـنــاء عــلى مـــا جــاء بالشــكوى المــقــدمــة في حقــكم، يـرجــى العـلم بأنــه تقــرر إيقــافكم عـن العــمل اعتـــبارا من <t t-esc="doc.suspension_date.strftime('%d/%m/%Y')"/> وحـتى الانتهــاء من إجـراءات التحقيق معـكم فيـما  <t t-esc="doc.arabic_reason"/><br/><br/>
+                                </td>
+                            </tr>
+                            <!-- <tr>
+                                <td colspan="2">
+                                    <t t-esc="doc.english_reason"/>
+                                </td>
+                                <td></td>
+                                <td colspan="2" style="text-align: right;" dir="rtl">
+                                    <t t-esc="doc.arabic_reason"/>
+                                </td>
+                            </tr> -->
+                            <tr>
+                                <td colspan="2">
+                                    You will be informed of the date of your investigation in the Legal Affairs Department to hear your comments, please be on time.
+                                    <br/><br/><br/>
+                                </td>
+                                <td></td>
+                                <td colspan="2" style="text-align: right;" dir="rtl">
+                                    علمـا بأنـه سـيتم إبــلاغـكم بــمـوعد   اســتدعائكــم الـشئــون الـقانونية لـسماع أقـوالكم فيـما ورد، آملين التـزامكم بالموعد المحدد
+                                    <br/><br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align: center;">
+                                    Best Regards, <br/><br/>
+                                </th>
+                                <td></td>
+                                <th colspan="2" style="text-align: center;" dir="rtl">
+                                  ولكم جزيل الشكر <br/><br/>
+                                </th>
+                            </tr>
+                            <!-- <tr style="text-align: center;">
+                                <th colspan="5">
+                                    <div style="text-align: center;" dir="rtl">مدير الشئون الادارية والموارد البشرية</div>
+                                    <div>HR &amp; Admin Manager</div>
+                                </th>
+                            </tr> -->
+                            <tr style="text-align: center;">
+                                <th colspan="5" style="padding-top:90px;">
+                                    <div><span t-field="doc.title_id.name"/></div>
+                                    <hr style="margin: 10px 35% 2px 35%; border: 1px solid #929292;"/>
+                                </th>
+                            </tr>
+                        </table>
+                        <div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <report
+            id="subj_suspension_report"
+            string="Print"
+            model="boutiqaat.report.wizarad"
+            report_type="qweb-pdf"
+            name="boutiqaat_reports.subj_suspension"
+            file="boutiqaat_reports.subj_suspension"
+            print_report_name="'Subj Suspension'"
+            menu="False"
+        />
+
+    </data>
+</odoo>

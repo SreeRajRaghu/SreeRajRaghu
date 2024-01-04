@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="asset_move_form" model="ir.ui.view">
+        <field name="name">asset.move.form</field>
+        <field name="model">asset.move</field>
+        <field name="arch" type="xml">
+            <form string="Asset Move">
+                <sheet>
+                    <separator string="Asset Move"/>
+                    <group>
+                        <group>
+                            <field name="is_issue" attrs="{'invisible': [('is_return', '=', True)]}"/>
+                            <field name="is_return" attrs="{'invisible': [('is_issue', '=', True)]}"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="product_ids" domain="[('state', '=', 'instock')]"
+                                   attrs="{'invisible': [('is_issue', '!=', True)]}" context="{'asset_code': 1}"
+                                   widget="many2many_tags"
+                                   options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                            <field name="company_id" invisible="1" groups="base.group_multi_company"
+                                   options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                            <field name="building_id" attrs="{'invisible': [('is_issue', '!=', True)]}"
+                                   domain="[('company_id', '=' ,company_id)]"
+                                   options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="block_id" attrs="{'invisible': [('is_issue', '!=', True)]}"
+                                   options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                            <field name="floor_id" attrs="{'invisible': [('is_issue', '!=', True)]}"
+                                   options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                            <field name="room_id" attrs="{'invisible': [('is_issue', '!=', True)]}"
+                                   options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                        </group>
+                        <field name="return_product_ids" options="{'no_create': True}"
+                               domain="[('state', '=', 'issued')]" attrs="{'invisible': [('is_return', '!=', True)]}">
+                            <tree editable="bottom">
+                                <field name="product_code"/>
+                                <field name="asset_name"/>
+                                <field name="company_id"/>
+                                <field name="building_id"/>
+                                <field name="block_id"/>
+                                <field name="floor_id"/>
+                                <field name="room_id"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+                <footer>
+                    <span groups="base.group_user">
+                        <button class="oe_highlight" name="confirm_move" string="Issue" type="object"
+                                attrs="{'invisible': [('is_issue', '!=', True)]}"/>
+                        <button class="oe_highlight" name="action_asset_return" string="Return" type="object"
+                                attrs="{'invisible': [('is_return', '!=', True)]}"/>
+                    </span>
+                    <span groups="base.group_user">
+                        <button special="cancel" string="_Cancel"/>
+                    </span>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_asset_move" model="ir.actions.act_window">
+        <field name="name">Asset Move</field>
+        <field name="res_model">asset.move</field>
+        <field name="view_mode">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="asset_move_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

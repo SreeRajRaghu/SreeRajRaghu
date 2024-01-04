@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">  
+    <t t-name="BtnFollowUpScreen">
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="fa fa-address-card nav-icon"></i>
+                <p>Follow Up</p>
+            </a>
+        </li>
+    </t>
+
+    <t t-name="FollowupListScreenWidget">
+        <div class="container-fluid screen">
+            <section class="top-content p-1">
+                <div class="row">
+                    <div class="col-3">
+                        <span class='btn btn-secondary back'>
+                            <i class='fa fa-angle-double-left'></i>
+                            Back
+                        </span>
+
+                        <span class="btn btn-primary btn-refresh">
+                            <span class="fa fa-refresh" />
+                            Refresh
+                        </span>
+                    </div>
+                    <div class="col-6">
+                        <h3>Appointment FollowUp</h3>
+                    </div>
+                    <div class="col-3">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2 offset-4">
+                        <select class="search-states form-control capitalise">
+                            <t t-foreach="widget.medical.db.states_by_id" t-as="state">
+                                <t t-set="opt_value" t-value="state_value['name'].split('_').join(' ')"/>
+                                <option t-att-value="state" class="capitalise"><t t-esc="opt_value"/></option>
+                            </t>
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <select class="search-action form-control">
+                            <t t-foreach="widget.medical.db.last_action_by_id" t-as="act">
+                                <option t-att-value="act[0]"><t t-esc="act_value.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+            </section>
+            <section class="full-content">
+                <div class='window'>
+                    <section class='subwindow'>
+                        <div class='subwindow-container'>
+                            <div class='subwindow-container-fix touch-scrollable scrollable-y' style="height: 550px; overflow-y: auto;">
+                                <table class="table table-striped display appointment-table" width="100%">
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </t>
+</templates>

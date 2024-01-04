@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+<t t-name="SynchNotificationWidget">
+    <li class="nav-item">
+        <a class="nav-link" href="#" role="button">
+            <div class="oe_status js_synch">
+                <span class='js_msg oe_hidden'>0</span>
+                <div class="js_connected oe_icon oe_green">
+                    <i class='fa fa-fw fa-wifi' role="img" aria-label="Synchronisation Connected" title="Synchronisation Connected"></i>
+                </div>
+                <div class="js_connecting oe_icon oe_hidden">
+                    <i class='fa fa-fw fa-spin fa-spinner' role="img" aria-label="Synchronisation Connecting" title="Synchronisation Connecting"></i>
+                </div>
+                <div class="js_disconnected oe_icon oe_red oe_hidden">
+                    <i class='fa fa-fw fa-wifi' role="img" aria-label="Synchronisation Disconnected" title="Synchronisation Disconnected"></i>
+                </div>
+                <div class="js_error oe_icon oe_red oe_hidden">
+                    <i class='fa fa-fw fa-warning' role="img" aria-label="Synchronisation Error" title="Synchronisation Error"></i>
+                </div>
+            </div>
+        </a>
+    </li>
+</t>
+<t t-name="WidgetFullScreen">
+    <li class="nav-item v-full-screen">
+        <div class="nav-link" role="button">
+            <i class="fa fa-expand"></i>
+            <!-- <span class="v-close-span" /> -->
+        </div>
+    </li>
+</t>
+
+<t t-name="Chrome">
+    <div class="base-root">
+        <!-- <body class="hold-transition sidebar-mini layout-fixed"> -->
+        <div class="medical-base oe_hidden">
+            <!-- <div class="placeholder_MedicalBaseScreen" /> -->
+            <t t-call="MedicalBaseScreen" />
+        </div>
+        <div class="loader">
+            <div class='loader-feedback oe_hidden'>
+                <h1 class='message'>Loading</h1>
+                <div class='progressbar'>
+                    <div class='progress' width='50%'></div>
+                </div>
+                <div class='oe_hidden button skip'>
+                    Skip
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="HeaderButtonWidget">
+    <li class="nav-item">
+        <div class="nav-link v-close" role="button">
+            <i class="fa fa-power-off"></i>
+            <span class="v-close-span" />
+        </div>
+    </li>
+</t>
+
+<t t-name="MedicalContextMenu">
+    <ul class='custom-menu'>
+        <li data-action="opt1">Hide Sidebar</li>
+        <li data-action="opt2">Mini Sidebar</li>
+        <li data-action="opt3">Full Sidebar</li>
+    </ul>
+</t>
+
+<t t-name="MedicalBaseScreen">
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand-lg navbar-white navbar-light layout-navbar-fixed">
+        <!-- Left navbar links -->
+        <t t-call="MedicalContextMenu" />
+        <ul class="navbar-nav">
+            <li class="nav-item v-menu-control">
+                <div class="nav-link" data-widget="pushmenu" role="button">
+                    <i class="fa fa-bars"></i>
+                </div>
+            </li>
+            <li class="nav-item dropdown v-clinic">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="fa fa-building input-group-text">
+                        </span>
+                    </div>
+                    <select class="form-control js_clinic">
+                        <option>All</option>
+                        <option t-foreach="widget.medical.db.all_clinics or []" t-as="clinic" t-att-value="clinic.id">
+                            <t t-esc="clinic.name" />
+                        </option>
+                    </select>
+                </div>
+            </li>
+            <t t-set="all_groups" t-value="widget.medical.db.all_resource_groups" />
+            <li class="nav-item dropdown v-resource-group"
+                    t-if="(all_groups or []).length">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="fa fa-dashboard input-group-text">
+                        </span>
+                    </div>
+                    <select class="form-control" id="js_resource_group">
+                        <option>All</option>
+                        <option t-foreach="all_groups or []" t-as="group" t-att-value="group.id">
+                            <t t-esc="group.name" />
+                        </option>
+                    </select>
+                </div>
+            </li>
+        </ul>
+
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto v-top-right">
+        </ul>
+        <ul class="navbar-nav v-top-control">
+        </ul>
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside id="sidebar_menu" class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <div class="brand-link">
+            <t t-set="company" t-value="widget.medical.company or {}" />
+            <img t-attf-src="/web/image/res.company/#{company.id}/logo/160x45" t-att-alt="company and company.name or 'Logo'" class="brand-image elevation-3"
+             style="opacity: .8" t-if="company.id"/>
+            <div class="brand-text font-weight-light" style="white-space: normal;">
+                <t t-esc="company and company.name or 'Company'" />
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <t t-set="emp" t-value="widget.medical.get_cashier() or {}" />
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <t t-set="url" t-value="emp.id and '/web/image/hr.employee/' + emp.id + '/image_1920/100x60' or ''" />
+                    <img class="img-circle elevation-2" t-att-src="url"/>
+                </div>
+                <div class="info">
+                    <a class="d-block"><t t-esc="emp.name" /></a>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column control-buttons oe_hidden" data-widget="treeview" role="menu" data-accordion="false">
+                    <!-- Add icons to the links using the .nav-icon class
+                    with font-awesome or any other icon font library -->
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+    <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper screens">
+    </div>
+
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+
+    <div class="popups">
+    </div>
+</div>
+<!-- ./wrapper -->
+</t>
+
+
+<!-- Popups -->
+
+<t t-name="MenuButtonWidget">
+    <div class='control-button'>
+        <t t-esc='widget.label' />
+    </div>
+</t>
+
+<t t-name="ActionButtonWidget">
+    <div class='control-button'>
+        <t t-esc='widget.label' />
+    </div>
+</t>
+
+
+<t t-name="LoginScreenWidget">
+    <div class="login-overlay">
+        <div class="screen-login">
+            <div class="p-3">
+                <t t-set="company" t-value="widget.medical.company or {}" />
+                <img t-attf-src="/web/image/res.company/#{company.id}/logo/260x145" t-att-alt="company and company.name or 'Logo'" class="brand-image elevation-3"
+                 style="" t-if="company.id"/>
+                <div class="border-bottom" style="white-space: normal;">
+                    <t t-esc="company and company.name or 'Company'" />
+                </div>
+            </div>
+            <div class="login-title">
+                <small>Log in to </small>
+                <t t-esc="widget.medical.config.name"/>
+            </div>
+            <div class="btn btn-info btn-lg select-employee">
+                Select Employee
+            </div>
+            <div class="btn btn-danger btn-lg close-session">
+                Close Session
+            </div>
+             <!-- <div class="mt-4 login-footer">
+                 <small>
+                     <button class="login-button close-session">Close session</button>
+                 </small>
+             </div> -->
+        </div>
+    </div>
+</t>
+</templates>

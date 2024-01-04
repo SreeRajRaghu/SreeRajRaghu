@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="prc_report_portal" name="ReportPortal : PCR Report Details">
+        <t t-call="website.layout">
+            <t t-set="additional_title">PCR - Report</t>
+            <t t-set="no_footer">1</t>
+           <div class="container bg-white col-md-6">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <img src="/logo" alt="Company Logo"/>
+                        <br />
+                        <!-- <img t-attf-src="/web/images/res.company/#{order.company_id.id}/logo2" alt="Company Logo"/> -->
+                        <h2 t-field="order.company_id.name" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mt-3">
+                        <table class="table table-bordered table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th colspan="2" class="text-center">Appoitment Details</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td> Appointment Date </td>
+                                <td><span t-field="order.start_time" t-options='{"widget": "date"}'/></td>
+                            </tr>
+                            <tr>
+                                <td> Appointment Time </td>
+                                <td><span  t-if="order.start_time" t-field="order.start_time"  widget="float_time"/> </td>
+                            </tr>
+                            <tr>
+                                <td> Branch </td>
+                                <td><span  t-if="order.clinic_id" t-field="order.clinic_id.name" /></td>
+                            </tr>
+                            <tr>
+                                <td>Result</td>
+                                <td><span  t-if="order.pcr_result" t-field="order.pcr_result" /></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-bordered table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th colspan="2" class="text-center">Patient Details</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td> Patient Code </td>
+                                <td><span t-if="order.pcr_qr_code"  t-field="order.pcr_qr_code" /></td>
+                            </tr>
+                            <tr>
+                                <td> First Name </td>
+                                <td><span t-if="order.partner_id.name" t-field="order.partner_id.name" /></td>
+                            </tr>
+                            <tr>
+                                <td> Last Name </td>
+                                <td><span t-if="order.partner_id.name" t-field="order.partner_id.name" /></td>
+                            </tr>
+                            <tr>
+                                <td> Phone </td>
+                                <td><span t-if="order.partner_id.phone" t-field="order.partner_id.phone" /></td>
+                            </tr>
+                            <tr>
+                                <td> Passport Number </td>
+                                <td><span t-if="order.partner_id.file_no" t-field="order.partner_id.file_no" /></td>
+                            </tr>
+                            <tr>
+                                <td> Civil ID </td>
+                                <td><span t-if="order.partner_id.civil_code" t-field="order.partner_id.civil_code" /></td>
+                            </tr>
+                            <tr>
+                                <td> Nationality </td>
+                                <td><span t-if="order.partner_id.nationality_id" t-field="order.partner_id.nationality_id.name" /></td>
+                            </tr>
+                            <tr>
+                                <td> Date of Birth </td>
+                                <td><span t-if="order.partner_id.birthday" t-field="order.partner_id.birthday" /></td>
+                            </tr>
+                            <tr>
+                                <td> Gender</td>
+                                <td><span t-if="order.partner_id.gender" t-field="order.partner_id.gender" /></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-bordered table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th colspan="2" class="text-center">Flight Details</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td> Airline </td>
+                                <td><span t-if="order.airline_selection_id" t-field="order.airline_selection_id.name" /></td>
+                            </tr>
+                            <tr>
+                                <td> Flight Number </td>
+                                <td><span t-if="order.airline_number" t-field="order.airline_number" /></td>
+                            </tr>
+                            <tr>
+                                <td> Destination </td>
+                                <td><span t-if="order.swab_location_id" t-field="order.swab_location_id" /></td>
+                            </tr>
+                            <tr>
+                                <td> Travel Date </td>
+                                <td><span t-if="order.travel_date" t-field="order.travel_date" /></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

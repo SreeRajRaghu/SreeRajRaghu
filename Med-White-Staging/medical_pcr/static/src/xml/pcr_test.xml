@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+<t t-name="PCRListButtons">
+    <td>
+        <t t-set="is_pcr" t-value="widget.medical.config.company_code == 'pcr'" />
+        <t t-log="'is_pcr ? ', is_pcr" />
+        <a t-attf-class="btn btn-outline-success has-action" t-if="is_pcr and order.is_app_pcr" t-attf-href="/report/pdf/medical_pcr.pcr_consent_form/#{order.id}" target="blank">
+            <span class="fa fa-print has-action" /> Consent Form
+        </a>
+
+        <button class="btn btn-primary has-action" title="Validate"
+            t-if="is_pcr and !order.invoice_state"
+            data-event="app_create_invoice">
+            <span class="fa fa-money has-action" data-event="app_create_invoice"/>
+            Receive Payment
+        </button>
+
+        <button t-attf-class="btn btn-outline-info has-action #{order.handover_file_on and 'disabled'} #{!order.invoice_state and 'disabled'} " title="Sample Taken" t-if="is_pcr and widget.medical.config.enable_lab_center and order.is_app_pcr" data-event="log_sample_date">
+            <span class="fa fa-hand-lizard-o has-action text-primary" data-event="log_sample_date"/>
+            <t t-if="order.handover_file_on">
+                Sample Taken
+            </t>
+            <t t-else="True">
+                <t t-if="!order.invoice_state">
+                    Not Invoiced
+                </t>
+                <t t-else="1">
+                    Take Sample
+                </t>
+            </t>
+        </button>
+
+        <a t-attf-class="btn btn-outline-success has-action v-qr-print" t-if="is_pcr and order.is_app_pcr" t-attf-href="/report/pdf/medical_pcr.pcr_qr_custom_report/#{order.id}" target="blank">
+            <span class="fa fa-print has-action" /> QR
+        </a>
+
+        <a t-attf-class="btn btn-outline-success has-action v-barcode-print" t-if="is_pcr and order.is_app_pcr" t-attf-href="/report/pdf/medical_pcr.pcr_barcode_custom_report/#{order.id}" target="blank">
+            <span class="fa fa-print has-action" /> Barcode
+        </a>
+
+        <button t-attf-class="btn btn-outline-info has-action #{order.vaccine_batch_no and 'disabled'} #{!order.invoice_state and 'disabled'} " title="Vaccine Batch No" t-if="is_pcr and order.is_app_vaccine" data-event="show_popup_batch_no">
+            <span class="fa fa-barcode has-action text-primary" data-event="show_popup_batch_no"/>
+            <span class='has-action jab-str'>
+                <t t-if="order.vaccine_batch_no">
+                    Jab Taken
+                </t>
+                <t t-else="1">
+                    Take Jab
+                </t>
+            </span>
+        </button>
+        <a t-attf-class="btn btn-outline-success has-action v-vaccine-batch #{!order.vaccine_batch_no and 'd-none'}" t-attf-href="/report/pdf/medical_pcr.vaccine_certificate/#{order.id}" target="blank">
+            <span class="fa fa-print has-action" /> Certificate
+        </a>
+
+        <button class="btn btn-secondary has-action" title="Open Details"
+            t-if="is_pcr"
+            data-event="app_open_invoice">
+            <t t-if="!order.invoice_state">
+                <span class="fa fa-pencil-square-o has-action" data-event="app_open_invoice"/>
+                Edit
+            </t>
+            <t t-else="1">
+                <span class="fa fa-info-circle has-action" data-event="app_open_invoice"/>
+                Invoice
+            </t>
+        </button>
+        
+        <t t-if="order.pcr_test_state == 'confirmed' or order.pcr_test_state == 'done'">
+            <a class="btn btn-warning has-action" title="Print Result" t-if="is_pcr" t-attf-href="/report/pdf/medical_pcr.appointment_pcr_certificate/{{order.id}}" target="_blank">
+                <span class="fa fa-print" />
+                Print Result
+            </a>
+        </t>
+
+        <t t-if="order.pcr_test_state == 'done'">
+            <button class="btn btn-warning has-action" title="Send Result" t-if="is_pcr" data-event="send_result_SMS">
+                <span class="fa fa-paper-plane" data-event="send_result_SMS"/>
+                Result By SMS
+            </button>
+        </t>
+
+        <t t-if="order.invoice_number">
+            <button class="btn btn-warning has-action" title="Send Invoice" t-if="is_pcr" data-event="send_invoice_SMS">
+                <span class="fa fa-paper-plane" data-event="send_invoice_SMS"/>
+                Invoice By SMS
+            </button>
+        </t>
+    </td>
+</t>
+
+    <t t-extend='PopupOrderDetails'>
+        <t t-jquery=".title" t-operation="prepend">
+            <t t-if="order and order.pcr_qr_code">
+                <t t-esc="order.pcr_qr_code" /> - 
+            </t>
+        </t>
+        <t t-jquery='.to_waiting_div' t-operation='append'>
+            <t t-set="is_pcr" t-value="widget.medical.config.company_code == 'pcr'" />
+
+            <button class="btn btn-link log-handover-file-on" title="Sample Taken" t-if="is_pcr">
+                <span t-att-data-order-id="order.id" class="fa fa-hand-lizard-o text-primary"/>
+            </button>
+
+            <a t-if="is_pcr" class="btn btn-outline-success" t-attf-href="/report/pdf/medical_pcr.pcr_qr_custom_report/#{order.id}" target="blank">
+                <span class="fa fa-print mr-2" /> QR
+            </a>
+
+            <!-- <button class="btn btn-link p-pcr-report" title="PCR BARCODE" t-if="widget.medical.config.allow_pcr_test">
+                <span t-att-data-order-id="order.id" class="fa fa-print text-primary"/>
+            </button> -->
+
+            <button t-if="is_pcr" class="btn btn-link log-print-file-on" title="Log Print File">
+                <span t-att-data-order-id="order.id" class="fa fa-print text-primary"/>
+            </button>
+        </t>
+    </t>
+
+    <t t-name="PcrRequestButton">
+        <button class="btn btn-default" id="js_pcr_request">
+            <i class='fa fa-link js_icon' /> <span class="js_name">PCR REQUEST</span>
+        </button>
+    </t>
+
+<t t-name="PCRPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput" style="width: 70%;height: 80%">
+            <header class="title">PCR Request</header>
+            <t t-set="app_order" t-value="widget.order or widget.options.order or {}" />
+            <!-- <t t-set="app_pcr_data" t-value="widget.pcr_data or widget.options.pcr_data or {}" /> -->
+            <div class="container pcr-form text-left" style="font-size: 14px;">
+                <t t-call="PCR.FormBody" />
+            </div>
+            <div>
+                <div class="button confirm">
+                    Apply
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+
+<t t-name="PCRScreenWidget">
+    <div class="pcr-screen screen p-1">
+        <t t-set="app_order" t-value="widget.order or {}" />
+        <div class="container-fluid">
+            <section class="pcr-header">
+                <h1>
+                    <span class="btn btn-danger back fa fa-arrow-left fa-2x" />
+                    PCR Request
+                </h1>
+            </section>
+            <t t-call="PCR.FormBody" />
+        </div>
+    </div>
+</t>
+
+<t t-name="PCR.FormBody">
+<section class="pcr-body">
+                
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">
+            Vaccination
+        </div>
+        <div class="card-tools">
+            <div type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fa fa-plus"></i>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class='row'>
+            <div class="col-6">
+                <div class="row mb-2">
+                    <div class="col-4 pcr-label">Is Vaccinated ?</div>
+                    <div class="col-8">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                      <input type="checkbox" class="v-checkbox is_vaccinated" aria-label="Checkbox for following text input" name="is_vaccinated" checked="checked" />
+                                </div>
+                            </div>
+                            <select class="custom-select v-select pcr_type" name="pcr_type">
+                                <option value="">Choose Immune Type...</option>
+                                <option value="red">Red</option>
+                                <option value="green">Green</option>
+                                <option value="yellow">Yellow</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="row mb-2">
+                    <div class="col-4 pcr-label">Swab Type *</div>
+                    <div class="col-8">
+                        <select class="custom-select v-select swab_type" name="swab_type">
+                            <!-- <option value="">Choose...</option> -->
+                            <option value="nasal" selected='selected'>Nasal</option>
+                            <option value="salaiva">Salaiva</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4 pcr-label">Collection Center *</div>
+                    <div class="col-8">
+                        <input id='center_id' class="swab_location_id m2o-field v-allow-create" name="swab_location_id" data-field="swab_locations" data-model="swab.location" t-att-value="app_order and app_order.swab_location_id and app_order.swab_location_id[0] or ''"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card collapsed-card">
+    <div class="card-header">
+        <div class="card-title">
+            Travel Details
+        </div>
+        <div class="card-tools">
+            <div type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fa fa-plus"></i>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class='row'>
+            <div class="col-6">
+                <div class="row mb-2">
+                    <div class="col-4 pcr-label">Travel</div>
+                    <div class="col-8">
+                        <div class="input-group">
+                            <select name="pcr_appointments_type" class="custom-select v-select pcr_appointments_type">
+                                <option value="">Select Any</option>
+                                <t t-foreach="[['arrival', 'Arrival'], ['departure', 'Departure']]" t-as="pcr_app_type">
+                                    <t t-if="app_order and app_order.pcr_appointments_type and app_order.pcr_appointments_type == pcr_app_type[0]">
+                                        <option t-att-value="pcr_app_type[0]" selected="selected"><t t-esc="pcr_app_type[1]"/></option>
+                                    </t>
+                                    <t t-else="1">
+                                        <option t-att-value="pcr_app_type[0]"><t t-esc="pcr_app_type[1]"/></option>
+                                    </t>
+                                </t>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4 pcr-label">Travel Date</div>
+                    <div class="col-8">
+                        <input type="date" t-att-value="app_order.travel_date || ''" name="travel_date" class="form-control v-input travel_date" placeholder="Travel Date"/>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4 pcr-label">Country of Origin</div>
+                    <div class="col-8">
+                        <select class="origin_country_id m2o-field" name="origin_country_id">
+                            <option value="">Choose...</option>
+                            <t  t-foreach="widget.medical.countries or []" t-as="rec">
+                                <t t-if="app_order and app_order.origin_country_id and rec.id == app_order.origin_country_id[0]">
+                                    <option t-att-value="rec.id" selected="selected"><t t-esc="rec.name" /></option>
+                                </t>
+                                <t t-else="1">
+                                    <option t-att-value="rec.id"><t t-esc="rec.name" /></option>
+                                </t>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2 v-not-departure">
+                    <div class="col-4 pcr-label">Quarantine Station</div>
+                    <div class="col-8">
+                        <select class="quarantine_station_id m2o-field" name="quarantine_station_id">
+                            <option value="">Choose...</option>
+                            <t  t-foreach="widget.medical.quarantine_stations or []" t-as="rec">
+                                <t t-if="app_order and app_order.quarantine_station_id and rec.id == app_order.quarantine_station_id[0]">
+                                    <option t-att-value="rec.id" selected="selected"><t t-esc="rec.name" /></option>
+                                </t>
+                                <t t-else="1">
+                                    <option t-att-value="rec.id"><t t-esc="rec.name" /></option>
+                                </t>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="row mb-2 v-not-departure">
+                    <div class="col-4 pcr-label">Is Airways Staff ?</div>
+                    <div class="col-8">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                      <input type="checkbox" class="v-checkbox is_airways_staff" aria-label="Checkbox for following text input" name="is_airways_staff" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-4 pcr-label">Is Traveller Swab ?</div>
+                    <div class="col-8">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                      <input type="checkbox" class="v-checkbox is_traveller_swab" aria-label="Checkbox for following text input" name="is_traveller_swab" />
+                                </div>
+                            </div>
+                            <input type="text" class="form-control v-input passport_no" name="passport_no" t-att-value="app_order.passport_no or (widget.partner and widget.partner.passport_no) or ''" placeholder="Passport No."/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-4 pcr-label">Airline</div>
+                    <div class="col-8">
+                        <select class="airline_selection_id m2o-field" name="airline_selection_id">
+                            <option value="">Choose...</option>
+                            <t  t-foreach="widget.medical.airlines or []" t-as="rec">
+                                <t t-if="app_order.airline_selection_id and app_order.airline_selection_id[0] == rec['id']">
+                                    <option t-att-value="rec.id" selected="selected"><t t-esc="rec.name" /></option>
+                                </t>
+                                <t t-else="1">
+                                    <option t-att-value="rec.id"><t t-esc="rec.name" /></option>
+                                </t>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-4 pcr-label">Airline Number</div>
+                    <div class="col-8">
+                        <input type="text" class="form-control v-input" id="airline_number" t-att-value="app_order.airline_number || ''" name="airline_number" placeholder="Airline Number"/>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4 pcr-label">Medical ID</div>
+                    <div class="col-8">
+                        <input name="medical_id" type="text" t-att-value="app_order.medical_id || ''" class="form-control medical_id v-input" placeholder="Medical ID" aria-label="Medical ID"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="input-group col-2">
+                <span class="label">Additional Notes</span>
+            </div>
+            <div class="input-group col-10">
+                <textarea class="form-control" name="additional_notes" rows="2" cols="40"><t t-esc="app_order.additional_notes || ''"/></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card collapsed-card">
+    <div class="card-header">
+        <div class="card-title">
+            Consent Form Details
+        </div>
+        <div class="card-tools">
+            <div type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fa fa-plus"></i>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class='row v-panel'>
+            <div class="col-3">
+                <div class="input-group mb-3">
+                    <input type="checkbox" class="v-checkbox v-check" aria-label="Checkbox for following text input" name="is_symptomatic" id="is_symptomatic"/>
+                    <label class="pcr-label ml-2" for="is_symptomatic">Is Symptomatic ?</label>
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="mb-2 v-visible" style="display: none;">
+                    <div class="d-inline-block ml-4" t-foreach="widget.symptomatic_list or []" t-as="line">
+                        <t t-if="line['value']">
+                            <input type="checkbox" selected="selected" t-attf-class="v-checkbox #{line['name']}" t-att-id="line['name']" t-att-name="line['name']" />
+                        </t>
+                        <t t-else="1">
+                            <input type="checkbox" selected="selected" t-attf-class="v-checkbox #{line['name']}" t-att-id="line['name']" t-att-name="line['name']" />
+                        </t>
+                        <label t-att-for="line['name']"><t t-esc="line['label']" /></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row v-panel'>
+            <div class="col-3">
+                <div class="input-group mb-3">
+                    <input type="checkbox" class="v-checkbox v-check" aria-label="Checkbox for following text input" name="has_recent_tranvel" id="has_recent_tranvel"/>
+                    <label class="pcr-label ml-2" for="has_recent_tranvel">Recent Travel History ?</label>
+                </div>
+            </div>
+
+            <div class="col-9 v-visible" style="display: none;">
+                <div class="row">
+                    <div class="col-3 pcr-label">Country Arriving From</div>
+                    <div class="col-9">
+                        <select class="recent_travel_country_id m2o-field" name="recent_travel_country_id">
+                            <option value="">Choose...</option>
+                            <t t-foreach="widget.medical.countries or []" t-as="rec">
+                                <t t-if="widget.medical.company.country.id != rec.id">
+                                    <t t-if="(app_order and app_order.recent_travel_country_id and rec.id == app_order.recent_travel_country_id[0])">
+                                        <option t-att-value="rec.id" selected="selected"><t t-esc="rec.name" /></option>
+                                    </t>
+                                    <t t-else="1">
+                                        <option t-att-value="rec.id"><t t-esc="rec.name" /></option>
+                                    </t>
+                                </t>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3 pcr-label">Recent Travel Date</div>
+                    <div class="col-9">
+                        <input type="date" t-att-value="app_order.recent_travel_date || ''" name="recent_travel_date" class="form-control v-input recent_travel_date" placeholder="Travel Date"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row v-panel'>
+            <div class="col-3">
+                <div class="input-group mb-3">
+                    <input type="checkbox" class="v-checkbox v-check" aria-label="Checkbox for following text input" name="is_health_worker" id="is_health_worker"/>
+                    <label class="pcr-label ml-2" for="is_health_worker">Healthcare Worker ?</label>
+                </div>
+            </div>
+            <div class="col-9 v-visible" style="display: none;">
+                <div class="row mb-3">
+                    <div class="col-3 pcr-label">Residence Type</div>
+                    <div class="col-9 input-group">
+                        <select class="custom-select v-select patient_residence_type" name="patient_residence_type">
+                            <option value="">Choose...</option>
+                            <option value="private">Private</option>
+                            <option value="hostel">Nursing Hostel</option>
+                        </select>
+                        <input type="text" class="form-control v-input w-50" id="patient_work_region" t-att-value="app_order.patient_work_region || ''" name="patient_work_region" placeholder="Workplace Health Region"/>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3 pcr-label">Center Name</div>
+                    <div class="col-9">
+                        <input type="text" class="form-control v-input" id="patient_work_center_name" t-att-value="app_order.patient_work_center_name || ''" name="patient_work_center_name" placeholder="Center Name"/>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3 pcr-label">Place of Work ?</div>
+                    <div class="col-9">
+                        <select class="custom-select v-select patient_work_place" name="patient_work_place">
+                            <option value="">Choose...</option>
+                            <t t-foreach="[['public', 'Public Hospital'], ['phc', 'PHC'], ['private', 'Private Hospital']]" t-as="rec">
+                                <option t-att-value="rec[0]"><t t-esc="rec[1]" /></option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+                <div class="row v-department" style="display: none">
+                    <div class="col-3 pcr-label">Department ?</div>
+                    <div class="col-9">
+                        <select class="custom-select v-select patient_department" name="patient_department">
+                            <option value="">Choose...</option>
+                            <t t-foreach="[['icu', 'ICU'], ['er', 'ER'], ['ward', 'Medical Ward'], ['or', 'OR'], ['op', 'OP']]" t-as="rec">
+                                <option t-att-value="rec[0]"><t t-esc="rec[1]" /></option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row v-panel'>
+            <div class="col-3">
+                <div class="input-group mb-3">
+                    <input type="checkbox" class="v-checkbox v-check" aria-label="Checkbox for following text input" name="in_contact_with_suspected" id="in_contact_with_suspected"/>
+                    <label class="pcr-label ml-2" for="in_contact_with_suspected">Contact of a confirmed <br /> / suspected case ?</label>
+                </div>
+            </div>
+            <div class="col-9 v-visible" style="display: none;">
+                <div class="row">
+                    <div class="col-12">
+                        Contact Names
+                    </div>
+                    <div class="col-12">
+                        <!-- <textarea name="in_contact_names" class="form-control v-input in_contact_names" placeholder=""><t t-esc="app_order.in_contact_names or ''" /></textarea> -->
+                        <table class="table-sm w-100 table-bordered">
+                            <thead>
+                                <tr>
+                                    <th width="40%">Name</th>
+                                    <th width="40%">Contact No.</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="v-contact-list">
+                            </tbody>
+                            <tfoot>
+                                <td colspan="3">
+                                    <span class="btn btn-link v-contact-add">Add New Line</span>
+                                </td>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+</t>
+
+<t t-name="PCR.ContactListTR">
+    <tr>
+        <td t-att-data-line="line and line.id">
+            <input type="hidden" name="id" t-att-value="line and line.id"/>
+            <input type="text" name="name" class="form-control" t-att-value="line and line.name"/>
+        </td>
+        <td>
+            <input type="number" name="phone" class="form-control" t-att-value="line and line.phone"/>
+        </td>
+        <td>
+            <span t-att-data-line="line and line.id" class="btn btn-link fa fa-times v-contact-delete" />
+        </td>
+    </tr>
+</t>
+
+</templates>

@@ -1,0 +1,104 @@
+<odoo>
+    <template id="cabin_asset_report">
+        <div class="article">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <div style="position:absolute;margin-top:40px;width:100%;">
+                            <div style="text-align: center; font-size:24px;">
+                                <strong>CABIN REPORT</strong>
+                            </div>
+                            <table style="width:95%; margin-top:25px;">
+                                <tbody>
+                                    <tr width="95%">
+                                        <td style="text-align:left; width:45%;font-size:18px;font-family:Arial;">
+                                            <strong>Cabin Name:</strong>
+                                            <span t-field="o.room_name"/>
+                                        </td>
+                                        <td style="text-align:left; width:45%;font-size:18px;font-family:Arial;">
+                                            <strong>Building:</strong>
+                                            <span t-field="o.building_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr width="100%">
+                                        <td style="text-align:left; width:45%;font-size:18px;font-family:Arial;">
+                                            <strong>Cabin Number:</strong>
+                                            <span t-field="o.name"/>
+                                        </td>
+                                        <td style="text-align:left; width:45%;font-size:18px;font-family:Arial;">
+                                            <strong>Block:</strong>
+                                            <span t-field="o.block_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left; width:45%;font-size:18px;font-family:Arial;">
+                                            <strong>Responsible Person:</strong>
+                                            <span t-field="o.responsible_person.name"/>
+                                        </td>
+                                        <td style="text-align:left; width:45%;font-size:18px;font-family:Arial;">
+                                            <strong>Floor:</strong>
+                                            <span t-field="o.floor_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:left; width:45%;font-size:18px;font-family:Arial;">
+                                            <strong>Company:</strong>
+                                            <span t-field="o.company_id.name"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="text-align: left; font-size:18px;margin-top:25px;">
+                                <strong>Asset Management</strong>
+                            </div>
+                            <table style="border-collapse: collapse; border: 1px solid black;width:95%; margin-top:40px;font-size:16px;">
+                                <thead>
+                                    <tr style="background-color:#D3D3D3; width:100%; padding:5px;">
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">
+                                            Sl.No
+                                        </th>
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">
+                                            Product Name
+                                        </th>
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">
+                                            Product Category
+                                        </th>
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">
+                                            Product Sub Category
+                                        </th>
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">
+                                            Asset Code
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.asset_product_ids" t-as="pro">
+                                        <tr style="border-collapse: collapse; border: 1px solid black;width:100%; padding:5px;page-break-inside:avoid; page-break-after:auto;">
+                                            <td style="border-collapse: collapse; border: 1px solid black; padding:5px;">
+                                                <span t-esc="pro_index+1"/>
+                                            </td>
+                                            <td style="border-collapse: collapse; border: 1px solid black; padding:5px;">
+                                                <span t-esc="pro.product_name"/>
+                                            </td>
+                                            <td style="border-collapse: collapse; border: 1px solid black; padding:5px;">
+                                                <span t-esc="pro.product_category.cat_name"/>
+                                            </td>
+                                            <td style="border-collapse: collapse; border: 1px solid black; padding:5px;">
+                                                <span t-esc="pro.product_sub_category.sub_cat_name"/>
+                                            </td>
+                                            <td style="border-collapse: collapse; border: 1px solid black; padding:5px;">
+                                                <span t-esc="pro.product_code"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </template>
+
+</odoo>
+

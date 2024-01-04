@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_res_config_settings_inherit_purchase_request" model="ir.ui.view">
+            <field name="name">res.config.settings.inherited</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="Purchase Request" string="Purchase Request" data-key="purchase_request">
+
+                        <div id="purchase_request">
+                            <h2>Purchase Request</h2>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="company_settings">
+                            <div class="o_setting_right_pane">
+                                <label string="Main Store" for=""/>
+                                <div class="text-muted">
+                                    Main store location
+                                </div>
+                                <field name="location_id" domain="[('usage', '=', 'internal')]"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_request_config_settings_action" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'purchase_request', 'bin_size': False}</field>
+        </record>
+
+    </data>
+</odoo>

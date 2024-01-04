@@ -1,0 +1,154 @@
+<odoo>
+    <!-- brand form view -->
+    <record id="medcell_asset_brand_view_form" model="ir.ui.view">
+        <field name="name">medcell.asset.brand.form</field>
+        <field name="model">medcell.asset.brand</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <separator colspan="4" string="Brand Details"/>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--brand tree-->
+
+    <record id="medcell_asset_brand_view_tree" model="ir.ui.view">
+        <field name="name">medcell.asset.brand.tree</field>
+        <field name="model">medcell.asset.brand</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="BrandDetails">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--brand search view-->
+
+    <record id="view_asset_brand_search" model="ir.ui.view">
+        <field name="name">medcell.asset.brand.search</field>
+        <field name="model">medcell.asset.brand</field>
+        <field name="arch" type="xml">
+            <search string="Brand">
+                <field name="name"/>
+                <field name="code"/>
+                <newline/>
+                <group expand="0" string="Group By...">
+                    <filter string="Name" name="name" domain="[]" context="{'group_by':'name'}"/>
+                    <filter string="Code" name="code" domain="[]" context="{'group_by':'code'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!--brand action-->
+
+    <record id="medcell_asset_brand_action" model="ir.actions.act_window">
+        <field name="name">Brand</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">medcell.asset.brand</field>
+        <field name="view_mode">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_asset_brand_search"/>
+    </record>
+
+    <!-- Products Group -->
+    <!-- Products Group Form -->
+    <record id="medcell_products_group_view_form" model="ir.ui.view">
+        <field name="name">medcell.products.group.form</field>
+        <field name="model">medcell.products.group</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <separator colspan="4" string="Group"/>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="product_sub_category_id"
+                                   options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                            <field name="company_id" readonly="1" options="{'no_create_edit': True, 'no_open': True}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--brand tree-->
+
+    <record id="medcell_products_group_view_tree" model="ir.ui.view">
+        <field name="name">medcell.products.group.tree</field>
+        <field name="model">medcell.products.group</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Group">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Products Group search view-->
+
+    <record id="view_products_group_search" model="ir.ui.view">
+        <field name="name">medcell.products.group.search</field>
+        <field name="model">medcell.products.group</field>
+        <field name="arch" type="xml">
+            <search string="Group">
+                <field name="name"/>
+                <field name="code"/>
+                <newline/>
+                <group expand="0" string="Group By...">
+                    <filter string="Name" name="name" domain="[]" context="{'group_by':'name'}"/>
+                    <filter string="Code" name="code" domain="[]" context="{'group_by':'code'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!--brand action-->
+
+    <record id="medcell_products_group_action" model="ir.actions.act_window">
+        <field name="name">Group</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">medcell.products.group</field>
+        <field name="view_mode">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_products_group_search"/>
+    </record>
+
+    <!-- Hr Employee Inherit View -->
+    <record id="view_employee_asset_move_return_inherit_form" model="ir.ui.view">
+        <field name="name">hr.employee.asset.move.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='hr_settings']" position="after">
+                <page string="Asset Details">
+                    <field name="asset_move_issue_ids" nolabel="1">
+                        <tree editable="bottom">
+                            <field name="product_id"/>
+                            <field name="handover_date"/>
+                            <field name="return_date"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

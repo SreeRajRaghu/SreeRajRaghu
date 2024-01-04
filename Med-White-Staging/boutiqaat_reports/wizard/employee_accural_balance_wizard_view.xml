@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_employee_accural_balance_wizard" model="ir.ui.view">
+        <field name="name">employee.accural.balance.wizard.form</field>
+        <field name="model">employee.accural.balance.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Employee">
+                <group>
+                    <group>
+                        <field name="employee_id"/>
+                    </group>
+                    <group>
+                        <field name="date" />
+                    </group>
+                </group>
+                <group colspan="6" col="6">
+                    <label for="allocation_value"/>
+                    <div class="o_row" name="allocation_value">
+                        <field name="allocation_value" nolabel="1" readonly="1" force_save="1"/>
+                        <field name="allocation_type" readonly="1" force_save="1"/>
+                    </div>
+                    <field name="current_total_balance" readonly="1" force_save="1"/>
+                    <field name="working_days_balance" readonly="1" force_save="1"/>
+                    <field name="total_accured_balance" readonly="1" force_save="1"/>
+                    <field name="eos_balance" readonly="1" force_save="1"/>
+                    <field name="date_joining" readonly="1" force_save="1"/>
+                </group>
+
+                <footer>
+                    <button name="print_pdf" string="Print" type="object" class="btn-primary"/>
+                    <button name="print_all_pdf" string="Print All Employees" type="object" class="btn-primary"/>
+                    <button name="action_xlsx" string="Print All Employees(Xlsx)" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_employee_accural_balance_wizard" model="ir.actions.act_window">
+        <field name="name">Employee Leave/EoS Balance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">employee.accural.balance.wizard</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_employee_accural_balance_wizard"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem 
+        action="action_employee_accural_balance_wizard"
+        id="action_employee_accural_balance_wizard_menu"
+        parent="hr.hr_menu_hr_reports"
+        name="Employee Balance"
+        sequence="20"/>
+</odoo>

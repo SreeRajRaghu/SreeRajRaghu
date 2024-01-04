@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+        <record id="account_invoice_view_tree_inherit" model="ir.ui.view">
+            <field name="name">account.move.tree.inherit.discount</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <field name="amount_total_signed" position="before">
+                    <field name="payment_discount_amount"/>
+                    <field name="payment_amount"/>
+                    <field name="is_discount"/>
+                </field>
+            </field>
+        </record>
+</odoo>

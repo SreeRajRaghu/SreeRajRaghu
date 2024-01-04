@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="category_dashboard" model="ir.module.category">
+            <field name="name">Dashboard</field>
+        </record>
+
+        <record id="dashboard_user" model="res.groups">
+            <field name="name">Dashboard Users</field>
+            <field name="category_id" ref="category_dashboard"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="dashboard_manager" model="res.groups">
+            <field name="name">Dashboard Managers</field>
+            <field name="category_id" ref="category_dashboard"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+            <field name="implied_ids" eval="[(4, ref('medical_dashboard.dashboard_user'))]"/>
+        </record>
+
+        <!-- Multi Company -->
+        <record id="rule_medical_dash_setting_line_multi_company" model="ir.rule">
+            <field name="name">Dashboard Settings Line : Multi Company</field>
+            <field name="model_id" ref="model_dashboard_settings_line"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_medical_dash_setting_chart_multi_company" model="ir.rule">
+            <field name="name">Dashboard Settings Chart : Multi Company</field>
+            <field name="model_id" ref="model_dashboard_settings_chart"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

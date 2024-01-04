@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- <template id="footer_copyright_inherit" inherit_id="website.layout" name="Footer">
+        <xpath expr="//t[@t-call='website.language_selector']" position="replace"/>
+    </template>
+ -->
+    <template id="footer_mw" inherit_id="website.footer_custom" name="Footer">
+        <xpath expr="//div[@id='footer']" position="replace">
+            <div id="footer" class="oe_structure oe_structure_solo" t-ignore="true" t-if="not no_footer">
+                <section class="container s_text_block pt16 pb8" style="font-size: 10px;">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="footer-about-us">
+                                <h3>
+                                    <strong>ABOUT US</strong>
+                                </h3>
+                                <p>At Med White Lab. we provide full-fledged laboratory services with
+                                    comprehensive diagnonic tests to all health professionals, physicians,
+                                    and patients. Med White Lab delivers high-quality, responsive diagnonic
+                                    lab service provided with efficient and fast access to lab results with an enhanced &amp; premium patient experience. 
+                                </p>
+                                <p>
+                                    The reliability and accuracy of our tests and methods are accredited &amp; licensed by the Ministry of Health . Moreover, we make sure that we deliver top-quality services to our clientele by complying with the International Standards and aim to set the benchmark for quality standards in the region.
+                                </p>
+                                <p>
+                                    Safety, honesty, trust and innovation are the top drivers of our customer-oriented services. With continued growth and development, we will always be contributing towards an improved healthcare system.
+                                </p>
+                                <!-- <small>We are Gamers,we are here to provide you the Best</small> -->
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="connect">
+                            <h3><strong>OUR PRODUCTS  &amp; SERVICES</strong></h3>
+                            <ul class="list-unstyled" style="list-style-type: '-'">
+                                <li class="pl-2">
+                                       All types of Diagnostic Lab Tests
+                                       <br />
+                                        (Biochemistry, Immunology ,Endocrinology, Tumor markers , Hematology ,Urine, Coagulation, Electrophoresis, Semen Analysis , Microbiology, and many more….)
+                                </li>
+                                <li class="pl-2 mt-2">
+                                       Home Visit Service
+                                </li>
+                                <li class="pl-2 mt-2">
+                                       PCR
+                                </li>
+                                 <li class="pl-2 mt-2">
+                                       Specialized Tests
+                                </li>
+                                 <li class="pl-2 mt-2">
+                                      Health Packages Tests
+                                </li>
+                                 <li class="pl-2 mt-2">
+                                      Antibody Test
+                                </li>
+                                 <li class="pl-2 mt-2">
+                                       International LAB Test
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3" id="connect">
+                            <h3><strong>CONNECT WITH US</strong></h3>
+                            <ul class="list-unstyled">
+                                <li style="display: inline-flex">
+                                    <img src="/medical_lab_website/static/src/pcr.png" width="35" height="35" alt="PCR"/>
+                                    <div class="mt-1 ml-1">
+                                        PCR TEST<br/>
+                                        Tel./ Whatsapp : 2227333
+                                    </div>
+                                </li>
+                                <li style="display: inline-flex">
+                                    <img style="pointer-events: none;"
+                                        src="/medical_lab_website/static/src/home.png" width="35" height="35" alt="Home"/>
+                                    <div class="mt-1 ml-1">
+                                        Home visit Services Available<br/>
+                                        Tel./ Whatsapp : 92207708
+                                    </div>
+                                </li>
+                                <li style="display: inline-flex">
+                                    <img src="/medical_lab_website/static/src/support.png" width="35" height="35" alt="Support"/>
+                                    <div class="mt-1 ml-1">
+                                        Customer Services<br/>
+                                        Tel./ Whatsapp : 22275132
+                                    </div>
+                                </li>
+                                <li>
+                                    <img src="/medical_lab_website/static/src/dark-logo.png" width="130" height="50" alt="Logo" class="m-1"/>
+                                </li>
+                                <li style="font-size: 9px;">
+                                    <div class="ml-1">
+                                        <span>برج مزايا – حولي قطعة 4 – شارع تونس – قسيمة 127</span>
+                                        <br />
+                                        <span t-field="res_company.partner_id.street"/>
+                                    </div>
+                                </li>
+                                <li style="font-size: 9px;">
+                                    <div class="row">
+                                        <div class="col-sm-5 v-icon">
+                                            <span class="fa fa-facebook-square fa-4x" />
+                                            <span class="fa fa-instagram fa-4x" />
+                                        </div>
+                                        <div class="col-sm-7 text-right">
+                                            <span t-field="res_company.partner_id.street2"/>
+                                            <br />
+                                            Tel / WhatsApp: <span t-field="res_company.partner_id.phone"/>
+                                            <br />
+                                            <span t-field="res_company.partner_id.website"/>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </xpath>
+    </template>
+</odoo>

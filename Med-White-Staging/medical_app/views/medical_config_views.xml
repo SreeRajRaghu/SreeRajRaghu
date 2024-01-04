@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_medical_config_form" model="ir.ui.view">
+        <field name="name">view.medical.config.form</field>
+        <field name="model">medical.config</field>
+        <field name="arch" type="xml">
+            <form string="Scheduler">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title" id="title">
+                        <label for="name" string="Scheduler" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <field name="currency_id" invisible="1" />
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="user_id" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                        <field name="clinic_id" string="Default Branch"/>
+                    </group>
+                    <notebook>
+                        <page string="Resource">
+                            <group>
+                                <field name="resource_ids" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Timing Control" name="time_control">
+                            <group>
+                                <group name="time_table">
+                                    <field name="start_time" widget="float_time"/>
+                                    <field name="end_time" widget="float_time"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Inventory">
+                            <group>
+                                <field name="picking_type_id" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                                <field name="location_id" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                                <field name="cons_opr_type_id" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                            </group>
+                        </page>
+                        <page string="Accounting">
+                            <group>
+                                <group>
+                                    <field name="journal_id"/>
+                                    <field name="invoice_journal_id"/>
+                                </group>
+                                <group>
+                                    <field name="allowed_pricelist_ids" widget="many2many_tags"/>
+                                    <field name="pricelist_id"/>
+                                </group>
+                                <separator string="Allowed Payment Methods" />
+                                <field name="journal_ids"/>
+                            </group>
+                        </page>
+                        <page string="Misc" name="misc">
+                            <group name="misc_group">
+                                <group>
+                                    <field name="depends_on" required="1"/>
+                                    <field name="sequence_id" required="1"/>
+                                    <field name="company_code" />
+                                    <field name="enable_app_complain" groups="medical_app.group_manage_complain"/>
+                                    <field name="pricelist_need_password" />
+                                </group>
+                                <group>
+                                    <field name="employee_ids" widget="many2many_tags" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                                    <field name="default_employee_id" domain="[('id', 'in', employee_ids)]" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                                    <field name='default_collection_center_id' options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                                    <field name='default_visit_option_id' options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                                    <field name="allowed_user_ids" widget="many2many_tags" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Report Images">
+                            <group>
+                                <group>
+                                    <field name="logo2" widget="image" class="oe_avatar"/>
+                                    <field name="header_main_logo" widget="image" class="oe_avatar"/>
+                                    <field name="header_sub_logo" widget="image" class="oe_avatar"/>
+                                    <field name="img_footer" widget="image" class="oe_avatar"/>
+                                    <field name="cash_header_img" widget="image" class="oe_avatar"/>
+                                    <field name="cash_footer_img" widget="image" class="oe_avatar"/>
+                                    <field name="invoice_patient_header_img" widget="image" class="oe_avatar"/>
+                                    <field name="invoice_patient_footer_img" widget="image" class="oe_avatar"/>
+                                    <field name="invoice_company_header_img" widget="image" class="oe_avatar"/>
+                                    <field name="invoice_company_footer_img" widget="image" class="oe_avatar"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_medical_config_tree" model='ir.ui.view'>
+        <field name='name'>view.medical.config.tree</field>
+        <field name='model'>medical.config</field>
+        <field name='arch' type='xml'>
+            <tree string='Schedule Configuration'>
+                <field name='name'/>
+                <field name='clinic_id'/>
+                <field name='location_id'/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_medical_config" model="ir.actions.act_window">
+        <field name="name">Schedule Configuration</field>
+        <field name="res_model">medical.config</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_medical_config" name="Schedule Configuration" parent="medical_app.menu_medical_app_config" action="medical_app.action_medical_config" sequence="50"/>
+
+    <template id="set_med_config">
+        <t t-if="not o and doc">
+            <t t-set="o" t-value="doc" />
+        </t>
+        <t t-if="o">
+            <t t-if="'config_id' in o">
+                <t t-set="med_config" t-value="o.config_id.sudo()"/>
+            </t>
+            <t t-if="not med_config and 'appointment_id' in o">
+                <t t-set="med_config" t-value="o.appointment_id.config_id.sudo()"/>
+            </t>
+            <t t-if="not med_config and 'medical_order_id' in o">
+                <t t-set="med_config" t-value="o.sudo().medical_order_id.config_id"/>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_account_asset_form_branch" model="ir.ui.view">
+        <field name="name">account.asset.form</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='account_analytic_id']" position="after">
+                <field name="branch_id"/>
+            </xpath>
+
+        </field>
+    </record>
+
+<!--    <record id="asset_modify_form_branch" model="ir.ui.view">-->
+<!--        <field name="name">wizard.asset.modify</field>-->
+<!--        <field name="model">asset.modify</field>-->
+<!--        <field name="inherit_id" ref="account_asset.asset_modify_form"/>-->
+<!--        <field name="arch" type="xml">-->
+
+<!--            <xpath expr="//field[@name='salvage_value']" position="after">-->
+<!--                <field name="branch_id"/>-->
+<!--                <field name="analytic_account_id"/>-->
+<!--            </xpath>-->
+
+<!--        </field>-->
+<!--    </record>-->
+
+</odoo>

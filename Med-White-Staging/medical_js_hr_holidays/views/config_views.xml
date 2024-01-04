@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_medical_config_form_inherit_time_off_type_id" model="ir.ui.view">
+        <field name="name">medical.config.form.inherit.</field>
+        <field name="model">medical.config</field>
+        <field name="inherit_id" ref="medical_js.view_medical_config_form"/>
+        <field name="arch" type="xml">
+            <field name="allow_time_off" position="after">
+                <field name="allow_time_off" invisible="1"/>
+                <field name="time_off_type_id" attrs="{'required': [('allow_time_off', '!=', False)], 'invisible': [('allow_time_off', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

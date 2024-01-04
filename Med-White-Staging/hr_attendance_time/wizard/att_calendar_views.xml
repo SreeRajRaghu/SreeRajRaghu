@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="export_attendance_calendar_form_view" model="ir.ui.view">
+        <field name="name">wizard.export.attendance.calendar.form</field>
+        <field name="model">wizard.export.attendance.calendar</field>
+        <field name="arch" type="xml">
+            <form string="Export Attendance with Current Calendar">
+                <group>
+                    <field name="start_date" />
+                    <field name="end_date" />
+                    <field name="employee_ids" widget="many2many_tags" />
+                </group>
+                <footer>
+                    <button name="export_attendance_calendar" string="Export Attendance" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_export_attendance_calendar" model="ir.actions.act_window">
+        <field name="name">Export Attendance with Current Calendar</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wizard.export.attendance.calendar</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="export_attendance_calendar_form_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_hr_attendance_export_calendar"
+        name="Attendance Export: Current Calendar"
+        parent="menu_hr_attendance_report_label"
+        sequence="31" action="action_export_attendance_calendar"/>
+
+</odoo>

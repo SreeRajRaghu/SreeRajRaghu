@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="report_hr_eos2" inherit_id="hr_employee_eos.report_hr_eos" primary="True">
+        <xpath expr="//t[@t-call='web.external_layout']" position="attributes">
+            <attribute name="t-call">medical_report.empty_layout</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]" position="before">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="col-12 mb-4">
+                        <img t-if="doc.company_id.med_cell_header_img" t-att-src="image_data_uri(doc.company_id.med_cell_header_img)" style="width:100%;" alt="Header" />
+                        <img t-else="1" src="/med_white_hr/static/img/medcell-header.png" style="width:100%;" alt="Header" />
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <report
+        id="action_hr_eos_report2"
+        string="Print EOS Report 2"
+        model="hr.employee"
+        report_type="qweb-pdf"
+        name="med_white_hr.report_hr_eos2"
+        file="med_white_hr.report_hr_eos2"
+        print_report_name="'EOS2 - ' + (object.identification_id or '')"
+        attachment="False"
+    />
+</odoo>

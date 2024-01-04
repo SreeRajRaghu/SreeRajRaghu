@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_customer_sms_wiz" model="ir.ui.view">
+            <field name="name">Customer SMS</field>
+            <field name="model">customer.sms.send</field>
+            <field name="arch" type="xml">
+                <form string="Customer SMS">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="config_id" />
+                                <field name="sms_template_id" />
+                                <field name="month"/>
+                            </group>
+                            <group>
+                                <field name="language" />
+                                <field name="message" readonly="1"/>
+                            </group>
+                        </group>
+                                                    <group>
+                                <field name="partner_ids" widget="many2many_tags"/>
+                            </group>
+
+                        <footer>
+                            <button name="send_sms" string="Send" type="object" class="btn-primary" confirm="Are You Sure?"/>
+                            <button string="Cancel" class="btn-default" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_customer_sms" model="ir.actions.act_window">
+            <field name="name">Customer SMS</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">customer.sms.send</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_customer_sms_wiz"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="send_sms_menu"
+                  name="Customer SMS"
+                  sequence="5"
+                  parent="base_notification.menu_sms_root"
+                  action="action_send_sms"/>
+    </data>
+</odoo>

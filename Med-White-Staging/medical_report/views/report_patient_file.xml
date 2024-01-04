@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_patient_file_document">
+    <t t-set="doc" t-value="doc.with_context({'lang':doc.lang})" />
+    <t t-call="web.basic_layout">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <img src="/medical_report/static/img/gold-header.jpeg" style="width:100%;" alt="Gold Header" />
+            </div>
+        </div>
+        <div class="page">
+            <div class="oe_structure"/>
+            <t t-set="currency" t-value="doc.env.user.company_id.currency_id" />
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="text-center">Patient Sheet</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th class="text-center">
+                                <t t-esc="'Derma File No.' if doc.last_medical_order_id.config_id.depends_on == 'file_no2' else 'File No.'" />
+                            </th>
+                            <td class="text-center" colspan="2">
+                                <t t-esc="doc.file_no2 if doc.last_medical_order_id.config_id.depends_on == 'file_no2' else doc.file_no" />
+                            </td>
+                            <th class="text-center">Registration Date</th>
+                            <td class="text-center" colspan="2"><span t-field="doc.create_date"/></td>
+                        </tr>
+                        <!--<tr>-->
+                            <!--<th class="text-center">Name Arabic</th>-->
+                            <!--<td class="text-center" colspan="5"><span t-field="doc.name"/></td>-->
+                        <!--</tr>-->
+                        <tr>
+                            <th class="text-center">Name English</th>
+                            <td class="text-center" colspan="5"><span t-field="doc.name"/></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Date of Birth / Age</th>
+                            <td class="text-center" colspan="2"><span t-field="doc.birthday"/> (Age-<span t-field="doc.age"/>)</td>
+                            <th class="text-center">Gender</th>
+                            <td class="text-center" colspan="2"><span t-field="doc.gender"/></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Marital Status</th>
+                            <td class="text-center" colspan="2"><span t-field="doc.marital"/></td>
+                            <th class="text-center">Nationality</th>
+                            <td class="text-center" colspan="2"><span t-field="doc.nationality_id"/></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Civil Id No.</th>
+                            <td class="text-center" colspan="2"><span t-field="doc.civil_code"/></td>
+                            <th class="text-center">Home Tel.</th>
+                            <td class="text-center" colspan="2"><span t-field="doc.mobile"/></td>
+                        </tr>
+                        <tr>
+                            <!--<th class="text-center">Passport No.</th>-->
+                            <!--<td class="text-center" colspan="2"></td>-->
+                            <th class="text-center">Mobile No.</th>
+                            <td class="text-center" colspan="2"><span t-field="doc.phone"/></td>
+
+                            <td class="text-center" colspan="2"/>
+                        </tr>
+                        <!--<tr>-->
+                            <!--<th class="text-center">Area</th>-->
+                            <!--<td class="text-center" colspan="2">MANSOURIYA</td>-->
+                            <!--<th class="text-center">Relation</th>-->
+                            <!--<td class="text-center" colspan="2">1</td>-->
+                        <!--</tr>-->
+                        <tr>
+                            <th class="text-center">Address</th>
+                            <td class="text-center"><span t-field="doc.street"/> <span t-field="doc.street2"/></td>
+                            <th class="text-center">City</th>
+                            <td class="text-center"><span t-field="doc.city"/></td>
+                            <th class="text-center">State</th>
+                            <td class="text-center"><span t-field="doc.state_id"/><t t-if="doc.zip"> - <span t-field="doc.zip"/></t></td>
+                        </tr>
+                        <!--<tr>-->
+                            <!--<th class="text-center">Block No.</th>-->
+                            <!--<td class="text-center">1</td>-->
+                            <!--<th class="text-center">Governorate</th>-->
+                            <!--<td class="text-center" colspan="3">1</td>-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<th class="text-center">Spouse Name</th>-->
+                            <!--<td class="text-center" colspan="5">1</td>-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<th class="text-center">Emergency Contact</th>-->
+                            <!--<td class="text-center" colspan="5">1</td>-->
+                        <!--</tr>-->
+                        <tr>
+                            <th class="text-center">VIP Status</th>
+                            <td class="text-center" colspan="2"><span t-field="doc.person_status"/></td>
+                            <!--<th class="text-center">Disability</th>-->
+                            <!--<td class="text-center" colspan="2">No Disability</td>-->
+
+                            <td class="text-center" colspan="2"/>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Printed By</th>
+                            <td class="text-center" colspan="5"><span t-field="env.user.name"/></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="row">
+                <div class="col-12">
+                    <img src="/medical_report/static/img/gold-footer.jpeg" style="width:100%;" alt="Gold Header" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div t-if="report_type == 'pdf'" class="text-muted text-right">
+                        Page: <span class="page"/> of <span class="topage"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>
+
+
+<template id="report_patient_file">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="medical_report.report_patient_file_document" t-lang="doc.lang"/>
+        </t>
+    </t>
+</template>
+
+</odoo>

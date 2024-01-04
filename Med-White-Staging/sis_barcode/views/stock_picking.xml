@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="stock_picking_view_form_inherit_stock_barcode_sismatix" model="ir.ui.view">
+            <field name="name">stock.picking.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <button name="action_see_move_scrap" position="before">
+                    <button name="%(stock_barcode.stock_barcode_picking_client_action)d" string="Barcode" type="action"
+                            class="oe_stat_button" icon="fa-bars"/>
+                </button>
+            </field>
+        </record>
+
+        <record id="stock_picking_action_kanban_sis" model="ir.actions.act_window">
+            <field name="name">Operations</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="view_id" ref="stock_barcode.stock_picking_kanban"/>
+            <field name="domain">[('purchase_id','=',active_id)]</field>
+            <field name="context">{
+                'form_view_initial_mode': 'edit',
+                'contact_display': 'partner_address',
+                'search_default_available': 1,
+                'force_detailed_view': True
+                }
+            </field>
+        </record>
+
+        <record id="stock_picking_action_kanban_sis2" model="ir.actions.act_window">
+            <field name="name">Operations</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="view_id" ref="stock_barcode.stock_picking_kanban"/>
+            <field name="domain">[('sale_id','=',active_id)]</field>
+            <field name="context">{
+                'form_view_initial_mode': 'edit',
+                'contact_display': 'partner_address',
+                'search_default_available': 1,
+                'force_detailed_view': True
+                }
+            </field>
+        </record>
+
+        <record id="po_sismatix" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                    <button name="%(sis_barcode.stock_picking_action_kanban_sis)d" string="Barcodes" type="action"
+                            class="oe_stat_button" icon="fa-bars"/>
+                </xpath>
+                <xpath expr="//notebook/page[1]/field[@name='order_line']/tree/field[@name='product_id']" position="after">
+                     <field name='barcode' string="Barcode"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="so_sismatix" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                    <button name="%(sis_barcode.stock_picking_action_kanban_sis2)d" string="Barcodes" type="action"
+                            class="oe_stat_button" icon="fa-bars"/>
+                </xpath>
+               <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_id']" position="after">
+                     <field name='barcode' string="Barcode"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="move_sismatix" model="ir.ui.view">
+            <field name="name">account.ove.form.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+               <xpath expr="//page[@id='invoice_tab']/field[@name='invoice_line_ids']/tree/field[@name='product_id']" position="after">
+                     <field name='barcode' string="Barcode"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

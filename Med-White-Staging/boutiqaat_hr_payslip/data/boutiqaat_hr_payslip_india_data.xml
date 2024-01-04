@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="structure_type_india" model="hr.payroll.structure.type">
+            <field name="name">India Pay</field>
+            <field name="country_id" ref="base.in"/>
+        </record>
+
+		<!-- Salary Structure -->
+		<record id="payroll_structure_india" model="hr.payroll.structure">
+            <field name="name">India Payroll</field>
+            <field name="type_id" ref="structure_type_india"/>
+            <field name="regular_pay" eval="True"/>
+            <field name="country_id" ref="base.in"/>
+            <field name="unpaid_work_entry_type_ids" eval="[(4, ref('hr_payroll.work_entry_type_unpaid_leave'))]" />
+        </record>
+
+        <!-- Salary Rules for Worker Pay-->
+
+        <record id="hr_salary_rule_houserentallowance_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.housing_allowance > 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">HRA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Housing Allowance</field>
+            <field name="sequence" eval="2"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">result = contract.housing_allowance</field>
+        </record>
+
+        <record id="hr_salary_rule_mobile_allowance_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.housing_allowance > 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">MA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Mobile Allowance</field>
+            <field name="sequence" eval="3"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">result = contract.mobile_allowance</field>
+        </record>
+
+        <record id="hr_salary_rule_vehicle_allowance_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.motor_vehicle_allowance > 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">VA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Moter Vehicle Allowance</field>
+            <field name="sequence" eval="4"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">result = contract.motor_vehicle_allowance</field>
+        </record>
+
+        <record id="hr_salary_rule_books_allowance_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.books_allowance > 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">BA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Books Allowance</field>
+            <field name="sequence" eval="5"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">result = contract.books_allowance</field>
+        </record>
+
+        <record id="hr_salary_rule_commisson_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.commission > 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">CA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Commission Allowance</field>
+            <field name="sequence" eval="6"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">result = contract.commission</field>
+        </record>
+
+        <record id="hr_salary_rule_pf_allowance_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.pf_allowance > 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">FPA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">PF Allowance</field>
+            <field name="sequence" eval="6"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">result = contract.pf_allowance</field>
+        </record>
+
+        <record id="hr_salary_rule_transport_allowance_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.transport_allowance > 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">TA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Transport Allowance</field>
+            <field name="sequence" eval="6"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">result = contract.transport_allowance</field>
+        </record>
+
+        <record id="hr_salary_rule_meal_allowance_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.meal_allowance > 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">MLA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Meal Allowance</field>
+            <field name="sequence" eval="7"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">result = contract.meal_allowance</field>
+        </record>
+
+        <record id="hr_salary_rule_driver_fuel_allowance_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.driver_fuel_allowance > 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">DFA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Driver &amp; Fuel Allowance</field>
+            <field name="sequence" eval="8"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">result = contract.driver_fuel_allowance</field>
+        </record>
+
+        <record id="hr_salary_rule_special_other_allowance_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.special_other_allowance > 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">SOA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Special Other Allowance</field>
+            <field name="sequence" eval="9"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">result = contract.special_other_allowance</field>
+        </record>
+
+        <record id="hr_salary_rule_staff_discount_allowance_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.staff_discount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">SDISCA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Staff Discount Allowance</field>
+            <field name="sequence" eval="10"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">
+tot_invoiced = employee.get_inv_discount(payslip)
+
+disc = tot_invoiced * contract.staff_discount
+
+result = disc if disc &lt;= contract.staff_max_discount else contract.staff_max_discount
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_loan_installment_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = employee.get_loan_amount(payslip) > 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">LOAN</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="name">Loan Installment Deduction</field>
+            <field name="sequence" eval="10"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">
+result = employee.get_loan_amount(payslip) * -1
+            </field>
+        </record>
+
+        <record id="hr_salary_rule_night_shift_allowance_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = contract.night_shift_allowance > 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">NIGHTSA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Night Shift Allowance</field>
+            <field name="sequence" eval="10"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">result = contract.night_shift_allowance</field>
+        </record>
+
+        <record id="hr_salary_rule_unpaid_leave_india" model="hr.salary.rule">
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = worked_days and worked_days.LEAVE90 and worked_days.LEAVE90.number_of_days != 0</field>
+            <field name="amount_select">code</field>
+            <field name="code">UNPAID</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="name">Unpaid Leave Deduction</field>
+            <field name="sequence" eval="4"/>
+            <field name="struct_id" ref="payroll_structure_india"/>
+            <field name="amount_python_compute">result = (contract.wage / contract.resource_calendar_id.month_days) * worked_days.LEAVE90.number_of_days * -1</field>
+        </record>
+
+	</data>
+</odoo>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sequence_pcr_report_seq" model="ir.sequence">
+            <field name="name">PCR Sequence</field>
+            <field name="code">medical.order.pcr</field>
+            <field name="prefix">CCAB-%(month)s-%(y)s-</field>
+            <field name="padding">6</field>
+            <field eval="False" name="company_id"/>
+        </record>
+    </data>
+</odoo>

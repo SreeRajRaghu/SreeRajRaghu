@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="asset_move_issue_form" model="ir.ui.view">
+        <field name="name">asset.move.issue.form</field>
+        <field name="model">asset.move.issue</field>
+        <field name="arch" type="xml">
+            <form string="Asset Issue">
+                <sheet>
+                    <separator string="Asset Issue"/>
+                    <group>
+                        <group>
+                            <field name="custodian_name"
+                                   options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                            <field name="department_id" options="{'no_open': True}"/>
+                            <field name="handover_date"/>
+                        </group>
+                        <group>
+                            <field name="manager_id" options="{'no_open': True}"/>
+                            <field name="product_id" options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                            <field name="company_id" options="{'no_open': True}" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <span groups="base.group_user">
+                        <button class="oe_highlight" name="action_issue_asset_move" string="Issue" type="object"/>
+                        <button class="oe_highlight" name="generate_issue_receipt" string="Print" type="object"/>
+                        <button special="cancel" string="Cancel"/>
+                    </span>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_asset_move_issue" model="ir.actions.act_window">
+        <field name="name">Asset Issue</field>
+        <field name="res_model">asset.move.issue</field>
+        <field name="view_mode">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="asset_move_issue_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

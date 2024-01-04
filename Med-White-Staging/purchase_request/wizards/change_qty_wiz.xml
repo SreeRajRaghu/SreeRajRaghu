@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="change_qty_wizard_view_form" model="ir.ui.view">
+            <field name="name">change.qty.wiz.view.form</field>
+            <field name="model">change.qty.wiz</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="request_line_ids" options="{'no_create': True, 'no_edit': True, 'no_open': True}" >
+                                <tree  editable="bottom" string="Products" create="0" delete="0" edit="1">
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="product_uom_id" readonly="1"/>
+                                    <field name="product_qty" readonly="1"/>
+                                    <field name="changed_qty" readonly="0"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                            <field name="reason"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_change" string="Change" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="change_qty_wizard_action" model="ir.actions.act_window">
+            <field name="name">Change Quantity</field>
+            <field name="res_model">change.qty.wiz</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

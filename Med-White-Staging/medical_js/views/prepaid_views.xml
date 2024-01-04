@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- <record id="medical_order_form_view_med_js" model="ir.ui.view">
+        <field name="name">medical.order.form.inherit</field>
+        <field name="model">medical.order</field>
+        <field name="inherit_id" ref="medical_app.view_medical_order_form"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <field name="prepaid_card_id" groups="medical_js.group_partner_prepaid_card"/>
+            </field>
+        </field>
+    </record> -->
+
+    <record id="view_partner_form_prepaid_card" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="has_med_resource" invisible="1"/>
+                <button name="create_med_resource" string="Create Medical Resource"
+                    type="object" class="btn-primary" attrs="{'invisible': [('has_med_resource','=',True)]}" />
+            </xpath>
+
+            <!-- create_med_resource -->
+            <field name="vat" position="after">
+                <!-- <field name="is_doctor" /> -->
+                <field name="medical_resource_ids" widget="many2many_tags" attrs="{'invisible': [('medical_resource_ids','=',False)]}" />
+            </field>
+            <field name="passport_no" position="after">
+                <field name="passport_name" />
+            </field>
+            <field name="category_id" position="before">
+                <field name="insurance_start_date" />
+                <field name="insurance_end_date" />
+            </field>
+            <xpath expr="//notebook" position="inside">
+                <page string="Prepaid Cards" groups="medical_js.group_partner_prepaid_card">
+                    <field name="prepaid_card_ids">
+                        <tree string="Prepaid Cards">
+                            <field name="name" />
+                            <field name="card_no" />
+                            <field name="card_balance" />
+                            <field name="balance"  sum="Total"/>
+                            <field name="create_uid" />
+                            <field name="create_date" />
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+
+            <!-- <xpath expr="//header" position="inside">
+                <button name="create_prepaid_card" string="Create Prepaid Card" type="object" class="btn-primary" groups="medical_js.group_partner_prepaid_card"/>
+            </xpath> -->
+        </field>
+    </record>
+
+    <record id="partner_prepaid_card_tree" model="ir.ui.view">
+        <field name="name">partner.prepaid.card.tree</field>
+        <field name="model">partner.prepaid.card</field>
+        <field name="arch" type="xml">
+            <tree string="Prepaid Cards">
+                <field name="name" />
+                <field name="card_no" />
+                <field name="card_balance" />
+                <field name="balance" sum="Total"/>
+                <field name="create_uid" />
+                <field name="write_date" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="partner_prepaid_card_search" model="ir.ui.view">
+        <field name="name">partner.prepaid.card.search</field>
+        <field name="model">partner.prepaid.card</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="card_no" />
+                <field name="partner_id" />
+            </search>
+        </field>
+    </record>
+
+    <record id="partner_prepaid_card_form_view" model="ir.ui.view">
+        <field name="name">partner.prepaid.card.form</field>
+        <field name="model">partner.prepaid.card</field>
+        <field name="arch" type="xml">
+            <form string="Prepaid Cards">
+                <sheet>
+                    <label for="name" />
+                    <h2><field name="name" /></h2>
+                    <group>
+                        <group>
+                            <field name="card_no" />
+                            <field name="balance" />
+                        </group>
+                        <group>
+                            <field name="card_balance" />
+                            <field name="partner_id" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Payment Received">
+                            <field name="payment_ids" readonly="1" />
+                        </page>
+                        <page string="Invoices">
+                            <field name="med_invoice_ids" readonly="1" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="medical_prepaid_card_action" model="ir.actions.act_window">
+        <field name="name">Prepaid Cards</field>
+        <field name="res_model">partner.prepaid.card</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Prepaid Cards of Customers.
+          </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_medical_prepaid_card" name="Prepaid Cards"
+        parent="medical_app.menu_medical_misc_menu"
+        groups="medical_js.group_partner_prepaid_card"
+        action="medical_prepaid_card_action" sequence="100"/>
+</odoo>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_account_payment_form_mass" model="ir.ui.view">
+            <field name="name">account.payment.form</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='post']" position="after">
+                    <!-- <button name="payment_voucher_print" class="oe_highlight" states="draft,posted,sent" string="Payment Voucher" type="object"/> -->
+                    <button name="payment_print" class="oe_highlight" states="draft,posted,sent" string="Payment Print" type="object"/>
+                </xpath>
+
+                <field name="journal_id" position="after">
+		   <field name="payment_method" attrs="{'invisible': [('payment_type', '!=', 'outbound')], 'required': [('payment_type', '=', 'outbound')]}"/>	
+                    <!-- attrs="{'invisible': [('payment_type', '!=', 'outbound')], 'required': [('payment_type', '=', 'outbound')]}" -->
+                    <field name="check_type" invisible="1"/>
+                    <field name="check_no" invisible="1"/>
+                    <!-- attrs="{'invisible': [('payment_method', '!=', 'check')], 'readonly': [('check_type', '=', 'auto')], 'required': [('check_type', '=', 'check')]}" -->
+                </field>
+                <field name="payment_method_id" position="after">
+                    <field name="check_number_new" attrs="{'invisible': [('payment_type', '!=', 'inbound')]}"/>
+                </field>
+
+
+            </field>
+        </record>
+
+        <!-- <record id="view_account_payment_invoice_form_mass_payment" model="ir.ui.view">
+            <field name="name">account.payment.form.mass</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_invoice_form" />
+            <field name="arch" type="xml">
+                <field name="payment_date" position="after">
+                    <field name="payment_method" attrs="{'invisible': [('payment_type', '!=', 'outbound')], 'required': [('payment_type', '=', 'outbound')]}"/>
+                    <field name="check_type" invisible="1"/>
+                    <field name="check_no" attrs="{'invisible': [('payment_method', '!=', 'check')], 'readonly': [('check_type', '=', 'auto')], 'required': [('check_type', '=', 'check')]}"/>
+                </field>
+            </field>
+        </record> -->
+
+    </data>
+</odoo>

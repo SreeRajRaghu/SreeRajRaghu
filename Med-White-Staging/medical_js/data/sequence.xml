@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="seq_multi_appointment" model="ir.sequence">
+            <field name="name">Multi Appointment Sequence</field>
+            <field name="code">medical.multi.order</field>
+            <field name="prefix">MULTI/</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="partner_prepaid_card_sequence" model="ir.sequence">
+            <field name="name">Partner Prepaid Card Sequence</field>
+            <field name="code">partner.prepaid.card</field>
+            <field name="prefix">PREPAID/</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+</odoo>

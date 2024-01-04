@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id='view_medical_attachment_type_tree' model='ir.ui.view'>
+        <field name='name'>view.medical.attachment.type.tree</field>
+        <field name='model'>medical.attachment.type</field>
+        <field name='arch' type='xml'>
+            <tree string='Attachment Type'>
+                <field name='sequence' widget='handle'/>
+                <field name='name'/>
+                <field name='attachment_type' />
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_medical_attachment_type_form" model="ir.ui.view">
+        <field name="name">view.medical.attachment.type.form</field>
+        <field name="model">medical.attachment.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name='name'/>
+                        <field name='attachment_type'/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_medical_attachment_type" model="ir.actions.act_window">
+        <field name="name">Attachment Type</field>
+        <field name="res_model">medical.attachment.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_medical_attachment_type" name="Attachment Type" parent="medical_app.menu_medical_app_config" action="medical_app.action_medical_attachment_type" sequence="95"/>
+</odoo>

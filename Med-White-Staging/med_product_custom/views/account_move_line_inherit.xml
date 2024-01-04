@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="account_invoice_form">
+            <field name="name">Account Invoice</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='discount']" position="after">
+                        <field name="is_brokerage" invisible="1"/>
+                        <field name="product_unit_ids" widget="many2many_tags" attrs="{'invisible': [('is_brokerage', '=', False)]}" options="{'no_create': True, 'no_edit' : True, 'no_open': True}"/>
+                    </xpath>
+                    <xpath expr="//field[@name='invoice_line_ids']/form/sheet/group/field[@name='discount']" position="after">
+                        <field name="product_unit_ids"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

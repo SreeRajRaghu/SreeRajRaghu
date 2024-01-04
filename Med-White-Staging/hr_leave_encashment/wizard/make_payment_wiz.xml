@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_payment_encashment_form" model="ir.ui.view">
+        <field name="name">make.encashment.payment.form</field>
+        <field name="model">make.encashment.payment</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="partner_id" readonly="1"/>
+                        <field name="branch_id" readonly="1"/>
+                        <field name="amount" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="journal_id" required="1"/>
+                        <field name="payment_date" required="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_make_payment" string="Payment" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+   <record id="action_make_account_encashment_payment" model="ir.actions.act_window">
+            <field name="name">Make Encashment Payment</field>
+            <field name="res_model">make.encashment.payment</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_account_payment_encashment_form"/>
+            <field name="target">new</field>
+        </record>
+    
+</odoo>

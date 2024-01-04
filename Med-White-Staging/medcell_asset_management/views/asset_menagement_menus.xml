@@ -1,0 +1,140 @@
+<odoo>
+    <data>
+        <menuitem id="menu_medcell_asset_root"
+                  name="Asset Management"
+                  sequence="10"
+                  web_icon="medcell_asset_management,static/description/icon.png"/>
+
+        <menuitem id="menu_asset_management"
+                  name="Asset Location"
+                  parent="menu_medcell_asset_root"
+                  sequence="1"
+                  groups="group_menu_products_management"/>
+
+        <menuitem id="menu_product"
+                  name="Assets"
+                  action="medcell_asset_product_acton"
+                  parent="menu_asset_management"
+                  sequence="1"
+                  groups="group_menu_products"/>
+
+        <menuitem id="menu_asset_management_buildings"
+                  name="Building Details"
+                  parent="menu_medcell_asset_root"
+                  sequence="2"
+                  groups="group_menu_building_details"/>
+
+        <menuitem id="menu_asset_building"
+                  name="Buildings"
+                  action="act_medcell_asset_building_management_view"
+                  parent="menu_asset_management_buildings"
+                  sequence="1"
+                  groups="group_menu_buildings"/>
+
+        <menuitem id="menu_medcell_block"
+                  name="Block"
+                  parent="menu_asset_management_buildings"
+                  action="medcell_asset_block_acton"
+                  sequence="2"
+                  groups="group_menu_blocks"/>
+
+        <menuitem id="menu_medcell_floor"
+                  name="Floor"
+                  parent="menu_asset_management_buildings"
+                  action="medcell_asset_floor_acton"
+                  sequence="3"
+                  groups="group_menu_floors"/>
+
+        <menuitem id="menu_asset_rooms"
+                  name="Cabin"
+                  action="act_medcell_asset_room_management_view"
+                  parent="menu_asset_management_buildings"
+                  sequence="4"
+                  groups="group_menu_cabins"/>
+
+        <menuitem id="menu_root_asset_movement"
+                  name="Asset Movements"
+                  parent="menu_medcell_asset_root"
+                  sequence="3"
+                  groups="group_menu_asset_movements"/>
+
+        <menuitem id="menu_generate_bulk_assets"
+                  name="Generate Assets"
+                  parent="menu_root_asset_movement"
+                  action="action_generate_bulk_assets"
+                  sequence="1"
+                  groups="group_menu_generate_bulk_asset"/>
+
+        <menuitem id="menu_asset_move"
+                  name="Asset Issue/Return"
+                  parent="menu_root_asset_movement"
+                  action="action_asset_move"
+                  sequence="2"
+                  groups="group_menu_asset_transfer"/>
+
+        <menuitem id="menu_asset_move_issue"
+                  name="Asset Issue Employee"
+                  parent="menu_root_asset_movement"
+                  action="action_asset_move_issue"
+                  sequence="3"
+                  groups="group_menu_asset_issue"/>
+
+        <menuitem id="menu_asset_move_return"
+                  name="Asset Return Employee"
+                  parent="menu_root_asset_movement"
+                  action="action_asset_move_return"
+                  sequence="4"
+                  groups="group_menu_asset_return"/>
+
+        <menuitem id="menu_asset_movement"
+                  name="Asset Movement"
+                  parent="menu_root_asset_movement"
+                  action="action_asset_movement"
+                  sequence="5"
+                  groups="group_sub_menu_asset_movement"/>
+
+        <menuitem id="menu_asset_management_configuration"
+                  name="Configuration"
+                  parent="menu_medcell_asset_root"
+                  sequence="4"
+                  groups="group_menu_asset_configuration"/>
+
+        <menuitem id="menu_product_category"
+                  name="Product Category"
+                  action="act_medcell_asset_product_category_view"
+                  parent="menu_asset_management_configuration"
+                  sequence="1"
+                  groups="group_menu_asset_product_category"/>
+
+        <menuitem id="menu_product_sub_category"
+                  name="Product Sub Category"
+                  action="act_medcell_asset_product_sub_category_view"
+                  parent="menu_asset_management_configuration"
+                  sequence="2"
+                  groups="group_menu_asset_product_sub_category"/>
+
+        <menuitem id="menu_medcell_products_group"
+                  name="Group"
+                  action="medcell_products_group_action"
+                  parent="menu_asset_management_configuration"
+                  sequence="3"
+                  groups="group_menu_asset_group"/>
+
+        <menuitem id="menu_medcell_facilities"
+                  name="Facilities"
+                  parent="menu_asset_management_configuration"
+                  action="act_medcell_facilities_action"
+                  sequence="4"
+                  groups="group_menu_asset_facilities"/>
+
+        <menuitem id="menu_asset_brand"
+                  name="Brand"
+                  action="medcell_asset_brand_action"
+                  parent="menu_asset_management_configuration"
+                  sequence="5"
+                  groups="group_menu_asset_brand"/>
+
+    </data>
+</odoo>
+
+

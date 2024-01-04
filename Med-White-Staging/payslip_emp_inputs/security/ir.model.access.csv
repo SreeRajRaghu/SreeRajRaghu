@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_emp_inputs,access_emp_inputs,model_emp_inputs,base.group_user,1,1,1,1
+access_emp_input_line,access_emp_input_line,model_emp_input_line,base.group_user,1,1,1,1
+
+access_bulk_emp_inputs,access_bulk_emp_inputs,model_bulk_emp_inputs,base.group_user,1,1,1,1
+access_emp_input_category,access_emp_input_category,model_emp_input_category,base.group_user,1,1,1,1

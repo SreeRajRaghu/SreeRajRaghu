@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="ckus_check_inherit" inherit_id="check_printing_sismatix.ckus_check">
+
+            <xpath expr="//div[@class='sequence_number']" position="replace">
+            </xpath>
+
+            <xpath expr="//div[@class='ckus_payee_addr']" position="replace">
+            </xpath>
+
+            <xpath expr="//div[@class='ckus_memo']" position="replace">
+            </xpath>
+
+        </template>
+
+    </data>
+</odoo>

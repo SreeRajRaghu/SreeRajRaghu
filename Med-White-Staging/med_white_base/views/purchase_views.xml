@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <template id="report_account_standard_report" inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="//div[contains(@class, 'page')]" position="after">
+                <div class="row mt32">
+                    <div class="col-12">
+                        <span style="font-size:20px;"><b>Terms and Conditions</b></span>
+                    </div> 
+                </div>
+                 <div class="row mt16">
+                    <div class="col-1 text-right" >1.
+                    </div> 
+                    <div class="col-11 text-left">
+                        <span >Delivery: Immediate</span>
+                    </div>
+                </div>
+                <div class="row">
+                     <div class="col-1 text-right" >2.
+                    </div> 
+                    <div class="col-11 text-left">
+                        <span >Payment Terms: </span>
+                        <span t-field="o.payment_term_id"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1 text-right" >3.
+                    </div> 
+                    <div class="col-11 text-left">
+                        <span >All Items Of Long Expiry To Be Supplied</span>
+                    </div>
+                </div>
+
+                <div class="row mt128">
+                    <div class="col-2" style="border-bottom: 1px solid black;">
+                    </div> 
+                    <div class="col-2">
+                    </div>
+                    <div class="col-2" style="border-bottom: 1px solid black;">
+                    </div>
+                    <div class="col-2">
+                    </div>
+                    <div class="col-2" style="border-bottom: 1px solid black;">
+                    </div>
+                </div> 
+
+                <div class="row" style="font-size:16px;">
+                    <div class="col-4">
+                        <span >Prepared By</span>
+                    </div> 
+                    <div class="col-4">
+                        <span >Verified By</span>
+                    </div> 
+                    <div class="col-4">
+                        <span >Authorized By</span>
+                    </div> 
+                </div>
+        </xpath>
+    </template>
+</odoo>

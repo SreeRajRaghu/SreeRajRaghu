@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="0">
+        <template id="report_salary_continous_certificate_footer">
+            <div class="row">
+                <div class="col-6">
+                    This Certificate is valid for period of 3 months
+                </div>
+                <div class="col-6" style="text-align: right" dir="rtl">
+                    هذه الشهادة صالحة لمدة 3 أشهر
+                </div>
+            </div>
+        </template>
+
+        <template id="external_layout_standard" inherit_id="web.external_layout_standard">
+            <xpath expr="//div[@name='financial_infos']/.." position="before">
+                <t t-if="is_salary_continous_certificate">
+                    <t t-call="boutiqaat_reports.report_salary_continous_certificate_footer"/>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="report_salary_continous_certificate">
+            <t t-call="web.html_container">
+                <t t-set="is_salary_continous_certificate" t-value="True"/>
+                <t t-call="web.basic_layout">
+                    <t t-set="doc" t-value="docs[0]"/>
+                    <t t-set="e" t-value="doc.employee_id"/>
+                    <div class="page" style="font-size:14px;">
+                        <div style="text-align: left;">
+                            <h3><t t-esc="doc.print_date.strftime('%d/%m/%Y')"/></h3>
+                        </div>
+                        <table style="width: 100%">
+                            <colgroup>
+                                <col width="20%" class="text-left"/>
+                                <col width="25%"/>
+                                <col width="10%"/>
+                                <col width="25%"/>
+                                <col width="20%"/>
+                            </colgroup>
+                            <tr>
+                                <th colspan="2" style="text-align: left;">
+                                    <h4><u>TO WHOM IT MAY CONCERN</u></h4>
+                                </th>
+                                <td></td>
+                                <th colspan="2" dir="rtl" style="text-align: right;">
+                                    <h4><u>لمن من يهمه الأمر</u></h4>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align: left;">
+                                    <t t-esc="doc.company_id.name"/>, hereby certify that the below mentioned employee works for our organization as per the following details : <br/><br/>
+                                </th>
+                                <td></td>
+                                <th colspan="2" style="text-align: right;" dir="rtl">
+                                    تشهد <t t-esc="doc.company_id.arabic_name"/> بأن <t t-if="e.gender == 'male'">الموظف </t> <t t-else="1">الموظفة </t>
+                                     <t t-if="e.gender == 'male'"> المذكور</t> <t t-else="1"> المذكورة </t> ادناه <t t-if="e.gender == 'male'">  يعمل </t> <t t-else="1">  تعمل </t> لدى الشركة حسب البيانات التالية :
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Employee ID :</th>
+                                <td><t t-esc="e.identification_id"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.identification_id"/></td>
+                                <th style="text-align: right;" dir="rtl">الرقم الوظيفي :</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Name :</th>
+                                <td><t t-esc="e.name"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.arabic_name"/></td>
+                                <th style="text-align: right;" dir="rtl">الإسم :</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Civil Id No :</th>
+                                <td><t t-esc="e.civil_id or ''"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.civil_id or ''"/></td>
+                                <th style="text-align: right;" dir="rtl">الرقم المدني:</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Nationality :</th>
+                                <td><t t-esc="e.country_id.name or ''"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.country_id.arabic_name or ''"/></td>
+                                <th style="text-align: right;" dir="rtl">الجنسية :</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Position :</th>
+                                <td><t t-esc="e.job_id.name or ''"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.job_id.arabic_name or ''"/></td>
+                                <th style="text-align: right;" dir="rtl">الوظيفة :</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Date of Employment :</th>
+                                <td>
+                                    <t t-if="e.date_joining">
+                                        <sapn t-esc="e.date_joining.strftime('%d/%m/%Y')"/>
+                                    </t>
+                                </td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl">
+                                    <t t-if="e.date_joining">
+                                        <span t-esc="e.date_joining.strftime('%Y/%m/%d')"/>
+                                    </t>
+                                </td>
+                                <th style="text-align: right;" dir="rtl">تاريخ التعيين :</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Net Salary :</th>
+                                <td><t t-esc="e.contract_id.get_all_allowance() or 0.0" t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.contract_id.get_all_allowance() or 0.0" t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'/></td>
+                                <th style="text-align: right;" dir="rtl">صافي الراتب الشهري :</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Bank Name :</th>
+                                <td><t t-esc="e.bank_id.name or ''"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.bank_id.arabic_name or ''"/></td>
+                                <th style="text-align: right;" dir="rtl">اسم البنك :</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Account No : <br/><br/></th>
+                                <td><t t-esc="e.iban_number or ''"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.iban_number or ''"/></td>
+                                <th style="text-align: right;" dir="rtl">رقم الحساب:</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align: left;">
+                                    Employee still working with us, monthly salary is transferred to above mentioned bank details.<br/><br/>
+                                </th>
+                                <td></td>
+                                <th colspan="2" style="text-align: right;" dir="rtl">
+                                   <t t-if="e.gender == 'male'"> و مازال </t> <t t-else="1"> و مازالت </t> <t t-if="e.gender == 'male'"> مستمر </t> <t t-else="1"> مستمرة </t> بالعمل لدينا حتى تاريخه، ويحول <t t-if="e.gender == 'male'"> راتبه </t> <t t-else="1"> راتبها </t> إلى الحساب الموضح أعلاه.
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align: left;">
+                                    This certificate is issued upon employee request, without liability towards the company.
+                                </th>
+                                <td></td>
+                                <th colspan="2" style="text-align: right;" dir="rtl">
+<!--                                     هذا وقد <t t-if="e.gender == 'male'"> اعطي </t> <t t-else="1"> اعطيت </t> هذه الشهادة بناء على <t t-if="e.gender == 'male'"> طلبه </t> <t t-else="1"> طلبها </t>
+ -->
+                                    هذا وقد <t t-if="e.gender == 'male'"> اعطي </t> <t t-else="1"> اعطيت </t> هذه الشهادة بناء على <t t-if="e.gender == 'male'"> طلبه </t> <t t-else="1"> طلبها </t>
+                                </th>
+                            </tr>
+                            <!-- <tr style="text-align: center;">
+                                <th colspan="5">
+                                    <hr style="margin: 100px 35% 2px 35%; border: 1px solid #929292;"/>
+                                    <div>General Manager</div>
+                                </th>
+                            </tr> -->
+                            <tr style="text-align: center;">
+                                <th colspan="5" style="padding-top:90px;">
+                                    <div><span t-field="doc.title_id.name"/></div>
+                                    <hr style="margin: 10px 35% 2px 35%; border: 1px solid #929292;"/>
+                                </th>
+                            </tr>
+                        </table>
+                        <div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <report
+            id="salary_continous_certificate_report"
+            string="Print"
+            model="boutiqaat.report.wizarad"
+            report_type="qweb-pdf"
+            name="boutiqaat_reports.report_salary_continous_certificate"
+            file="boutiqaat_reports.report_salary_continous_certificate"
+            print_report_name="'Salary Continuity Certificate'"
+            menu="False"
+        />
+
+    </data>
+</odoo>

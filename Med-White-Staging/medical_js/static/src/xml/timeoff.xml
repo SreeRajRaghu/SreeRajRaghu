@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+<t t-name="TimeoffIcon">
+    <li class="nav-item dropdown v-timeoff">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+            <i class="fa fa-hourglass-1"></i>
+            <!-- <span class="badge badge-warning navbar-badge v-timeoff-count">0</span> -->
+        </a>
+    </li>
+</t>
+
+<t t-name="TimeoffAddPopup">
+    <div class="modal-dialog">
+        <div class="popup">
+            <p class="title">Set Time Off</p>
+            <table class="table table-sm text-left">
+                <tr>
+                    <th width="30%">Date</th>
+                    <td>
+                        <input type="hidden" name="id" t-att-value="leave and leave.id or ''"/>
+                        <input type="hidden" name="holiday_status_id" t-att-value="leave and leave.holiday_status_id and leave.holiday_status_id[0] or widget.leave_status_id"/>
+                        <input type="text" name="request_date_from" class="v-input-date form-control" placeholder="Date"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Reason</th>
+                    <td>
+                        <input type="text" name="name" class="form-control" placeholder="Subject"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="30%">Resource</th>
+                    <td>
+                        <select name="resource_id" class="form-control">
+                            <t  t-foreach="widget.medical.db.all_resources or []" t-as="item">
+                                <option t-att-value="item.id" t-if="item.hr_staff_id and item.hr_staff_id.length">
+                                    <t t-esc="item.name" />
+                                </option>
+                            </t>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="30%">From Hours</th>
+                    <td>
+                        <select name="request_hour_from" class="form-control">
+                            <option t-foreach="widget.display_hour_list or []" t-as="item" t-att-value="item[0]">
+                                <t t-esc="item[1]" />
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="30%">To Hours</th>
+                    <td>
+                        <select name="request_hour_to" class="form-control">
+                            <option t-foreach="widget.display_hour_list or []" t-as="item" t-att-value="item[0]">
+                                <t t-esc="item[1]" />
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <div class="footer">
+                <div class="button confirm">
+                    Save
+                </div>
+                <div class="button cancel">
+                    Cancel
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
+<!-- 
+<t t-name="ReminderListScreen">
+    <div class="container">
+        <table class="table table-striped table-bordered v-data-table" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Appointment</th>
+                    <th>Subject</th>
+                    <th>Description</th>
+                    <th>
+                        <button class="button v-add-new">
+                            <span class="fa fa-plus" /> Add New
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="ReminderListBody">
+            </tbody>
+        </table>
+    </div>
+</t>
+<t t-name="ReminderListTBody">
+    <t t-if="widget.medical.app_reminders">
+        <t t-foreach="widget.medical.app_reminders" t-as="leave">
+            <t t-call="Reminderleave" />
+        </t>
+    </t>
+</t>
+<t t-name="Reminderleave">
+    <tr t-att-data-id="leave.id">
+        <td class="v-date"><t t-esc="widget.format_date(new Date(leave.todo_date))" /></td>
+        <td><t t-esc="leave.medical_order_id and leave.medical_order_id[1] or ''" /></td>
+        <td><t t-esc="leave.name" /></td>
+        <td><t t-esc="leave.description" /></td>
+        <td><button class='v-btn-edit'>Edit</button><button class='v-btn-done'>Done</button><button class='v-btn-cancel'>Cancel</button></td>
+    </tr>
+</t> -->
+
+</templates>

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="pcr_certificate_report_template">
+        <t t-call="web.basic_layout">
+            <t t-set="company" t-value="o.company_id or res_company" />
+            <t t-call="medical_report.medical_header" />
+            <div class="page" style="font-family: sans-serif;" t-if="o.is_app_pcr">
+                <div class="p-1" style="background: #1d2562">
+                    <div class="row text-center">
+                        <div class="col-12">
+                            <div style="letter-spacing: 1px; font-size: 23px;">
+                                <span style="color:#f1ffff;">PRIVATE AND CONFIDENTIAL PATHOLOGY RESULTS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-sm table-borderless mt16">
+                    <tr>
+                        <td width="15%">
+                            <span style="color:#0a2a8e;">Lab #:</span>
+                            <img t-if="o.sudo().swab_location_id.pcr_center_logo" t-att-src="image_data_uri(o.sudo().swab_location_id.pcr_center_logo)" style="max-height: 60px;" alt="Logo"/>
+                        </td>
+                        <td width="35%">
+                            <div t-field="o.swab_location_id.code"/>
+                            <div>
+                                <span t-field="o.swab_location_id.name" />
+                                <br />
+                                <span t-field="o.swab_location_id.street"/>
+                                <br />
+                                <span t-field="o.swab_location_id.street2"/>
+                                <br />
+                                <span t-field="o.swab_location_id.area_id"/>
+                                <br />
+                                <span t-field="o.swab_location_id.city"/> <span> </span>
+                                <span t-field="o.swab_location_id.state_id"/>
+                                <!-- <br />
+                                <span t-field="o.swab_location_id.country_id"/> -->
+                                <!-- <br />
+                                Tel: <span t-field="o.swab_location_id.phone"/> -->
+                            </div>
+                        </td>
+                        <td width="15%">
+                            <span style="color:#0a2a8e;">Patient:</span>
+                        </td>
+                        <td width="35%">
+                            <div t-esc="doc.partner_id.passport_name or doc.partner_id.name or ''"/>
+                            <div t-if="doc.partner_id.civil_code" t-field="doc.partner_id.civil_code"/>
+                            <div t-if="doc.partner_id.birthday" t-field="doc.partner_id.birthday"/>
+                            <div t-if="doc.partner_id.gender" t-field="doc.partner_id.gender"/>
+                            <div t-if="doc.partner_id.mobile or doc.partner_id.phone" t-esc="doc.partner_id.mobile or doc.partner_id.phone"/>
+                            <div t-if="doc.partner_id.passport_no" t-field="doc.partner_id.passport_no"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="color:#0a2a8e;">Dr:</span>
+                        </td>
+                        <td>
+                            <span t-field="doc.resource_id.partner_id"/>
+                        </td>
+                        <td>
+                            <span style="color:#0a2a8e;">QR Code:</span>
+                        </td>
+                        <td>
+                            <span t-field="doc.pcr_qr_code" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="color:#0a2a8e;">Spec. Taken:</span>
+                        </td>
+                        <td>
+                            <span t-field="doc.date_requested"/>
+                        </td>
+                        <td>
+                            <span style="color:#0a2a8e;">Processed:</span>
+                        </td>
+                        <td>
+                            <span t-field="doc.date_inprogress"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="color:#0a2a8e;">Spec. Recv’d:</span>
+                        </td>
+                        <td>
+                            <span t-field="doc.date_received"/>
+                        </td>
+                        <td>
+                            <span  style="color:#0a2a8e;">Result Time:</span>
+                        </td>
+                        <td>
+                            <span t-field="doc.date_confirmed"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="color:#0a2a8e;">Order:</span>
+                        </td>
+                        <td>
+                            <span t-field="o.name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="color:#0a2a8e;">Speclmen:</span>
+                        </td>
+                        <td>
+                            <span t-field="doc.pcr_result_user_id.name" />
+                        </td>
+                    </tr>
+                </table>
+                <div class="p-1 mt16" style="background: #1d2562">
+                    <div class="row text-center">
+                        <div class="col-12">
+                            <div style="letter-spacing: 1px; font-size: 23px;">
+                                <span style="color:#f1ffff;">MOLECULAR (FINAL)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-0" style="background: #e9ecef; font-size:19px;">
+                    <div class="col-5">
+                        <strong>Test</strong>
+                    </div>
+                    <div class="col-7">
+                         <strong>RESULT</strong>
+                    </div>
+                </div>
+                <div class="row m-0" style="font-size: 17px;">
+                    <div class="col-12">
+                        <strong t-field="doc.appointment_line_id.product_id.pcr_report_line_1" />
+                    </div>
+                </div>
+
+                <div class="row m-0" style="font-size: 17px;">
+                    <div class="col-5 ">
+                        <span t-field="doc.appointment_line_id.product_id.pcr_report_line_2" />
+                    </div>
+                    <div class="col-7">
+                        <t t-if="o.pcr_result == 'negative'">
+                            <span t-field="o.pcr_result" style="color:green"/>
+                        </t>
+                        <t t-if="o.pcr_result == 'positive'" >
+                            <span t-field="o.pcr_result" style="color:red"/>
+                        </t>
+                        <t t-if="o.pcr_result in  ['equivocal' ,'rejected']">
+                            <span t-field="o.pcr_result" style="color:#0a2a8e;"/>
+                        </t>
+                    </div>
+                </div>
+
+                <div class="row m-0" style="font-size: 17px;">
+                    <div class="col-1 mt16"/>
+                    <div class="col-11">
+                        <span t-field="doc.appointment_line_id.product_id.pcr_report_line_3" />
+                    </div>
+
+                </div>
+                <div class="mt32" style="border: 5px solid #f0f1f2; font-size: 10px; color:#0a2a8e">
+                    <div class="col-12"> 
+                        <div>Negative result dose not rule out the possibility of covid-19 infection. Negative results must be combined with clinical observations Patient history, and epidemiological information</div>
+                        <div class="text-right mt-2">
+                            النتيجة السلبية لا تستبعد احتمال الإصابة بفيروس كوفيد -19 ، يجب الجمع بين النتائج السلبية والحالة الصحية وتاريخ المريض ومعلومات التقصي الوبائي
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt16" >
+                    <div class="col-6"/>
+                    <div class="col-3">
+                        <img class="mt-2" t-if="o.company_id.stamp_image" t-att-src="image_data_uri(o.company_id.stamp_image)" style="max-height: 60px;" alt="Logo"/>
+                    </div>
+                    <div class="col-3">
+                       <img class="mt-2" t-if="o.company_id.sign_image" t-att-src="image_data_uri(o.company_id.sign_image)" style="max-height: 60px;" alt="Logo"/>
+                    </div>
+                </div>
+                <div class="row mt32" >
+                    <div class="col-8"/>
+                    <div class="col-4">
+                        <span style="color:#0a2a8e;font-size:16px">Signed-Out-</span>
+                        <span style="color:#0a2a8e;" t-field="doc.date_completed"/>
+                    </div>
+                </div>
+                <div class="row mt-2" >
+                    <div class="col-2">
+                        <img class="mr-auto" width="75px" t-att-src="image_data_uri(o.sudo().qr_result_url_image)"/>
+                    </div>
+                    <div class="col-10"> 
+                        <per  style="color:#0a2a8e; font-size:12px">This result was electromically generated. To download the original PDF Scan the adjacent  QR Code. you will be taken to the secure chironone. cloud laboratory  information  management system third party validation  portal. If you are viewing this document electronically, you may also click here.</per>
+                    </div>
+                </div>
+                <div class="mt8 text-center">
+                    <strong style="color:#0a2a8e;">END OF REPORT</strong>
+                </div>
+                <div class="row mt8" >
+                    <div class="col-8"/> 
+                    <div class="col-4">
+                        <img class="mr-auto" width="165px" src="/medical_lab/static/pcr_report_footer.png"/>
+                        <img class="mr-auto" width="85px" t-att-src="image_data_uri(o.sudo().qr_cert_image)"/>
+                    </div>
+                </div>
+                <div class="footer o_standard_footer">
+                    <div class="text-left">
+                        <div>
+                            <img src="/medical_report/static/lab-result-footer.png" style="width:100%;" alt="Footer" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page" t-else="1">
+                <div class="alert alert-danger">Not PCR Appointment.</div>
+            </div>
+        </t>
+    </template>
+
+    <template id="appointment_pcr_certificate">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-foreach="o.pcr_test_ids" t-as="doc">
+                    <t t-call="medical_pcr.pcr_certificate_report_template"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- <record id="paperformat_pcr_certi" model="report.paperformat">
+        <field name="name">PCR Certificate</field>
+        <field name="format">custom</field>
+        <field name="page_height">160</field>
+        <field name="page_width">120</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">1</field>
+        <field name="margin_bottom">1</field>
+        <field name="margin_left">1</field>
+        <field name="margin_right">1</field>
+        <field name="header_spacing">1</field>
+        <field name="dpi">90</field>
+    </record> -->
+
+    <report
+        id="action_report_pcr_certi_from_appointment"
+        model="medical.order" 
+        string="PCR Certificate"
+        report_type="qweb-pdf"
+        name="medical_pcr.appointment_pcr_certificate"
+        file="medical_pcr.appointment_pcr_certificate"
+    />
+        <!-- paperformat="medical_pcr.paperformat_pcr_certi" -->
+
+
+    <template id="pcr_test_certificate">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-set="o" t-value="doc.appointment_id" />
+                <t t-call="medical_pcr.pcr_certificate_report_template"/>
+            </t>
+        </t>
+    </template>
+
+    <report
+        id="action_report_pcr_certi"
+        model="medical.pcr.test" 
+        string="PCR Certificate"
+        report_type="qweb-pdf"
+        name="medical_pcr.pcr_test_certificate"
+        file="medical_pcr.pcr_test_certificate"
+    />
+
+</odoo>

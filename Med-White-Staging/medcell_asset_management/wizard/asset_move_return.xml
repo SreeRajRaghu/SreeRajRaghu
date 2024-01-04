@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="asset_move_return_form" model="ir.ui.view">
+        <field name="name">asset.move.return.form</field>
+        <field name="model">asset.move.return</field>
+        <field name="arch" type="xml">
+            <form string="Asset Return">
+                <sheet>
+                    <separator string="Asset Return"/>
+                    <group>
+                        <group>
+                            <field name="custodian_name"
+                                   options="{'no_create': True, 'no_edit': True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="company_id" options="{'no_open': True}" readonly="1"/>
+                        </group>
+                        <field name="asset_issue_ids" nolabel="1">
+                            <tree create="false" editable="bottom">
+                                <field name="product_id" readonly="1" force_save="1"/>
+                                <field name="handover_date" readonly="1" force_save="1"/>
+                                <field name="return_date"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+                <footer>
+                    <span groups="base.group_user">
+                        <button class="oe_highlight" name="action_return_asset_move" string="Return" type="object"/>
+                        <button class="oe_highlight" name="generate_return_receipt" string="Print" type="object"/>
+                        <button special="cancel" string="Cancel"/>
+                    </span>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_asset_move_return" model="ir.actions.act_window">
+        <field name="name">Asset Return</field>
+        <field name="res_model">asset.move.return</field>
+        <field name="view_mode">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="asset_move_return_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

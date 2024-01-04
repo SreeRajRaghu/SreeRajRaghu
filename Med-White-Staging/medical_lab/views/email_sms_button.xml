@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_medical_order_form_email_sms" model="ir.ui.view">
+        <field name="name">medical.order.sms.email.form.inherit</field>
+        <field name="model">medical.order</field>
+        <field name="inherit_id" ref="medical_app.view_medical_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="send_by_sms" string="Send By SMS" type="object" class="btn-primary"/>
+                <button name="send_by_email" string="Send By Email" type="object" class="btn-primary"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

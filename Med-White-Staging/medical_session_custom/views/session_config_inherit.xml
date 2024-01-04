@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+ <record id="view_medical_config_form_inherit_disable_closing" model="ir.ui.view">
+        <field name="name">medical.config.form.inherit.disable.closing</field>
+        <field name="model">medical.config</field>
+        <field name="inherit_id" ref="medical_js.view_medical_config_form"/>
+        <field name="arch" type="xml">
+            <field name="allow_time_off" position="after">
+                <field name="disable_closing"/>
+            </field>
+        </field>
+    </record>
+    </data>
+</odoo>

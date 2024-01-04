@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="last_action_no_need" model="last.action">
+            <field name="name">No Need</field>
+            <field name="use_in_state">no_show</field>
+        </record>
+        <record id="last_action_postponed" model="last.action">
+            <field name="name">Postponed</field>
+            <field name="use_in_state">no_show</field>
+        </record>
+        <record id="last_action_recall" model="last.action">
+            <field name="name">Recall</field>
+            <field name="use_in_state">no_answer</field>
+        </record>
+        <record id="last_action_recall_request" model="last.action">
+            <field name="name">Recall Request</field>
+            <field name="use_in_state">no_answer</field>
+        </record>
+        <record id="last_action_no_answer" model="last.action">
+            <field name="name">No Answer</field>
+            <field name="use_in_state">no_answer</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="aml_payment_history_form_view" model="ir.ui.view">
+        <field name="name">aml.payment.history.form</field>
+        <field name="model">aml.payment.history</field>
+        <field name="arch" type="xml">
+            <form string="Payment History">
+                <group>
+                    <group>
+                        <field name="move_line_id" />
+                        <field name="payment_date" />
+                        <field name="amount" />
+                        <field name="active" />
+                    </group>
+                    <group>
+                        <field name="invoice_id" />
+                        <field name="is_insurance_invoice" />
+                        <field name="medical_order_line_id" />
+                        <field name="medical_order_id" />
+                        <field name="medical_order_resource_id" />
+                        <field name="medical_order_clinic_id" />
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Distribution">
+                        <field name="line_ids" editable="bottom">
+                            <tree string="Distribution">
+                                <field name="analytic_account_id" />
+                                <field name="amount" />
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Payments">
+                        <field name="payment_ids" />
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+
+    <record id="aml_payment_history_tree_view" model="ir.ui.view">
+        <field name="name">aml.payment.history.tree</field>
+        <field name="model">aml.payment.history</field>
+        <field name="arch" type="xml">
+            <tree string="Payment History">
+                <field name="move_line_id" />
+                <field name="payment_date" />
+                <field name="amount" sum="Total"/>
+                <field name="invoice_id" optional="hide"/>
+                <field name="medical_order_line_id" optional="hide"/>
+                <field name="medical_order_id" optional="hide"/>
+                <field name="medical_order_resource_id" optional="hide"/>
+                <field name="medical_order_clinic_id" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="aml_payment_history_search_view" model="ir.ui.view">
+        <field name="name">aml.payment.history.search</field>
+        <field name="model">aml.payment.history</field>
+        <field name="arch" type="xml">
+            <search string="Payment History">
+                <field name="move_line_id" />
+                <field name="payment_date" />
+                <field name="payment_ids" />
+                <field name="amount" />
+                <field name="active" />
+                <field name="invoice_id" />
+                <field name="medical_order_line_id" />
+                <field name="medical_order_id" />
+                <field name="medical_order_resource_id" />
+                <field name="medical_order_clinic_id" />
+                <filter string="Payment Date" name="payment_date" date="payment_date"/>
+                <separator />
+                <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+                <separator />
+                <filter string="From Insurance" name="insured" domain="[('is_insurance_invoice','=',True)]" />
+                <filter string="From Patient" name="none_insured" domain="[('is_insurance_invoice','=',False)]" />
+                <group string="Group By" name="groupby">
+                    <filter name="move_line_id_groupby" string="Move Line" context="{'group_by': 'move_line_id'}"/>
+                    <filter name="payment_date_groupby" string="Payment Date" context="{'group_by': 'payment_date'}"/>
+                    <filter name="invoice_id_groupby" string="Invoice" context="{'group_by': 'invoice_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="aml_payment_history_action" model="ir.actions.act_window">
+        <field name="name">Payment History</field>
+        <field name="res_model">aml.payment.history</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'create': False, 'edit': False}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Payments and Distributions
+          </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_medical_payment" name="Payments"
+        parent="medical_app.menu_medical_order_menu"
+        groups="medical_app.group_medical_cashier"
+        action="account.action_account_payments" sequence="100"/>
+
+    <menuitem id="menu_aml_payment_history" name="Payment History"
+        parent="medical_app.menu_medical_order_menu"
+        groups="medical_app.group_medical_cashier"
+        action="aml_payment_history_action" sequence="120"/>
+
+
+
+
+    <record id="aml_payment_history_line_tree_view" model="ir.ui.view">
+        <field name="name">aml.payment.history.line.tree</field>
+        <field name="model">aml.payment.history.line</field>
+        <field name="arch" type="xml">
+            <tree string="Payment History Line">
+                <field name="analytic_account_id" optional="hide"/>
+                <field name="resource_id" optional="show"/>
+                <field name="move_line_id" />
+                <field name="payment_date" />
+                <field name="amount" sum="Total"/>
+                <field name="invoice_id" optional="hide"/>
+                <field name="medical_order_line_id" optional="hide"/>
+                <field name="medical_order_id" optional="hide"/>
+                <field name="medical_order_clinic_id" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="aml_payment_history_line_search_view" model="ir.ui.view">
+        <field name="name">aml.payment.history.line.search</field>
+        <field name="model">aml.payment.history.line</field>
+        <field name="arch" type="xml">
+            <search string="Payment History">
+                <field name="resource_id" />
+                <field name="move_line_id" />
+                <field name="analytic_account_id" />
+                <field name="payment_date" />
+                <field name="amount" />
+                <field name="active" />
+                <field name="invoice_id" />
+                <field name="medical_order_line_id" />
+                <field name="medical_order_id" />
+                <field name="medical_order_clinic_id" />
+                <filter string="Payment Date" name="payment_date" date="payment_date"/>
+                <separator />
+                <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+                <separator />
+                <filter string="From Insurance" name="insured" domain="[('is_insurance_invoice','=',True)]" />
+                <filter string="From Patient" name="none_insured" domain="[('is_insurance_invoice','=',False)]" />
+                <group string="Group By" name="groupby">
+                    <filter name="payment_date_groupby" string="Payment Date" context="{'group_by': 'payment_date'}"/>
+
+                    <separator />
+                    <filter name="analytic_account_id_groupby" string="Analytic Account" context="{'group_by': 'analytic_account_id'}"/>
+                    <filter name="move_line_id_groupby" string="Move Line" context="{'group_by': 'move_line_id'}"/>
+                    <filter name="invoice_id_groupby" string="Invoice" context="{'group_by': 'invoice_id'}"/>
+
+                    <separator />
+                    <filter name="medical_order_id_groupby" string="Appointment" context="{'group_by': 'medical_order_id'}"/>
+                    <filter name="medical_order_clinic_id_groupby" string="Clinic" context="{'group_by': 'medical_order_clinic_id'}"/>
+                    <filter name="resource_id_groupby" string="Resource (Doctor)" context="{'group_by': 'resource_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="aml_payment_history_line_action" model="ir.actions.act_window">
+        <field name="name">Payment Distribution</field>
+        <field name="res_model">aml.payment.history.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'create': False, 'edit': False}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Patient Payments and Distributions
+          </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_aml_payment_history_line" name="Payment Distribution"
+        parent="medical_app.menu_medical_order_menu"
+        groups="medical_app.group_medical_cashier"
+        action="aml_payment_history_line_action" sequence="130"/>
+</odoo>

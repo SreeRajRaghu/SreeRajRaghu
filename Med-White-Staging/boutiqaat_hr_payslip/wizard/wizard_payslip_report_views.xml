@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="wizard_hr_payslip_report_view" model="ir.ui.view">
+        <field name="name">wizard.payslip.report.form</field>
+        <field name="model">wizard.payslip.report</field>
+        <field name="arch" type="xml">
+            <form string="Export Payslips">
+                <group col="4">
+                    <field name="from_date" />
+                    <field name="to_date" />
+                    <field name="state" />
+                    <field name="company_id" />
+                </group>
+                <span>No need to select department, if you need all employee data.</span>
+                <separator string="Departments"/>
+                <field name="department_ids"/>
+                <footer>
+                    <button string="Export Payslips" class="oe_highlight" type="object"
+                        name="print_excel" />
+                    <button string="Payslip Bank Details" class="oe_highlight" type="object"
+                        name="print_bank_excel" />
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_payslip_report" model="ir.actions.act_window">
+        <field name="name">Export Payslip</field>
+        <field name="res_model">wizard.payslip.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wizard_hr_payslip_report_view" />
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        action="action_wizard_payslip_report"
+        id="menu_wizard_payslip_report"
+        parent="hr_payroll.menu_hr_payroll_report" />
+
+    <!-- Employee Master -->
+
+    <record id="wizard_hr_emp_master_report_view" model="ir.ui.view">
+        <field name="name">wizard.emp.master.report.form</field>
+        <field name="model">wizard.emp.master</field>
+        <field name="arch" type="xml">
+            <form string="Employee Masters">
+                <group col="4">
+                    <field name="company_id" />
+                </group>
+                <span>No need to select department, if you need all employee data.</span>
+                <separator string="Departments"/>
+                <field name="department_ids"/>
+                <footer>
+                    <button string="Employee Masters" class="oe_highlight" type="object"
+                        name="print_excel_emp_master" />
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_emp_master_report" model="ir.actions.act_window">
+        <field name="name">Employee Master</field>
+        <field name="res_model">wizard.emp.master</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wizard_hr_emp_master_report_view" />
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        action="action_wizard_emp_master_report"
+        id="menu_wizard_emp_info"
+        parent="hr.hr_menu_hr_reports" />
+</odoo>

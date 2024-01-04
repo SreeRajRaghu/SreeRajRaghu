@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="wiz_emp_multi_case_form" model="ir.ui.view">
+        <field name="name">wiz.multi.case.form</field>
+        <field name="model">wiz.multi.case</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Technician">
+                <group>
+                    <group>
+                        <field name="test_type_id" options="{'no_create_edit': True}"/>
+                        <field name="case_ids" options="{'no_create_edit': True}"/>
+                    </group>
+                    <group>
+                        <field name="test_ids" options="{'no_create_edit': True}"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="add_multi_cases" string="Add Cases" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="wiz_emp_multi_case_action" model="ir.actions.act_window">
+        <field name="name">Add Cases</field>
+        <field name="res_model">wiz.multi.case</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

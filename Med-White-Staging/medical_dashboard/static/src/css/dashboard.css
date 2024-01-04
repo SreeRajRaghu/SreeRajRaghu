@@ -1,0 +1,389 @@
+.o_kanban_view.o_kanban_ungrouped.o_kanban_record.own{
+    min-width: 100%;
+}
+
+
+.btn-outline {
+  color: inherit;
+  background-color: transparent;
+  transition: all .5s;
+}
+.btn-primary.btn-outline {
+  color: #428bca;
+}
+.btn-success.btn-outline {
+  color: #5cb85c;
+}
+.btn-info.btn-outline {
+  color: #5bc0de;
+}
+.btn-warning.btn-outline {
+  color: #f0ad4e;
+}
+.btn-danger.btn-outline {
+  color: #d9534f;
+}
+.btn-primary.btn-outline:hover,
+.btn-success.btn-outline:hover,
+.btn-info.btn-outline:hover,
+.btn-warning.btn-outline:hover,
+.btn-danger.btn-outline:hover {
+  color: white;
+}
+
+
+.flot-chart {
+  display: block;
+  height: 400px;
+}
+.flot-chart-content {
+  width: 100%;
+  height: 100%;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.428571429;
+}
+.btn-circle.btn-lg {
+  width: 50px;
+  height: 50px;
+  padding: 10px 16px;
+  border-radius: 25px;
+  font-size: 18px;
+  line-height: 1.33;
+}
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  border-radius: 35px;
+  font-size: 24px;
+  line-height: 1.33;
+}
+.show-grid [class^="col-"] {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: 1px solid #ddd;
+  background-color: #eee !important;
+}
+.show-grid {
+  margin: 15px 0;
+}
+.huge {
+  font-size: 40px;
+}
+.panel-green {
+  border-color: #5cb85c;
+}
+.panel-green > .panel-heading {
+  border-color: #5cb85c;
+  color: white;
+  background-color: #5cb85c;
+}
+.panel-green > a {
+  color: #5cb85c;
+}
+.panel-green > a:hover {
+  color: #3d8b3d;
+}
+
+.panel-don_juan > .panel-heading {
+  border-color: #644D52;
+}
+
+.panel-don_juan {
+  border-color: #644D52;
+  color: white;
+  background-color: #644D52;
+}
+
+.panel-don_juan > a {
+  color: #644D52;
+}
+
+.panel-don_juan > a:hover {
+  color: #644D52;
+}
+
+
+.panel-coral > .panel-heading {
+  border-color: #F77A52;
+}
+
+.panel-coral {
+  border-color: #F77A52;
+  color: white;
+  background-color: #F77A52;
+}
+
+.panel-coral > a {
+  color: #F77A52;
+}
+
+.panel-coral > a:hover {
+  color: #F77A52;
+}
+
+.panel-sunshade > .panel-heading {
+  border-color: #FF974F;
+}
+
+.panel-sunshade {
+  border-color: #FF974F;
+  color: white;
+  background-color: #FF974F;
+}
+
+.panel-sunshade > a {
+  color: #FF974F;
+}
+
+.panel-sunshade > a:hover {
+  color: #FF974F;
+}
+
+
+.panel-outrageous > .panel-heading {
+  border-color: #F54F29;
+}
+
+.panel-outrageous {
+  border-color: #F54F29;
+  color: white;
+  background-color: #F54F29;
+}
+
+.panel-outrageous > a {
+  color: #F54F29;
+}
+
+.panel-outrageous > a:hover {
+  color: #F54F29;
+}
+
+
+.panel-matisse > .panel-heading {
+  border-color: #375D81;
+}
+
+.panel-matisse {
+  border-color: #375D81;
+  color: white;
+  background-color: #375D81;
+}
+
+.panel-matisse > a {
+  color: #375D81;
+}
+
+.panel-matisse > a:hover {
+  color: #375D81;
+}
+
+
+.panel-regent > .panel-heading {
+  border-color: #91BED4;
+}
+
+.panel-regent {
+  border-color: #91BED4;
+  color: white;
+  background-color: #91BED4;
+}
+
+.panel-regent > a {
+  color: #91BED4;
+}
+
+.panel-regent > a:hover {
+  color: #91BED4;
+}
+
+
+.panel-air_force > .panel-heading {
+  border-color: #5B92A8;
+}
+
+.panel-air_force {
+  border-color: #5B92A8;
+  color: white;
+  background-color: #5B92A8;
+}
+
+.panel-air_force > a {
+  color: #5B92A8;
+}
+
+.panel-air_force > a:hover {
+  color: #5B92A8;
+}
+
+
+.panel-heather > .panel-heading {
+  border-color: #9DBDC6;
+}
+
+.panel-heather {
+  border-color: #9DBDC6;
+  color: white;
+  background-color: #9DBDC6;
+}
+
+.panel-heather > a {
+  color: #9DBDC6;
+}
+
+.panel-heather > a:hover {
+  color: #9DBDC6;
+}
+
+.panel-night > .panel-heading {
+  border-color: #333333;
+}
+
+.panel-night {
+  border-color: #333333;
+  color: white;
+  background-color: #333333;
+}
+
+.panel-night > a {
+  color: #333333;
+}
+
+.panel-night > a:hover {
+  color: #333333;
+}
+
+
+.panel-sandybrown > .panel-heading {
+  border-color: #F4A460;
+}
+
+.panel-sandybrown {
+  border-color: #F4A460;
+  color: white;
+  background-color: #F4A460;
+}
+
+.panel-sandybrown > a {
+  color: #F4A460;
+}
+
+.panel-sandybrown > a:hover {
+  color: #F4A460;
+}
+
+
+.panel-lightgreen > .panel-heading {
+  border-color: #71b36d;
+}
+
+.panel-lightgreen {
+  border-color: #71b36d;
+  color: white;
+  background-color: #71b36d;
+}
+
+.panel-lightgreen > a {
+  color: #71b36d;
+}
+
+.panel-lightgreen > a:hover {
+  color: #71b36d;
+}
+
+
+.panel-lightyellow > .panel-heading {
+  border-color: #bfa90ce0;
+}
+
+.panel-lightyellow {
+  border-color: #bfa90ce0;
+  color: white;
+  background-color: #bfa90ce0;
+}
+
+.panel-lightyellow > a {
+  color: #bfa90ce0;
+}
+
+.panel-lightyellow > a:hover {
+  color: #bfa90ce0;
+}
+
+
+.panel-red {
+  border-color: #d9534f;
+}
+.panel-red > .panel-heading {
+  border-color: #d9534f;
+  color: white;
+  background-color: #d9534f;
+}
+.panel-red > a {
+  color: #d9534f;
+}
+.panel-red > a:hover {
+  color: #b52b27;
+}
+.panel-yellow {
+  border-color: #f0ad4e;
+}
+.panel-yellow > .panel-heading {
+  border-color: #f0ad4e;
+  color: white;
+  background-color: #f0ad4e;
+}
+.panel-yellow > a {
+  color: #f0ad4e;
+}
+.panel-yellow > a:hover {
+  color: #df8a13;
+}
+.btn-setting{
+      padding: 7px 7px;
+      margin-bottom:5px;
+}
+.btn-setting fa{
+  margin-right:5px;
+}
+.howl-iconpicker .geticonval,.howl-iconpicker-close{
+  -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+input.input1.input {
+    border: 1px solid grey;
+    width: 20%;
+    margin-bottom:5px;
+}
+.btn-dadhboard{
+  margin-left:5px;
+}
+.openerp .oe_kanban_view .oe_kanban_action_button.detail{
+  height: inherit;
+  color: #337ab7;
+    background-color: #fff;
+    padding: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+}
+.openerp .oe_kanban_view .col-lg-3.col-md-6{
+  margin-bottom:6px
+}
+button.btn.btn-default.btn-setting.pull-right.oe_kanban_action.oe_kanban_action_button,button#refresh {
+    color: #7C7BAD;
+    padding: 10px 15px;
+    height: inherit;
+    background-color: inherit;
+    background-image: none;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}

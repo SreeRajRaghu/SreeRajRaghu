@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+       <!--  <record id="menu_book_appointment_data" model="website.menu">
+            <field name="name">Lab Test Form</field>
+            <field name="url">/book_appointment</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">10</field>
+        </record> -->
+
+<record id="book_appointment" model="ir.ui.view">
+    <field name="name">Lab Test Form</field>
+    <field name="type">qweb</field>
+    <field name="key">medical_lab_website.book_appointment</field>
+    <field name="arch" type="xml">
+        <t name="Lab Test Form" t-name="medical_lab_website.book_appointment">
+        <t t-call="website.layout">
+            <div class="oe_structure oe_empty" id="wrap">
+                <section class="p-4">
+                    <div class="container" id="appointment">
+                        <form>
+                            <h2 class="pt-4 pb-2">
+                                Lab Test Form
+                            </h2>
+
+                            <div class="p-patient-info" style="font-family: AdobeArabic;">
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <table class="table-sm w-100">
+                                            <tr>
+                                                <th width="30%">Name</th>
+                                                <td><input type="text" class="form-control o_website_form_input" name="partner_name" required="1"/></td>
+                                            </tr>
+                                            <tr>
+                                                <th width="30%">Phone / Mobile</th>
+                                                <td>
+                                                    <input type="number" class="form-control o_website_form_input" name="phone"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-6">
+                                        <table class="table-sm w-100">
+                                            <tr>
+                                                <th width="30%">Civil ID</th>
+                                                <td><input type="text" class="form-control o_website_form_input" name="civil_id" required="1"/></td>
+                                            </tr>
+                                            <tr>
+                                                <th width="30%">Gender</th>
+                                                <td>
+                                                    <select name="gender" class="form-control p-patient-info" required="1">
+                                                        <option value="male">Male</option>
+                                                        <option value="female">Female</option>
+                                                     </select>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <t t-set="current_user" t-value="website.env.user" />
+                                    <div class="col-md-12 mt-3 mb-3 text-center">
+                                        <div>
+                                            <strong>Requested By</strong>
+                                        </div>
+                                        <div>
+                                             <input type="hidden" name="requested_by" t-att-value="current_user.partner_id.id"/>
+                                             <span t-field="current_user.partner_id" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-md-12">
+                                <div class="card w-100 product_category_div">
+                                    <div class="card-header">
+                                        <h4 class="m-0">Lab Test Serach By Category <small class="pull-right fa fa-plus" /></h4>
+                                    </div>
+                                    <div class="card-body" style="display: none; background-color: #efefef !important">
+                                        <div>
+                                            <input class="form-control product_search" id="product_search" type="text" placeholder="Search..."/>
+                                        </div>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="badge bg-secondary m-1" t-foreach="all_categories" t-as="category">
+                                                    <span class="btn btn-default text-white filter-button" t-att-data-filter="category.id"><t t-esc="category.name"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row hidden-sm mt-5" style="max-height: 300px; overflow: auto;">
+                                            <t t-foreach="sale_ok_products" t-as="product">
+                                                <div t-att-class="'gallery_product filter col-xl-3 col-sm-6 col-12 %s' % (product.categ_id.id if product.categ_id else '')" t-att-data-product="product.id">
+                                                    <div class="mb-1 p-2" style="cursor: pointer; background: #6e7699; color: white;">
+                                                        <div class="v-product">
+                                                            <strong><t t-esc="product.name"/></strong>
+                                                        </div>
+                                                        <div class="bg-secondary badge">
+                                                            <t t-esc="product.lst_price" t-options="{'widget': 'float', 'precision': 3}"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-md-12 mt-4 mb-4">
+                                <div class="card w-100 product_category_div">
+                                    <div class="card-header">
+                                        <h4 class="m-0">Lab Test List <small class="pull-right fa fa-plus" /></h4>
+                                    </div>
+                                    <div class="card-body" style="background-color: #efefef !important">
+                                        <table class="table table-hover table-responsive" style="width: 100%; display: inline-table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" width="40%">Lab Test</th>
+                                                    <th scope="col" width="5%"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="tbody_lines">
+                                                <tr class="add_new_line_tr">
+                                                    <td colspan="5">
+                                                        <a class="btn btn-link add_new_line">
+                                                            Add an item
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class='card w-100 '>
+                                        <div class="card-header">
+                                            <h4>Note <small class="pull-right fa fa-plus" /></h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <textarea class='notes col-12 form-control o_wysiwyg_loader' id="app_notes" name='app_notes' placeholder='Enter Messages'/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <div class="pull-right">
+                                        <button type="button" class="btn btn-lg btn-primary save"> Submit Lab Request </button>
+                                        <button type="reset" class="btn btn-lg btn-link bg-white" data-dismiss="modal"> Clear </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </t>
+        </t>
+    </field>
+</record>
+
+<record id="page_medical_lab_website" model="website.page">
+    <field name="url">/book_appointment</field>
+    <field name="is_published">True</field>
+    <field name="name">Lab Test Form</field>
+    <field name="track">True</field>
+    <field name="view_id" ref="medical_lab_website.book_appointment"/>
+</record>
+
+
+
+<record id="thank_you_note" model="ir.ui.view">
+    <field name="name">Thank You for Request</field>
+    <field name="type">qweb</field>
+    <field name="key">medical_lab_website.thank_you_note</field>
+    <field name="arch" type="xml">
+        <t name="Lab Test Form" t-name="medical_lab_website.thank_you_note">
+            <t t-call="website.layout">
+                <h2 align="center">
+                    Thank you for the Lab Request.
+                    <br />
+                    <small>Your request will be confirmed shortly</small>
+                </h2>
+            </t>
+        </t>
+    </field>
+</record>
+
+<record id="page_medical_thank_you_note" model="website.page">
+    <field name="url">/thank-you-note</field>
+    <field name="is_published">True</field>
+    <field name="name">Thank You Note</field>
+    <field name="track">True</field>
+    <field name="view_id" ref="medical_lab_website.thank_you_note"/>
+</record>
+
+</odoo>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_increment_contract_wizard" model="ir.ui.view">
+        <field name="name">wiz.increment.contract.form</field>
+        <field name="model">wiz.increment.contract</field>
+        <field name="arch" type="xml">
+            <form string="Update Contract">
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                    </group>
+                    <group>
+                        <field name="date_to" />
+                    </group>
+                </group>
+                <group>
+                    <field name="employee_ids" />
+                </group>
+                <footer>
+                    <button name="action_increment_report" string="Increment Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_increment_contract_wizard" model="ir.actions.act_window">
+        <field name="name">Increment Comparison Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wiz.increment.contract</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_increment_contract_wizard"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem 
+        action="action_increment_contract_wizard"
+        id="menu_increment_contract"
+        parent="hr.hr_menu_hr_reports"
+        name="Increment Report"
+        sequence="1"/>
+</odoo>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+<t t-name="BtnUnInvoicedAppointments">
+    <button class="btn btn-secondary" id="js_order_history">
+        <i class='fa fa-tasks' /> History
+    </button>
+</t>
+
+<t t-name="UnInvoicedOrderPopupWidget">
+    <div role="dialog" class="modal-dialog">
+        <div class="popup popup-textinput">
+            <header class="title">
+                Appointment History
+                <div class="cancel pull-right" style="cursor: pointer">
+                    <span class="fa fa-times" />
+                </div>
+            </header>
+            <div t-if="widget.options.order_history">
+                <t t-set="uninvoiced_orders" t-value="widget.options.order_history or []" />
+                <t t-call="UnInvoicedAppBox" />
+            </div>
+        </div>
+    </div>
+</t>
+<t t-name="UnInvoicedAppBox">
+    <div class="mt-2">
+        <div class="card collapsed-card" t-foreach="uninvoiced_orders" t-as="order">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <t t-esc="order.name" />
+                    <small class="badge badge-primary">
+                        <t t-esc="widget.state_display[order.state]" />
+                    </small>
+                    <br />
+                    <small>
+                        Total : <t t-esc="widget.format_currency(order.net_total)" />
+                    </small>
+                </h3>
+                <div class="card-tools">
+                    <div type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                        <i class="fa fa-plus"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <ol style="padding-left: 10px;">
+                    <li class="text-left" t-foreach="order.orderlines" t-as="o_line" style="font-size: 12px;">
+                        <span><t t-esc="o_line.product_id[1]" /></span>
+                        <span class="pull-right"><t t-esc="widget.format_currency_no_symbol(o_line.subtotal)" /></span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</t>
+</templates>

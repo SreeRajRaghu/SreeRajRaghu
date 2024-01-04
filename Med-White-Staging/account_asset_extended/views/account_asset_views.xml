@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Asset -->
+
+    <record model="ir.ui.view" id="view_account_asset_form_inherit">
+        <field name="name">account.asset.form</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+            <div name="model_box" position="replace">
+            </div>
+            <field name="original_value" position="after">
+                <field name='model_id' string="Asset Category"/>
+            </field>
+        </field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_insurance_report_wizard_form" model="ir.ui.view">
+        <field name="name">view.insurance.report.wizard.form</field>
+        <field name="model">insurance.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Insurance Report">
+                <sheet>
+                    <group>
+                        <field name="from_date"/>
+                        <field name="to_date"/>
+                        <field name="insurance_company_ids" string="Insurance Company*" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="insurance_sub_company_ids" string="Insurance Sub Company*" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="clinic_ids" string="Clinic*" widget="many2many_tags" options="{'no_create': True}" domain="[('id', 'in', allow_clinic_ids)]"/>
+                        <field name="invoice_status" required="1"/>
+                        <field name="include_no_records" />
+                        <field name="allow_clinic_ids" invisible="1"/>
+                    </group>
+                    <br/>
+                    <span class="text-bf text-it"><br/><br/>* If Insurance Company, Insurance Subcompany &amp; Clinic are not provided it will take all Insurance companies and Clinics.</span>
+                </sheet>
+                <footer>
+                    <button name="print_excel" type="object" string="Export" class="btn btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_insurance_report_wizard" model="ir.actions.act_window">
+        <field name="name">Insurance Report</field>
+        <field name="res_model">insurance.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

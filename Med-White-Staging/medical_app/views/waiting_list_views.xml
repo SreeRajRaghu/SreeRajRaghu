@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id='view_app_waiting_list_tree' model='ir.ui.view'>
+        <field name='name'>view.app.waiting.list.tree</field>
+        <field name='model'>app.waiting.list</field>
+        <field name='arch' type='xml'>
+            <tree string='Waiting List'>
+                <field name='date'/>
+                <field name='resource_id'/>
+                <field name='partner_id'/>
+                <field name='medical_order_id'/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_app_waiting_list_form" model="ir.ui.view">
+        <field name="name">view.app.waiting.list.form</field>
+        <field name="model">app.waiting.list</field>
+        <field name="arch" type="xml">
+            <form string="Waiting List">
+                <header>
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="resource_id"/>
+                            <field name="employee_id"/>
+                            <field name="branch_id"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="patient_mobile"/>
+                            <field name="medical_order_id"/>
+                            <field name="medical_config_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page id="services" string="Services">
+                            <field name="service_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page id="orderliens" string="Appointment Lines">
+                            <field name="medical_order_line_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page id="misc" string="Misc.">
+                            <group>
+                                <field name="note"/>
+                                <field name="after_call_note"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_app_waiting_list" model="ir.actions.act_window">
+        <field name="name">Waiting List</field>
+        <field name="res_model">app.waiting.list</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_app_waiting_list" name="App Waiting List" parent="medical_app.menu_medical_misc_menu" action="medical_app.action_app_waiting_list" sequence="10"/>
+</odoo>

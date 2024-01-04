@@ -1,0 +1,87 @@
+%!Adobe-FontList 1.22
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:AdobeArabic-Regular
+FamilyName:Adobe Arabic
+StyleName:Regular
+MenuName:Adobe Arabic
+StyleBits:0
+WeightClass:400
+WidthClass:5
+AngleClass:0
+FullName:Adobe Arabic Regular
+FamilyNameNative:
+StyleNameNative:Regular
+FullNameNative:
+WritingScript:Arabic
+OutlineFileName:/Users/mazaya1/Desktop/LAB Doctor Portal /LAB Doctor Portal  Folder/Document fonts/AdobeArabic-Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:230552
+FileModTime:641815108
+NameArray:0,Mac,18,Adobe Arabic
+NameArray:0,Mac,4,Adobe Arabic Regular
+NameArray:0,Win,1,Adobe Arabic
+NameArray:0,Win,16,Adobe Arabic
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Invalid
+OutlineFileName:/Users/mazaya1/Desktop/LAB Doctor Portal /LAB Doctor Portal  Folder/Document fonts/AdobeFnt22.lst
+FileLength:1945
+FileModTime:641824313
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Optima
+FamilyName:Optima
+StyleName:Normal
+MenuName:Optima
+StyleBits:0
+WeightClass:400
+WidthClass:5
+AngleClass:0
+FullName:Optima
+WritingScript:Roman
+OutlineFileName:/Users/mazaya1/Desktop/LAB Doctor Portal /LAB Doctor Portal  Folder/Document fonts/OPTIMA.TTF
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:40736
+FileModTime:641815108
+NameArray:0,Mac,4,Optima
+NameArray:0,Win,1,Optima
+%EndFont
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:TrueType
+FontName:Optima-Bold
+FamilyName:Optima
+StyleName:Bold
+MenuName:Optima
+StyleBits:2
+WeightClass:700
+WidthClass:5
+AngleClass:0
+FullName:Optima Bold
+WritingScript:Roman
+OutlineFileName:/Users/mazaya1/Desktop/LAB Doctor Portal /LAB Doctor Portal  Folder/Document fonts/OPTIMA_B.TTF
+DataFormat:sfntData
+hasSVG:no
+VariableFontType:NonVariableFont
+FileLength:43124
+FileModTime:641815108
+NameArray:0,Mac,4,Optima Bold
+NameArray:0,Win,1,Optima
+%EndFont
+

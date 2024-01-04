@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_medical_order_form" model="ir.ui.view">
+        <field name="name">medical.order.form.inherit</field>
+        <field name="model">medical.order</field>
+        <field name="inherit_id" ref="medical_app.view_medical_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='line_ids']//field[@name='name']" position="after">
+                <field name="employee_id" optional="hide"/>
+                <field name="multi_resource_id" optional="hide"/>
+                <field name="multi_start_time" optional="hide"/>
+            </xpath>
+            <field name="total_duration" position="after">
+                <field name="is_multi_order" invisible="1"/>
+                <field name="visit_opt_id"/>
+            </field>
+            <field name="note" position="after">
+                <field name="disc_reason_id" />
+            </field>
+            <field name="config_id" position="after">
+                <field name="config_on_validation" readonly="1" force_save="1"/>
+            </field>
+            <field name="payment_ids" position="replace">
+                <field name="payment_history_ids">
+                    <tree string="Payment History">
+                        <field name="payment_date" />
+                        <field name="payment_ids" widget="many2many_tags" />
+                        <field name="amount" sum="Total"/>
+                    </tree>
+                </field>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_medical_order_tree" model="ir.ui.view">
+        <field name="name">medical.order.tree.inherit</field>
+        <field name="model">medical.order</field>
+        <field name="inherit_id" ref="medical_app.view_medical_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="patient_invoice_id" position="after">
+                <field name="invoice_date" optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_medical_order_search" model="ir.ui.view">
+        <field name="name">medical.order.search.inherit</field>
+        <field name="model">medical.order</field>
+        <field name="inherit_id" ref="medical_app.view_medical_order_search"/>
+        <field name="arch" type="xml">
+            <filter name="start_time_dt" position="after">
+                <filter name="invoice_date_dt" string="Invoice Date" date="invoice_date"/>
+            </filter>
+            <filter name="group_start_time" position="after">
+                <filter string="Invoice Date" name="group_invoice_date" context="{'group_by': 'invoice_date'}"/>
+            </filter>
+        </field>
+    </record>
+
+    <record id="view_medical_customer_package_form" model="ir.ui.view">
+        <field name="name">customer.package.form.inherit</field>
+        <field name="model">customer.package</field>
+        <field name="inherit_id" ref="medical_app.view_medical_customer_package_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='medical_order_line_ids']//field[@name='resource_id']" position="replace">
+                <field name="multi_resource_id" optional="show" />
+                <field name="employee_id" optional="show" />
+                <field name="multi_start_time" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_medical_order_line_tree" model='ir.ui.view'>
+        <field name='name'>view.medical.order.line.tree</field>
+        <field name='model'>medical.order.line</field>
+        <field name="inherit_id" ref="medical_app.view_medical_order_line_tree" />
+        <field name='arch' type='xml'>
+            <field name="partner_id" position="after">
+                <field name="employee_id" optional="hide"/>
+                <field name="multi_resource_id" groups="medical_js.group_multi_order" string="Therapist" optional="hide"/>
+                <field name="invoice_id" optional="hide"/>
+                <field name="invoice_date" optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_medical_order_line_search" model='ir.ui.view'>
+        <field name='name'>view.medical.order.line.search</field>
+        <field name='model'>medical.order.line</field>
+        <field name="inherit_id" ref="medical_app.view_medical_order_line_search" />
+        <field name='arch' type='xml'>
+            <field name="partner_id" position="after">
+                <field name="employee_id" optional="hide"/>
+                <field name="multi_resource_id" groups="medical_js.group_multi_order" string="Therapist" optional="hide"/>
+            </field>
+            <filter name="start_time_dt" position="after">
+                <filter name="invoice_date_dt" string="Invoice Date" date="invoice_date"/>
+            </filter>
+            <filter name="canceled_appointment" position="after">
+                <separator/>
+                <filter string="Tips" name="service_tips" domain="[('line_type', '=', 'tip')]"/>
+                <filter string="Product" name="service_product" domain="[('line_type', '=', 'product')]"/>
+                <filter string="Service" name="prod_service" domain="[('line_type', '=', 'service')]"/>
+                <filter string="Package Service" name="service_package" domain="[('line_type', '=', 'package')]"/>
+            </filter>
+            <filter name="by_resource" position="after">
+                <filter string="Employee" name="by_resource" context="{'group_by': 'employee_id'}"/>
+                <filter string="Multi Therapist" name="by_resource" context="{'group_by': 'multi_resource_id'}" groups="medical_js.group_multi_order"/>
+            </filter>
+            <filter name="group_start_time" position="after">
+                <filter string="Invoice Date" name="group_start_time" context="{'group_by': 'start_time'}"/>
+            </filter>
+        </field>
+    </record>
+
+</odoo>

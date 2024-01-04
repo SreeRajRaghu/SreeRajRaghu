@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="import_emp_attendace_form_view" model="ir.ui.view">
+        <field name="name">import.employee.attendance.form</field>
+        <field name="model">import.employee.attendance</field>
+        <field name="arch" type="xml">
+            <form string="Import Employee Attendance">
+                <group>
+                    <group>
+                        <field name="file" filename="name" required="1"/>
+                        <field name="name" readonly="1" force_save="1"/>
+                    </group>
+                    <group>
+                        <field name="tz" />
+                    </group>
+                </group>
+                <div colspan="6">
+                    <div>Your file must consist below format.</div>
+                    <table class="table">
+                        <tr>
+                            <th>Employee Number (Required)</th>
+                            <th>Employee Name (Optional)</th>
+                            <th>Check In (Required Datetime)</th>
+                            <th>Check Out (Required Datetime)</th>
+                        </tr>
+                        <tr>
+                            <td>101</td>
+                            <td>Administrator</td>
+                            <td>2020-01-01 10:00:00</td>
+                            <td>2020-01-01 16:00:00</td>
+                        </tr>
+                        <tr>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                        </tr>
+                    </table>
+                </div>
+                <footer>
+                    <button name="import_attendance" string="Import" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_import_emp_attendance" model="ir.actions.act_window">
+        <field name="name">Import Employee Attendance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">import.employee.attendance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="import_emp_attendace_form_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem 
+        action="action_import_emp_attendance"
+        id="action_import_emp_attendance_menu"
+        parent="menu_hr_attendance_report_label"
+        name="Import Attendance"
+        sequence="1"/>
+</odoo>

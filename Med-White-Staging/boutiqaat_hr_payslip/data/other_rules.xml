@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_work_entry_type_rot" model="hr.work.entry.type">
+            <field name="name">Overtime: Regular</field>
+            <field name="code">ROT</field>
+        </record>
+        <record id="hr_work_entry_type_wot" model="hr.work.entry.type">
+            <field name="name">Overtime: Week Off</field>
+            <field name="code">WOT</field>
+        </record>
+        <record id="hr_work_entry_type_pot" model="hr.work.entry.type">
+            <field name="name">Overtime: Public Holiday</field>
+            <field name="code">POT</field>
+        </record>
+
+        <!-- Other Inputs -->
+        <record id="hr_salary_other_input_benefit_1" model="hr.payslip.input.type">
+            <field name="name">Other Benefits 1</field>
+            <field name="code">OBS1</field>
+            <field name="country_id" ref="base.kw"/>
+            <field name="struct_ids" eval="[(4,ref('payroll_structure_kuwait')), 
+                (4, ref('payroll_structure_att_pay_hour_kuwait')),
+                (4,ref('payroll_structure_att_pay_kuwait'))]" />
+        </record>
+
+        <record id="hr_salary_other_input_benefit_2" model="hr.payslip.input.type">
+            <field name="name">Other Benefits 2</field>
+            <field name="code">OBS2</field>
+            <field name="country_id" ref="base.kw"/>
+            <field name="struct_ids" eval="[
+                (4, ref('payroll_structure_kuwait')),
+                (4, ref('payroll_structure_att_pay_hour_kuwait')),
+                (4, ref('payroll_structure_att_pay_kuwait'))]" />
+        </record>
+
+        <record id="hr_salary_other_input_ded_1" model="hr.payslip.input.type">
+            <field name="name">Other Deduction 1</field>
+            <field name="code">ODS1</field>
+            <field name="country_id" ref="base.kw"/>
+            <field name="struct_ids" eval="[
+                (4, ref('payroll_structure_kuwait')),
+                (4, ref('payroll_structure_att_pay_hour_kuwait')),
+                (4, ref('payroll_structure_att_pay_kuwait'))]" />
+        </record>
+
+        <record id="hr_salary_other_input_ded_2" model="hr.payslip.input.type">
+            <field name="name">Other Deduction 2</field>
+            <field name="code">ODS2</field>
+            <field name="country_id" ref="base.kw"/>
+            <field name="struct_ids" eval="[
+                (4, ref('payroll_structure_kuwait')),
+                (4, ref('payroll_structure_att_pay_hour_kuwait')),
+                (4, ref('payroll_structure_att_pay_kuwait'))]" />
+        </record>
+    </data>
+</odoo>

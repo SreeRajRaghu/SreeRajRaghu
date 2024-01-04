@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <record id="paperformat_report_pcr" model="report.paperformat">
+        <field name="name">PCR Concent Form Paperformat</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">3.00</field>
+        <field name="margin_bottom">3.00</field>
+        <field name="margin_left">1.00</field>
+        <field name="margin_right">1.00</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">3</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <template id="pcr_consent_form_template">
+        <t t-call="web.basic_layout">
+            <t t-set="o" t-value="o.sudo()"/>
+            <div class="page" style="font-size: 14px;">
+                <div class="row">
+                    <div  class="col-2">
+                        <img class="mr-auto" width="120px" src="/medical_pcr/static/src/image/logo.png"/>
+                    </div>
+                    <div class="col-8">
+                        <h3 class="text-center">
+                            <span class="mt-5">
+                                COVID-19 LAB REQUEST FORM
+                            </span>
+                        </h3>
+                    </div>
+                    <div  class="col-2">
+                        <img class="mr-auto" width="120px" src="/medical_pcr/static/src/image/logo2.png"/>
+                    </div>
+                </div>
+                <table class="table table-sm table-bordered">
+                    <tbody class="border">
+                        <tr>
+                            <td class="span" scope="colgroup" colspan="4"><span>IMPORTANT: Fill in ALL white boxes below. Copy of patient Civil ID must be attached with request form.</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><span>Company License No. (Refer to Lab for ID)</span></td>
+                            <td colspan="2"><span t-field="o.company_id.company_registry" /></td>
+                        </tr>
+                        <tr>
+                            <td><span>Center Name (Eng)</span></td>
+                            <td style="width: 25%">
+                                <span t-field="o.swab_location_id.name" />
+                            </td>
+                            <td><span>Center Name (Ar)</span></td>
+                            <td class="text-right" style="width: 25%">
+                                <span t-field="o.swab_location_id.name_ar" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span" scope="colgroup" colspan="4">
+                                <span>Enter at least one ID type.</span>
+                                <span class="ml-2" t-field="o.config_id.pcr_center_id_list" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-sm table-bordered">
+                    <tbody class="border">
+                        <tr>
+                            <td><strong>Civil ID</strong></td>
+                            <td style="width: 20%"><t t-esc="o.partner_id.civil_code"/></td>
+                            <td><strong>Passport No</strong></td>
+                            <td style="width: 20%"><t t-esc="o.partner_id.passport_no"/></td>
+                            <td><strong>Other ID</strong></td>
+                            <td style="width: 20%"></td>
+                        </tr>
+                        <tr>
+                            <td><span>Pt Name (Eng)</span></td>
+                            <td><span t-field="o.partner_id.name"/></td>
+                            <td><span>DOB (D/M/Y)</span></td>
+                            <td><span t-field="o.partner_id.birthday"/></td>
+                            <td><span>Nationality</span></td>
+                            <td><span t-field="o.partner_id.nationality_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"><span>Pt Name (Ar)</span></td>
+                            <td><t t-esc="o.partner_id.ar_name"/></td>
+                            <td colspan="2"><span></span></td>
+                            <td colspan="1"><span>Gender</span></td>
+                            <td colspan="2">
+                                Male
+                                <span t-attf-class="ml-1 fa fa#{o.partner_id.gender == 'male' and '-check' or ''}-square-o" />
+                                Female
+                                <span t-attf-class="ml-1 fa fa#{o.partner_id.gender == 'female' and '-check' or ''}-square-o" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span>Mobile No.</span></td>
+                            <td><span t-esc="o.partner_id.phone or o.partner_id.mobile or ''"/></td>
+                            <td><span>Actual Address: District (area)</span></td>
+                            <td><span t-field="o.partner_id.area_id.name"/></td>
+                            <td><span>Block</span></td>
+                            <td><span t-field="o.partner_id.block"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-sm table-bordered">
+                    <tbody class="border">
+                        <tr>
+                            <td><strong>Symptomatic?</strong></td>
+                            <td style="width: 200px">Y <input type="checkbox" class="mr-1" t-att-checked="'checked' if o.is_symptomatic else None" name="is_symptomatic" id='is_symptomatic'/> N <input type="checkbox" class="mr-2 ml-1" name="is_symptomatic" id='is_not_symptomatic' t-att-checked="'checked' if not o.is_symptomatic else None"/> </td>
+                            <td><span>If Yes, choose 1or more from the following:</span></td>
+                            <td  colspan="3">Dry cough <input type="checkbox" class="mr-1" name="dry_cough" id='dry_cough'/> 
+                                Cough <input type="checkbox" class="mr-2 ml-1" name="cough" id='cough' t-att-checked="'checked' if o.cough else None"/>
+                                Fever<input type="checkbox" class="mr-2 ml-1" name="fever" id='fever' t-att-checked="'checked' if o.fever else None"/>
+                                Shortness of breath <input type="checkbox" class="mr-2 ml-1" name="breath" id='breath' t-att-checked="'checked' if o.breath else None"/>
+                                Fatigue/Muscle aches<input type="checkbox" class="mr-2 ml-1" name="aches" id='aches' t-att-checked="'checked' if o.aches else None"/>
+                                Sore throat <input type="checkbox" class="mr-2 ml-1" name="throat" id='throat' t-att-checked="'checked' if o.throat else None"/>
+                                Diarrhea<input type="checkbox" class="mr-2 ml-1" name="diarrhea" id='diarrhea' t-att-checked="'checked' if o.diarrhea else None"/>
+                                Headache<input type="checkbox" class="mr-2 ml-1" name="headache" id='headache' t-att-checked="'checked' if o.headache else None"/>
+                                Runny nose  <input type="checkbox" class="mr-2 ml-1" name="nose" id='nose' t-att-checked="'checked' if o.nose else None"/>
+                                Loss of smell/taste <input type="checkbox" class="mr-2 ml-1" name="taste" id='taste' t-att-checked="'checked' if o.taste else None"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Recent History of Travel? </strong>
+                                <span>(within the past 14 days)</span>
+                            </td>
+                            <td>Y <input type="checkbox" class="mr-2 ml-1" name="has_recent_tranvel" id='has_recent_tranvel' t-att-checked="'checked' if o.has_recent_tranvel else None"/> N <input type="checkbox" class="mr-2 ml-1" name="has_not_recent_tranvel" id='has_not_recent_tranvel' t-att-checked="'checked' if not o.has_recent_tranvel else None"/></td>
+                            <td><span>If Yes, enter Country Arriving From</span></td>
+                            <td style="width: 20%"><span t-field="o.recent_travel_country_id.name"/></td>
+                            <td><span>Date of Arrival (D/M/Y)</span></td>
+                            <td style="width: 20%"><span t-field="o.recent_travel_date"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Healthcare Worker?</strong></td>
+                            <td>Y <input type="checkbox" class="mr-2 ml-1" name="is_health_worker" id='is_health_worker' t-att-checked="'checked' if o.is_health_worker else None"/> N <input type="checkbox" class="mr-2 ml-1" name="is_not_health_worker" id='is_not_health_worker' t-att-checked="'checked' if not o.is_health_worker else None"/></td>
+                            <td colspan="4"><span>If Yes, complete the information below</span></td>
+                        </tr>
+                        <tr>
+                            <td><span>Residence Type</span></td>
+                            <td colspan="2">Private <input type="checkbox" class="mr-2 ml-1" name="private" id='private' t-att-checked="'checked' if o.patient_residence_type == 'private' else None"/> Nursing Hostel <input type="checkbox" class="mr-2 ml-1" name="hostel" id='hostel' t-att-checked="'checked' if o.patient_residence_type == 'hostel' else None"/></td>
+                            <td><span>Workplace Health Region</span></td>
+                            <td colspan="2"><span t-field="o.patient_work_region" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><span>Place of Work?</span></td>
+                            <td colspan="4">Public Hospital  <input type="checkbox" class="mr-2 ml-1" name="public" id='public'  t-att-checked="'checked' if o.patient_work_place == 'public' else None"/> PHC <input type="checkbox" class="mr-2 ml-1" name="phc" id='phc' t-att-checked="'checked' if o.patient_work_place == 'phc' else None"/> Private Hospital <input type="checkbox" class="mr-2 ml-1" name="private" id='private' t-att-checked="'checked' if o.patient_work_place == 'private' else None"/>  </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><span>Center Name </span></td>
+                            <td colspan="4"><span t-field="o.patient_work_center_name"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><span>Department (only if public hospital) </span></td>
+                            <td colspan="3">
+                            ICU <input type="checkbox" class="mr-2 ml-1" name="icu" id='icu' t-att-checked="'checked' if o.patient_department == 'icu' else None"/>
+                            ER <input type="checkbox" class="mr-2 ml-1" name="er" id='er' t-att-checked="'checked' if o.patient_department == 'er' else None"/>
+                            Medical Ward <input type="checkbox" class="mr-2 ml-1" name="ward" id='ward' t-att-checked="'checked' if o.patient_department == 'ward' else None"/>
+                            OR <input type="checkbox" class="mr-2 ml-1" name="or" id='or' t-att-checked="'checked' if o.patient_department == 'or' else None"/>
+                            OP <input type="checkbox" class="mr-2 ml-1" name="op" id='op' t-att-checked="'checked' if o.patient_department == 'op' else None"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>Contact of a confirmed / suspected case? </strong></td>
+                            <td>Y <input type="checkbox" class="mr-2 ml-1" name="in_contact_with_suspected" id='in_contact_with_suspected' t-att-checked="'checked' if o.in_contact_with_suspected else None"/> N <input type="checkbox" class="mr-2 ml-1" name="in_not_contact_with_suspected" id='in_not_contact_with_suspected' t-att-checked="'checked' if not o.in_contact_with_suspected else None"/> </td>
+                            <td colspan="3">
+                                <span>If Yes, complete the information below. To add more names, include a signed attachment</span>
+                                <table class="table borderless" t-if="o.in_contact_with_suspected">
+                                    <tr><th>Name</th><th>Contact</th></tr>
+                                    <t t-foreach="o.in_contact_ids" t-as="contact" >
+                                        <tr><td><t t-esc="contact.name"/></td><td><t t-esc="contact.phone"/></td></tr>
+                                    </t>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Request Date (D/M/Y)</strong></td>
+                            <td colspan="2">
+                                <span t-field="o.start_time" t-options="{'widget': 'date'}"/>
+                            </td>
+                            <td><strong>Request Time</strong></td>
+                            <td colspan="2">
+                                <span t-field="o.start_time" t-options="{'time_only': 'true', 'format': 'short'}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Type of Swab</td>
+                            <td colspan="2">
+                                Swab <input type="checkbox" class="mr-2 ml-1" name="is_not_traveller_swab" id='is_not_traveller_swab' t-att-checked="'checked' if not o.is_traveller_swab else None"/>
+                                <br />
+                                Traveller Swab <input type="checkbox" class="mr-2 ml-1" name="is_traveller_swab" id='is_traveller_swab' t-att-checked="'checked' if o.is_traveller_swab else None"/>
+                            </td>
+                            <td>If “Traveler Swab”,enter Passport No.</td>
+                            <td><span t-field="o.partner_id.passport_no" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="width: 50%">Requesting Doctor’s Name:  <br/><br/><br/>Requesting Doctor’s Signature &amp; Stamp: <br/><br/></td>
+                            <td colspan="3" style="width: 50%">Hospital Administration Signature &amp; Seal: </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="page" style="page-break-before: always; font-size: 14px;">
+                <table class="table table-sm table-borderless mt-3">
+                    <tbody>
+                         <tr>
+                            <td colspan="3" class="p-4">
+                                <h4 class="text-center">LETTER OF UNDERTAKING-COVID19</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <u>
+                                    <strong>
+                                        Date: 
+                                        <span t-field="o.start_time" t-options="{'widget': 'date'}"/>
+                                    </strong>
+                                </u>
+                            </td>
+                        </tr>
+                        <tr t-if="o.company_id.terms_form1">
+                            <td colspan="3">
+                                <t t-raw="o.company_id.render_tmpl_form(o.company_id.terms_form1, o.ids)"/>
+                            </td>
+                        </tr>
+                        <tr t-if="o.company_id.terms_form2">
+                            <td colspan="3">
+                                <t t-raw="o.company_id.render_tmpl_form(o.company_id.terms_form2, o.ids)"/>
+                            </td>
+                        </tr>
+                        <tr t-if="o.company_id.terms_form3">
+                            <td colspan="3">
+                                <t t-raw="o.company_id.render_tmpl_form(o.company_id.terms_form3, o.ids)"/>
+                            </td>
+                        </tr>
+                        <tr t-if="o.company_id.terms_form4">
+                            <td colspan="3">
+                                <t t-raw="o.company_id.terms_form4"/>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <td><span>Name/االسم : <t t-esc="o.partner_id.name"/></span></td>
+                        </tr>
+                        <tr>
+                            <td><span>Civil ID #: <t t-esc="o.partner_id.civil_code"/></span></td>
+                        </tr> -->
+                        <tr>
+                            <td><span>Signature/التوقيع : </span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+
+        <template id="pcr_consent_form">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="medical_pcr.pcr_consent_form_template"/>
+                </t>
+            </t>
+        </template>
+
+        <!-- QWeb Reports -->
+        <report
+            id="action_pcr_consent_form_custom"
+            model="medical.order" 
+            string="PCR Consent Form"
+            report_type="qweb-pdf"
+            name="medical_pcr.pcr_consent_form"
+            file="medical_pcr.pcr_consent_form"
+            paperformat="medical_pcr.paperformat_report_pcr"
+        />
+    </data>
+</odoo>

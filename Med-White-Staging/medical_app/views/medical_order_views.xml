@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_visit_option_tree" model="ir.ui.view">
+        <field name="name">view.visit.option.tree</field>
+        <field name="model">visit.option</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name" />
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_visit_option" model="ir.actions.act_window">
+        <field name="name">Visit Option</field>
+        <field name="res_model">visit.option</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_medical_visit_option" name="Visit Option" parent="medical_app.menu_medical_app_config" action="medical_app.action_visit_option" sequence="100"/>
+
+    <record id="view_medical_order_form" model="ir.ui.view">
+        <field name="name">view.medical.order.form</field>
+        <field name="model">medical.order</field>
+        <field name="arch" type="xml">
+            <form string="Appointment">
+                <header>
+                    <field name="state" widget="statusbar" clickable="1"/>
+
+                    <button name="action_validate" string="Validate"
+                        class="oe_highlight" type="object"
+                        attrs="{'invisible': [('is_readonly','=',True)]}"/>
+
+                    <button name="action_reset" string="Reset To Draft"
+                        type="object"
+                        states="cancel"/>
+
+                    <button name="action_pricelist_approved" string="Pricelist Approved"
+                        type="object" attrs="{'invisible': [('need_pricelist_approval','=',True), ('pricelist_approved','!=',False)]}" class="oe_highlight"/>
+
+                    <button name="action_patient_invoice" invisible="1" string="Create Invoice"
+                        class="oe_highlight"
+                        type="object" groups="medical_app.group_medical_cashier"
+                        attrs="{'invisible': ['|',('state','=','cancel'),('patient_invoice_id', '!=', False)]}"/>
+
+                    <button name="action_payment_wizard" invisible="1" string="Register Payment"
+                        class="oe_highlight" type="object"
+                        groups="medical_app.group_medical_cashier"
+                        attrs="{'invisible': ['|','|',('state','=','cancel'),('patient_invoice_id','=',False), ('amount_due','=',0)]}"/>
+
+                     <button name="%(medical_app.action_update_resource)d" string="Update Resource"
+                        class="oe_highlight" type="action"/>
+
+                    <!-- <button name="create_picking" string="Create Picking"
+                        class="oe_highlight" type="object"
+                        attrs="{'invisible': ['|',('state','=','cancel'),('picking_id','!=',False)]}"/> -->
+
+                    <button name="action_cancel" string="Cancel"
+                        type="object"
+                        attrs="{'invisible': [('state','=','cancel')]}"/>
+                </header>
+                <sheet>
+                    <field name="is_readonly" invisible="1" />
+                    <div class="oe_button_box">
+                    </div>
+                    <div class="oe_title" id="title">
+                        <label for="name" string="Scheduler" class="oe_edit_only"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" attrs="{'readonly': [('is_readonly','=',True)]}"/>
+                            <field name="session_id" attrs="{'readonly': [('is_readonly','=',True)]}" string="Session" options="{'no_create': True, 'no_edit': True}"/>
+                            <field name="resource_id" attrs="{'readonly': [('is_readonly','=',True)]}" options="{'no_create': True, 'no_edit': True}"/>
+                            <field name="visit_type"/>
+                            <field name="file_no" readonly="1"/>
+                            <field name="file_no2" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="clinic_id" options="{'no_create': True, 'no_edit': True}"/>
+                            <field name="insurance_card_id" groups="medical_app.group_manage_insurance" attrs="{'readonly': [('is_readonly','=',True)]}" context="{'default_partner_id': partner_id}"/>
+                            <field name="pricelist_id" attrs="{'readonly': [('is_readonly','=',True)]}" readonly="1" force_save="1" options="{'no_create': True, 'no_edit': True}"/>
+                            <field name="start_time" attrs="{'readonly': [('is_readonly','=',True)]}"/>
+                            <field name="end_time"/>
+                            <field name="total_duration" widget="float_time"/>
+                        </group>
+                    </group>
+                    <notebook attrs="{'readonly': [('is_readonly','=',True)]}">
+                        <page id="orderlines" string="Services">
+                            <field name="line_ids" view_mode="tree" options="{'reload_on_button': True}" attrs="{'readonly': [('is_readonly','=',True)]}">
+                                <tree editable="bottom" decoration-success="pricelist_item_id != False">
+                                    <field name="product_id"/>
+                                    <field name="partner_id" invisible="1" />
+                                    <field name="name" optional="show"/>
+                                    <field name="is_insurance_applicable" optional="hide" groups="medical_app.group_manage_insurance"/>
+                                    <field name="duration" optional="hide" widget="float_time"/>
+                                    <field name="qty" optional="show"/>
+                                    <field name="product_uom_id" optional="hide"/>
+
+                                    <field name="pricelist_item_id" optional="hide" force_save="1" groups="medical_app.group_manage_insurance"/>
+                                    <field name="analytic_account_id" groups="analytic.group_analytic_accounting" optional="hide"/>
+                                    <field name="analytic_tag_ids" groups="analytic.group_analytic_tags" optional="hide" widget="many2many_tags"/>
+
+                                    <field name="related_pkg_id"
+                                        domain="[('partner_id', '=', partner_id), ('product_id', '=', product_id)]"
+                                        groups="medical_app.group_customer_packages"
+                                        optional="hide" />
+                                    <field name="session_count" groups="medical_app.group_customer_packages" optional="hide" />
+                                    <field name="pkg_amount" optional="hide" sum="Total"/>
+
+                                    <field name="price_unit_orig" optional="hide" readonly="1" force_save="1" groups="medical_app.group_medical_cashier" sum="Total"/>
+                                    <field name="approved_price_unit" optional="hide" sum="Total" groups="medical_app.group_manage_insurance"/>
+
+                                    <field name="ins_fixed" optional="hide" readonly="1" force_save="1" groups="medical_app.group_manage_insurance"/>
+                                    <field name="patient_share" optional="hide" readonly="1" force_save="1" groups="medical_app.group_manage_insurance"/>
+                                    <field name="patient_share_limit" optional="hide" readonly="1" force_save="1" groups="medical_app.group_manage_insurance"/>
+                                    <field name="share_limit_type" optional="hide" groups="medical_app.group_manage_insurance" readonly="1" force_save="1"/>
+
+                                    <field name="consumable_ids" groups="medical_app.group_orderline_consumables" widget="many2many_tags"/>
+
+                                    <field name="price_unit" optional="hide" sum="Total"/>
+
+                                    <field name="insurance_disc" optional="hide" readonly="1" force_save="1" groups="medical_app.group_manage_insurance"/>
+                                    <field name="apply_ins_disc" optional="hide" readonly="1" force_save="1" groups="medical_app.group_manage_insurance"/>
+                                    <field name="ins_price_unit" optional="hide" readonly="1" force_save="1" string="Ins.Net Claim" sum="Total" groups="medical_app.group_manage_insurance"/>
+
+                                    <field name="payable_price_unit" optional="show" sum="Total" groups="medical_app.group_manage_insurance"/>
+                                    <field name="discount" optional="show"/>
+                                    <field name="discount_fixed" optional="hide"/>
+                                    <field name="subtotal" sum="Total"/>
+                                    <field name="amount_paid" sum="Total Paid" optional="hide" />
+                                </tree>
+                            </field>
+                            <group name="total_group" col="6">
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="order_total">
+                                    <field name="ins_based_on" groups="medical_app.group_manage_insurance" />
+                                    <field name="approved_tot_price" groups="medical_app.group_manage_insurance"/>
+                                    <field name="payable_tot_price" groups="medical_app.group_manage_insurance" attrs="{'invisible': [('ins_based_on','!=','total')]}"/>
+                                    <field name="ins_tot_price" groups="medical_app.group_manage_insurance"/>
+
+                                    <button type="object" name="action_upd_insurance" groups="medical_app.group_manage_insurance" string="Compute Insurance" attrs="{'invisible': [('ins_based_on','!=','total')]}"/>
+
+                                    <separator />
+                                    <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="discount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="net_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_due" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                                <div class="oe_clear"/>
+                            </group>
+                        </page>
+                        <page id="complains" string="Complains" groups="medical_app.group_manage_complain">
+                            <field name="complain_ids"/>
+                        </page>
+                        <page string="Payments" groups="medical_app.group_medical_cashier">
+                            <field name="payment_ids" attrs="{'readonly': [('is_readonly','=',True)]}"/>
+                            <group name="total_group" col="6">
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="order_total">
+                                    <field name="amount_paid" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                                <div class="oe_clear"/>
+                            </group>
+                        </page>
+                        <page id="misc" string="Misc.">
+                            <group>
+                                <group string="Stock">
+                                    <field name="picking_id" />
+                                    <field name="consu_picking_id" />
+                                    <field name="show_consume_button" invisible="1"/>
+                                    <button name="create_consumable_picking" string="Consume" class="btn btn-primary mb-2" type="object" attrs="{'invisible': [('show_consume_button', '=', False)]}"/>
+                                    <field name="location_id" />
+                                    <field name="picking_type_id" />
+                                </group>
+                                <group string="Accounting">
+                                    <field name="patient_invoice_id" groups="medical_app.group_medical_cashier"/>
+                                    <field name="insurance_invoice_id" groups="medical_app.group_manage_insurance"/>
+                                    <field name="invoice_note" groups="medical_app.group_medical_cashier"/>
+                                    <field name="company_id" groups="base.group_multi_company"/>
+                                    <field name="currency_id" invisible="1" groups="base.group_multi_currency"/>
+                                    <field name="new_invoice_date" groups="medical_app.group_medical_cashier"/>
+                                </group>
+                                <group string="Misc.">
+                                    <field name="config_id" string="Scheduler" force_save="1"/>
+                                    <field name="last_order_id"/>
+                                    <field name="user_id" />
+                                    <field name="employee_id" />
+                                    <field name="note"/>
+                                    <field name="cancel_reason" attrs="{'readonly': [('state', '!=', 'cancel')]}"/>
+                                    <!-- <field name="canceled_by_cct"/> -->
+                                </group>
+                                <group string="Pricelist Approval" attrs="{'invisible': [('need_pricelist_approval','=',False)]}">
+                                    <field name="need_pricelist_approval" readonly="1"/>
+                                    <field name="pricelist_approved" readonly="1"/>
+                                    <field name="pricelist_approved_user_id" readonly="1"/>
+                                    <field name="pricelist_approved_date" readonly="1"/>
+                                </group>
+                                <group string="Last Action">
+                                    <field name="last_action_id" readonly="1"/>
+                                    <field name="last_action_dt" readonly="1"/>
+                                    <field name="last_action_emp_id" options="{'no_open': 1}" readonly="1"/>
+                                </group>
+                                <group string="Insurance Ref" groups="medical_app.group_manage_insurance">
+                                    <field name="ins_approval_no" />
+                                    <field name="ins_ticket_no" />
+                                    <field name="ins_ref" />
+                                    <field name="ins_member" />
+                                </group>
+                                <group string="Timestamp" readonly="1">
+                                    <field name="date_confirm" />
+                                    <field name="date_arrived" />
+                                    <field name="date_in" />
+                                    <field name="date_out" />
+                                    <field name="date_done" />
+                                    <field name="duration_in_arrived" widget="float_time"/>
+                                    <field name="duration_out_in" widget="float_time"/>
+                                    <field name="is_reschedule" />
+                                    <field name="cancellation_date" />
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+
+                </sheet>
+                <!-- Chatter -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_medical_order_search" model='ir.ui.view'>
+        <field name='name'>medical.order.search</field>
+        <field name='model'>medical.order</field>
+        <field name='arch' type='xml'>
+            <search string="Appointments">
+                <field name="name" string="Appointment"/>
+                <field name="partner_id" operator="child_of"/>
+                <field name="resource_id"/>
+                <field name="patient_invoice_id"/>
+                <field name="payment_ids"/>
+                <field name="session_id"/>
+                <field name="insurance_card_id" groups="medical_app.group_manage_insurance"/>
+                <field name="pricelist_id" groups="medical_app.group_manage_insurance"/>
+                <field name="config_id"/>
+                <field name="user_id"/>
+                <field name="state"/>
+                <filter string="My Appointments" name="my_appointments" domain="[('user_id', '=', uid)]"/>
+                <separator/>
+                <filter string="New" name="new_appointment" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirmed" name="confirmed_appointment" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Fully Paid" name="paid_appointment" domain="[('amount_due', '=', 0)]"/>
+                <filter string="Partial Paid" name="partial_paid_appointment" domain="[('amount_paid', '>', 0)]"/>
+                <filter string="Unpaid" name="unpaid_appointment" domain="[('amount_due', '>', 0)]"/>
+                <filter string="Cancel" name="canceled_appointment" domain="[('state', '=', 'cancel')]"/>
+                <filter string="Invoiced" name="invoiced_appointment" domain="[('patient_invoice_id', '!=', False)]"/>
+                <filter string="Uninvoiced" name="uninvoiced_appointment" domain="[('patient_invoice_id', '=', False)]"/>
+                <separator/>
+                <!-- <filter string="Starred" name="starred" domain="[('priority', 'in', [1, 2])]"/> -->
+                <filter string="Today" name="today_appointment" domain="[('start_time', '&gt;=', datetime.datetime.now().replace(hour=0, minute=0, second=0).strftime('%Y-%m-%d %H:%M:%S')),        ('start_time', '&lt;=', datetime.datetime.now().replace(hour=23, minute=59, second=59).strftime('%Y-%m-%d %H:%M:%S') )]"/>
+                <filter string="Yesterday" name="yesterday_appointment" domain="[('start_time', '&gt;=', (datetime.datetime.now().replace(hour=0, minute=0, second=0) - datetime.timedelta(days = 1)).strftime('%Y-%m-%d %H:%M:%S')),        ('start_time', '&lt;=', (datetime.datetime.now().replace(hour=23, minute=59, second=59) - datetime.timedelta(days = 1)).strftime('%Y-%m-%d %H:%M:%S') )]"/>
+                <filter string="Tomorrow" name="tomorrow_appointment" domain="[('start_time', '&gt;=', (datetime.datetime.now().replace(hour=0, minute=0, second=0) + datetime.timedelta(days = 1)).strftime('%Y-%m-%d %H:%M:%S')),        ('start_time', '&lt;=', (datetime.datetime.now().replace(hour=23, minute=59, second=59) + datetime.timedelta(days = 1)).strftime('%Y-%m-%d %H:%M:%S') )]"/>
+                <filter string="This Week" name="this_week_appointment" domain="['|', ('start_time', '=', False), '&amp;',('start_time', '&lt;', (context_today()+relativedelta(days=8)).strftime('%Y-%m-%d 00:00:00')),('start_time', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter string="Last Week" name="last_week_appointment" domain="['|', ('start_time', '=', False), '&amp;',('start_time', '&lt;', context_today().strftime('%Y-%m-%d 00:00:00')),('start_time', '&gt;=', (context_today()-relativedelta(days=8)).strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter string="This Month" name="this_month_appointment" domain="['|', ('start_time', '=', False), '&amp;',('start_time', '&lt;', (context_today()+relativedelta(months=1)).strftime('%Y-%m-01 00:00:00')),('start_time', '&gt;=', time.strftime('%Y-%m-01 00:00:00'))]"/>
+
+                <separator />
+                <filter name="start_time_dt" string="Start Time" date="start_time" />
+                <filter name="end_time_dt" string="End Time" date="end_time" />
+                <filter name="create_date_dt" string="Created On" date="create_date" />
+                <separator/>
+                <filter string="Has Insurance Card ?" name="has_insurance" domain="[('insurance_card_id','!=',False)]" groups="medical_app.group_manage_insurance"/>
+                <filter string="Cash Customer" name="has_cash_customer" domain="[('insurance_card_id','=',False)]" groups="medical_app.group_manage_insurance"/>
+                <separator/>
+                <filter string="Followed Appointments" name="my_followed_appointments" domain="[('message_is_follower', '=', True)]"/>
+                <filter string="Unread Messages" name="message_needaction" domain="[('message_needaction', '=', True)]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter invisible="1" string="Late Activities" name="activities_overdue" domain="[('activity_ids.date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]" help="Show all records which has next action date is before today"/>
+                <filter invisible="1" string="Today Activities" name="activities_today" domain="[('activity_ids.date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter invisible="1" string="Future Activities" name="activities_upcoming_all" domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="State" name="state" context="{'group_by': 'state'}"/>
+                    <filter string="Visit Type" name="visit_type" context="{'group_by': 'visit_type'}"/>
+                    <separator />
+                    <filter string="Patient" name="patient" context="{'group_by': 'partner_id'}"/>
+                    <filter string="User" name="user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Employee" name="employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Resource" name="by_resource" context="{'group_by': 'resource_id'}"/>
+                    <separator />
+                    <filter string="Branch" name="by_clinic" context="{'group_by': 'clinic_id'}"/>
+                    <filter string="Session" name="session" context="{'group_by': 'session_id'}"/>
+                    <filter string="Scheduler" name="config_id" context="{'group_by': 'config_id'}"/>
+                    <separator />
+                    <filter string="Start Date" name="group_start_time" context="{'group_by': 'start_time'}"/>
+                    <filter string="Creation Date" name="group_create_date" context="{'group_by': 'create_date'}"/>
+                    <filter string="Company" name="company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_medical_order_tree" model='ir.ui.view'>
+        <field name='name'>view.medical.order.tree</field>
+        <field name='model'>medical.order</field>
+        <field name='arch' type='xml'>
+            <tree string='Appointment' multi_edit="1">
+                <field name='name' readonly="1"/>
+                <field name='partner_id' readonly="1"/>
+                <field name="resource_id" optional="show"/>
+                <field name="start_time"/>
+                <field name="end_time" optional="hide"/>
+                <field name="amount_total" widget="monetary"
+                    options="{'currency_field': 'currency_id'}" optional="hide"/>
+                <field name="discount" widget="monetary"
+                    options="{'currency_field': 'currency_id'}" optional="hide"/>
+                <field name="net_total" widget="monetary"
+                    options="{'currency_field': 'currency_id'}" sum="Total"/>
+                <field name="amount_paid" widget="monetary"
+                    options="{'currency_field': 'currency_id'}" sum="Total" optional="hide"/>
+                <field name="amount_due" widget="monetary"
+                    options="{'currency_field': 'currency_id'}" optional="hide"/>
+                <field name="pricelist_id" readonly="1" optional="hide"/>
+                <field name="patient_invoice_id" readonly="1" optional="hide"/>
+                <field name="clinic_id" readonly="1"/>
+                <field name="session_id" readonly="1" string="Session" optional="hide"/>
+                <field name="write_date" readonly="1" optional="hide"/>
+                <field name="cancel_reason" optional="hide" />
+                <field name="state" readonly="1" />
+                <field name="company_id" readonly="1" groups="base.group_multi_company" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="medical_order_calendar" model="ir.ui.view">
+        <field name="name">medical.order.calendar</field>
+        <field name="model">medical.order</field>
+        <field eval="2" name="priority"/>
+        <field name="arch" type="xml">
+            <calendar date_start="start_time" string="Appointments" mode="month" color="resource_id" event_limit="5" hide_time="true">
+                <field name="partner_id"/>
+                <field name="end_time"/>
+                <field name="session_id"/>
+                <!-- <field name="priority" widget="priority"/> -->
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+                <!-- js_class="task_gantt" -->
+    <record id="medical_order_view_gantt" model="ir.ui.view">
+        <field name="name">medical.order.view.gantt</field>
+        <field name="model">medical.order</field>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <gantt date_start="start_time"
+                date_stop="end_time"
+                default_scale="week"
+                scales="day,week,month"
+                color="state_color"
+                string="Appointment"
+                thumbnails="{'user_id': 'image_128'}"
+                display_unavailability="1"
+                precision="{'day': 'hour:quarter', 'week': 'day:half', 'month': 'day:full'}">
+                <templates>
+                    <div t-name="gantt-popover" class="container-fluid">
+                        <div class="row no-gutters">
+                            <div class="col">
+                                <ul class="pl-1 mb-0">
+                                    <li t-if="partner_id"><strong>Patient: </strong> <t t-esc="partner_id[1]"/></li>
+                                    <li><strong>Start Date: </strong> <t t-esc="userTimezoneStartDate.format('YYYY-MM-DD HH:mm:ss')"/></li>
+                                    <li><strong>Stop Date: </strong> <t t-esc="userTimezoneStopDate.format('YYYY-MM-DD HH:mm:ss')"/></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </templates>
+                <field name="partner_id"/>
+                <field name="state_color" />
+            </gantt>
+        </field>
+    </record>
+
+    <record id="action_medical_order" model="ir.actions.act_window">
+        <field name="name">Appointments</field>
+        <field name="res_model">medical.order</field>
+        <field name="context">{'default_search_by_resource': True}</field>
+        <field name="view_mode">calendar,gantt,tree,form,kanban,pivot,graph</field>
+    </record>
+
+    <menuitem id="menu_medical_order" name="Appointments" parent="medical_app.menu_medical_order_menu" action="medical_app.action_medical_order" sequence="10"/>
+
+    <!-- Medical Order Line -->
+    <record id="view_medical_order_line_search" model='ir.ui.view'>
+        <field name='name'>medical.order.line.search</field>
+        <field name='model'>medical.order.line</field>
+        <field name='arch' type='xml'>
+            <search string="Appointments">
+                <field name="product_id" />
+                <field name="order_id" string="Appointment"/>
+                <field name="partner_id" operator="child_of" string="Patient"/>
+                <field name="resource_id"/>
+                <field name="patient_invoice_id"/>
+                <!-- <field name="payment_ids"/> -->
+                <field name="session_id"/>
+                <field name="config_id"/>
+                <field name="user_id"/>
+                <field name="state"/>
+                <filter string="My Appointments" name="my_appointments" domain="[('user_id', '=', uid)]"/>
+                <filter string="Invoiced" name="new_invoiced" domain="[('patient_invoice_id','!=',False)]"/>
+                <filter string="Applied Insurance" name="is_insurance_applicable" domain="[('is_insurance_applicable','=',True)]" groups="medical_app.group_manage_insurance"/>
+                <separator/>
+                <filter string="New" name="new_appointment" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirmed" name="confirmed_appointment" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Fully Paid" name="paid_lines" domain="[('amount_due', '=', 0)]"/>
+                <filter string="Partial Paid" name="partial_paid_lines" domain="[('amount_paid', '>', 0)]"/>
+                <filter string="Cancel" name="canceled_appointment" domain="[('state', '=', 'cancel')]"/>
+                <separator/>
+                <!-- <filter string="Starred" name="starred" domain="[('priority', 'in', [1, 2])]"/> -->
+                <filter string="Today" name="today_appointment" domain="[('start_time', '&gt;=', datetime.datetime.now().replace(hour=0, minute=0, second=0).strftime('%Y-%m-%d %H:%M:%S')),        ('start_time', '&lt;=', datetime.datetime.now().replace(hour=23, minute=59, second=59).strftime('%Y-%m-%d %H:%M:%S') )]"/>
+                <filter string="Yesterday" name="yesterday_appointment" domain="[('start_time', '&gt;=', (datetime.datetime.now().replace(hour=0, minute=0, second=0) - datetime.timedelta(days = 1)).strftime('%Y-%m-%d %H:%M:%S')),        ('start_time', '&lt;=', (datetime.datetime.now().replace(hour=23, minute=59, second=59) - datetime.timedelta(days = 1)).strftime('%Y-%m-%d %H:%M:%S') )]"/>
+                <filter string="Tomorrow" name="tomorrow_appointment" domain="[('start_time', '&gt;=', (datetime.datetime.now().replace(hour=0, minute=0, second=0) + datetime.timedelta(days = 1)).strftime('%Y-%m-%d %H:%M:%S')),        ('start_time', '&lt;=', (datetime.datetime.now().replace(hour=23, minute=59, second=59) + datetime.timedelta(days = 1)).strftime('%Y-%m-%d %H:%M:%S') )]"/>
+                <filter string="This Week" name="this_week_appointment" domain="['|', ('start_time', '=', False), '&amp;',('start_time', '&lt;', (context_today()+relativedelta(days=8)).strftime('%Y-%m-%d 00:00:00')),('start_time', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter string="Last Week" name="last_week_appointment" domain="['|', ('start_time', '=', False), '&amp;',('start_time', '&lt;', context_today().strftime('%Y-%m-%d 00:00:00')),('start_time', '&gt;=', (context_today()-relativedelta(days=8)).strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter string="This Month" name="this_month_appointment" domain="['|', ('start_time', '=', False), '&amp;',('start_time', '&lt;', (context_today()+relativedelta(months=1)).strftime('%Y-%m-01 00:00:00')),('start_time', '&gt;=', time.strftime('%Y-%m-01 00:00:00'))]"/>
+
+                <separator />
+                <filter name="start_time_dt" string="Start Time" date="start_time" />
+                <filter name="end_time_dt" string="End Time" date="end_time" />
+                <filter name="create_date_dt" string="Created On" date="create_date" />
+                <group expand="0" string="Group By">
+                    <filter string="State" name="state" context="{'group_by': 'state'}"/>
+                    <filter string="Salesperson" name="user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Resource" name="by_resource" context="{'group_by': 'resource_id'}"/>
+                    <filter string="Appointment" name="by_appointment" context="{'group_by': 'order_id'}"/>
+                    <separator />
+                    <filter string="Patient" name="partner_id" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Insurance Company" name="insurance_company_id" context="{'group_by': 'insurance_company_id'}" groups="medical_app.group_manage_insurance"/>
+                    <filter string="Product / Service" name="product_id" context="{'group_by': 'product_id'}"/>
+                    <filter string="Package" name="related_pkg_id" context="{'group_by': 'related_pkg_id'}" groups="medical_app.group_customer_packages"/>
+                    <filter string="Prod. Category" name="by_category" context="{'group_by': 'order_id'}"/>
+                    <separator />
+                    <filter string="Branch" name="by_clinic" context="{'group_by': 'clinic_id'}"/>
+                    <filter string="Session" name="session" context="{'group_by': 'session_id'}"/>
+                    <filter string="Scheduler" name="config_id" context="{'group_by': 'config_id'}"/>
+                    <separator />
+                    <filter string="Start Date" name="group_start_time" context="{'group_by': 'start_time'}"/>
+                    <filter string="End Date" name="group_end_time" context="{'group_by': 'end_time'}"/>
+                    <filter string="Creation Date" name="group_create_date" context="{'group_by': 'create_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_medical_order_line_form" model='ir.ui.view'>
+        <field name='name'>view.medical.order.line.form</field>
+        <field name='model'>medical.order.line</field>
+        <field name='arch' type='xml'>
+            <form string='Appointment'>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title" id="title">
+                        <h1><field name="product_id" /></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="duration" widget="float_time"/>
+                            <label for="qty"/>
+                            <div class="o_row">
+                                <field name="qty"/>
+                                <field name="product_uom_id"/>
+                            </div>
+                            <field name="approved_price_unit" groups="medical_app.group_manage_insurance"/>
+                            <field name="price_unit_orig"/>
+                            <field name="price_unit"/>
+                            <field name="payable_price_unit" groups="medical_app.group_manage_insurance"/>
+                            <field name="consumable_ids" groups="medical_app.group_orderline_consumables" widget="many2many_tags"/>
+                            <field name="discount"/>
+                            <field name="subtotal"/>
+                            <field name="amount_paid"/>
+                        </group>
+                        <group string="Insurance Details" groups="medical_app.group_manage_insurance">
+                            <field name="is_insurance_applicable"/>
+                            <field name="pricelist_item_id" />
+                            <field name="ins_price_unit" />
+                            <field name="patient_share"/>
+                            <field name="patient_share_limit"/>
+                            <field name="insurance_disc"/>
+                            <field name="apply_ins_disc"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Appointment">
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="pricelist_id" readonly="1" force_save="1"/>
+                            <field name="session_id" string="Session"/>
+                            <field name="resource_id"/>
+                        </group>
+                        <group>
+                            <field name="insurance_card_id" groups="medical_app.group_manage_insurance" context="{'default_partner_id': partner_id}"/>
+                            <field name="start_time"/>
+                            <field name="end_time"/>
+                            <field name="total_duration" widget="float_time"/>
+                            <field name="related_pkg_id" groups="medical_app.group_customer_packages"/>
+                            <field name="session_count"  groups="medical_app.group_customer_packages"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                            <field name="analytic_tag_ids" groups="analytic.group_analytic_tags" widget="many2many_tags"/>
+                        </group>
+                        <group />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_medical_order_line_tree" model='ir.ui.view'>
+        <field name='name'>view.medical.order.line.tree</field>
+        <field name='model'>medical.order.line</field>
+        <field name='arch' type='xml'>
+            <tree string='Appointment'>
+                <field name="is_insurance_applicable" optional="hide" string="Insured" groups="medical_app.group_manage_insurance"/>
+                <field name='order_id' optional="show"/>
+                <field name="clinic_id" optional="hide" />
+                <field name='partner_id' optional="show"/>
+                <field name="file_no" optional="hide"/>
+                <field name="file_no2" optional="hide"/>
+                <field name='civil_code' optional="hide"/>
+                <field name='insurance_card_id' optional="hide" groups="medical_app.group_manage_insurance"/>
+                <field name='insurance_company_id' optional="hide" groups="medical_app.group_manage_insurance"/>
+                <field name='insurance_invoice_id' optional="hide" groups="medical_app.group_manage_insurance"/>
+                <field name='ins_invoice_date' optional="hide" groups="medical_app.group_manage_insurance"/>
+                <field name="start_time" optional="hide"/>
+                <field name="end_time" optional="hide"/>
+                <field name="pricelist_id" optional="hide"/>
+                <field name="pricelist_item_id" optional="hide" groups="medical_app.group_manage_insurance"/>
+                <field name="session_id" string="Session" optional="hide"/>
+                <field name="resource_id" optional="show"/>
+                <field name="product_id" optional="show"/>
+                <field name="duration" optional="hide" widget="float_time"/>
+                <field name="qty" optional="hide" sum="Total Qty"/>
+                <field name="product_uom_id" optional="hide"/>
+                <field name="session_count" optional="hide"/>
+                <field name="consumable_ids" groups="medical_app.group_orderline_consumables" widget="many2many_tags" optional="hide"/>
+                <field name="price_unit_orig" optional="show" sum="Total"/>
+                <field name="approved_price_unit" optional="show"  sum="Total" groups="medical_app.group_manage_insurance"/>
+                <field name="price_unit" optional="hide" sum="Total"/>
+                <field name="payable_price_unit" optional="show" string="Patient Share" sum="Total" groups="medical_app.group_manage_insurance"/>
+                <field name="ins_price_unit" optional="hide" string="I.Net Claim" sum="Total" groups="medical_app.group_manage_insurance"/>
+                <field name="patient_share" optional="hide" string="Deductible(%)" groups="medical_app.group_manage_insurance"/>
+                <field name="ins_fixed" optional="hide" groups="medical_app.group_manage_insurance"/>
+                <field name="share_limit_type" optional="hide"  groups="medical_app.group_manage_insurance"/>
+                <field name="patient_share_limit" optional="hide" string="P.Share Limit" groups="medical_app.group_manage_insurance"/>
+                <field name="insurance_disc" optional="hide" string="Ins. Disc(%)" groups="medical_app.group_manage_insurance"/>
+                <field name="apply_ins_disc" optional="hide" string="Ins. Disc Type" groups="medical_app.group_manage_insurance"/>
+                <field name="discount" optional="hide" sum="Total Discount"/>
+                <field name="subtotal" optional="show" string="Subtotal"/>
+                <field name="amount_paid" optional="show" sum="Total Paid"/>
+                <field name="state" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_medical_order_line_all" model="ir.actions.act_window">
+        <field name="name">Appointment Services</field>
+        <field name="res_model">medical.order.line</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Appointment Line Not found
+          </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_medical_order_line_all" name="Appointment Services"
+        parent="medical_app.menu_medical_order_menu"
+        groups="medical_app.group_medical_cashier"
+        action="medical_app.action_medical_order_line_all" sequence="100"/>
+
+    <record id="action_medical_order_approval" model="ir.actions.act_window">
+        <field name="name">Appointment Approvals</field>
+        <field name="res_model">medical.order</field>
+        <field name="domain">[('need_pricelist_approval', '=', True),('pricelist_approved','=',False)]</field>
+        <field name="view_mode">tree,form,kanban,pivot,graph</field>
+    </record>
+
+    <menuitem id="menu_appointment_approval" name="Appointment Approvals"
+        parent="medical_app.menu_medical_order_menu"
+        groups="medical_app.group_pricelist_approval"
+        action="medical_app.action_medical_order_approval" sequence="20"/>
+</odoo>

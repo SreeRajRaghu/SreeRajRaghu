@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- Medical Appointment View -->
+    <record id="gold_action_medical_order_dash" model="ir.actions.act_window">
+        <field name="name">Appointments</field>
+        <field name="res_model">medical.order</field>
+        <field name="context">{'search_default_group_appointment_type':1, 'search_default_group_employee':1}</field>
+        <field name="view_mode">tree,form,kanban,pivot,graph</field>
+    </record>
+
+    <!-- Patient Having Birthday And Appointment -->
+    <record id="gold_line_patient_having_birthday_today_and_appointment" model="dashboard.settings.line">
+        <field name="name">Patient Having Birthday And Appointment</field>
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="field_id" ref="base.field_res_partner__id" />
+        <field name="filter">customer='t'</field>
+        <field name="type">qty</field>
+        <field name="color">green</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="custom_sql">SELECT count(id) as field FROM res_partner WHERE date_part('month', birthday) between date_part('month', TO_DATE('{date_from}', 'YYYY-MM-DD')) and date_part('month', TO_DATE('{date_to}', 'YYYY-MM-DD')) and date_part('day', birthday) between date_part('day', TO_DATE('{date_from}', 'YYYY-MM-DD')) and date_part('day', TO_DATE('{date_to}', 'YYYY-MM-DD')) and id in (select mo.partner_id from medical_order as mo where mo.start_time BETWEEN '{date_from}' AND '{date_to}' AND mo.file_no2 != null AND mo.state NOT IN ('cancel', 'no_show'))</field>
+        <field name="custom_sql_ids">SELECT id FROM res_partner WHERE date_part('month', birthday) between date_part('month', TO_DATE('{date_from}', 'YYYY-MM-DD')) and date_part('month', TO_DATE('{date_to}', 'YYYY-MM-DD')) and date_part('day', birthday) between date_part('day', TO_DATE('{date_from}', 'YYYY-MM-DD')) and date_part('day', TO_DATE('{date_to}', 'YYYY-MM-DD')) and id in (select mo.partner_id from medical_order as mo where mo.start_time BETWEEN '{date_from}' AND '{date_to}' AND mo.file_no2 != null AND mo.state NOT IN ('cancel', 'no_show'))</field>
+        <field name="custom_sql_alias">rp</field>
+        <field name="display">1</field>
+        <field name="visibility">med_gold</field>
+        <field name="show_only_today">0</field>
+        <field name="no_append">14</field>
+        <field name="sequence">1</field>
+    </record>
+
+
+    <record id="gold_dash_common_customer_visits_old" model="dashboard.settings.line">
+        <field name="name">Customer Visits (Old)</field>
+        <field name="color">primary</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="medical_app.model_medical_order"/>
+        <field name="field_id" ref="medical_app.field_medical_order__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(DISTINCT(mo.partner_id)) AS field FROM medical_order AS mo LEFT JOIN res_partner AS p ON p.id =
+            mo.partner_id WHERE mo.state NOT IN ('cancel', 'no_show') AND mo.company_code = 'gold' AND p.create_date NOT BETWEEN '{date_from}' AND
+            '{date_to}' AND mo.start_time BETWEEN '{date_from}' AND '{date_to}' AND mo.company_id = '{company_id}'
+        </field>
+        <field name="custom_sql_alias">mo</field>
+        <field name="custom_sql_ids">
+            SELECT mo.id FROM medical_order AS mo LEFT JOIN res_partner AS p ON p.id = mo.partner_id WHERE mo.state NOT
+            IN ('cancel', 'no_show') AND mo.company_code = 'gold' AND p.create_date NOT BETWEEN '{date_from}' AND '{date_to}' AND mo.start_time
+            BETWEEN '{date_from}' AND '{date_to}' AND mo.company_id = '{company_id}'
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_app.action_medical_order"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">start_time</field>
+        <field name="no_append" eval="True"/>
+        <field name="sequence">2</field>
+    </record>
+
+
+    <record id="gold_dash_total_revenue" model="dashboard.settings.line">
+        <field name="name">Total Revenue (Gross)</field>
+        <field name="color">green</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="field_id" ref="dashboard_data.field_account_move__amount_total_gross"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">type = 'out_invoice' AND state = 'posted' AND journal_id != 53 AND amount_total_gross > 0 AND company_code = 'gold'</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_app.action_move_patient_out_invoice_type"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">invoice_date</field>
+        <field name="sequence">0</field>
+    </record>
+
+    <record id="gold_line_patient_having_birthday_today" model="dashboard.settings.line">
+        <field name="name">Patient Having Birthday</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="field_id" ref="base.field_res_partner__id"/>
+        <field name="filter">customer='t'</field>
+        <field name="type">qty</field>
+        <field name="color">green</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="custom_sql">SELECT count(id) as field FROM res_partner WHERE file_no2 is not null and date_part('month', birthday) between date_part('month', TO_DATE('{date_from}', 'YYYY-MM-DD')) and date_part('month', TO_DATE('{date_to}', 'YYYY-MM-DD')) and  date_part('day', birthday) between date_part('day', TO_DATE('{date_from}', 'YYYY-MM-DD')) and date_part('day', TO_DATE('{date_to}', 'YYYY-MM-DD'))</field>
+        <field name="custom_sql_ids">SELECT id FROM res_partner WHERE file_no2 is not null and date_part('month', birthday) between date_part('month', TO_DATE('{date_from}', 'YYYY-MM-DD')) and date_part('month', TO_DATE('{date_to}', 'YYYY-MM-DD')) and  date_part('day', birthday) between date_part('day', TO_DATE('{date_from}', 'YYYY-MM-DD')) and date_part('day', TO_DATE('{date_to}', 'YYYY-MM-DD'))</field>
+        <field name="action_id" ref="contacts.action_contacts"/>
+        <field name="display">1</field>
+        <field name="visibility">med_gold</field>
+        <field name="show_only_today">0</field>
+        <field name="no_append">13</field>
+        <field name="sequence">4</field>
+    </record>
+
+    <record id="gold_dash_common_customer_visits_new" model="dashboard.settings.line">
+        <field name="name">Customer Visits (New)</field>
+        <field name="color">primary</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="medical_app.model_medical_order"/>
+        <field name="field_id" ref="medical_app.field_medical_order__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(DISTINCT(mo.partner_id)) AS field FROM medical_order AS mo LEFT JOIN res_partner AS p ON p.id =
+            mo.partner_id WHERE mo.state NOT IN ('cancel', 'no_show') AND p.create_date BETWEEN '{date_from}' AND
+            '{date_to}' AND mo.company_code = 'gold' AND mo.start_time BETWEEN '{date_from}' AND '{date_to}' AND mo.company_id = '{company_id}'
+        </field>
+        <field name="custom_sql_alias">mo</field>
+        <field name="custom_sql_ids">
+            SELECT mo.id FROM medical_order AS mo LEFT JOIN res_partner AS p ON p.id = mo.partner_id WHERE mo.state NOT
+            IN ('cancel', 'no_show') AND p.create_date BETWEEN '{date_from}' AND '{date_to}' AND mo.company_code = 'gold' AND mo.start_time BETWEEN
+            '{date_from}' AND '{date_to}' AND mo.company_id = '{company_id}'
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_app.action_medical_order"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">start_time</field>
+        <field name="no_append" eval="True"/>
+        <field name="sequence">5</field>
+    </record>
+
+    <record id="gold_dash_total_amount_due" model="dashboard.settings.line">
+        <field name="name">Total Due</field>
+        <field name="color">green</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="field_id" ref="account.field_account_move__amount_residual"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">type = 'out_invoice' AND company_code = 'gold' AND state = 'posted' AND journal_id != 53 AND amount_residual > 0 AND is_insurance_invoice = false</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_app.action_move_patient_out_invoice_type"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">invoice_date</field>
+        <field name="company_id" eval="False" />
+        <field name="sequence">6</field>
+    </record>
+
+    <record id="gold_line_advance_payment" model="dashboard.settings.line">
+        <field name="name">Advance/Balance Payment</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__id"/>
+        <field name="type">money</field>
+        <field name="color">green</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="custom_sql">
+            SELECT sum(p.payment_balance) AS field FROM account_payment AS p WHERE p.company_code = 'gold' AND p.state in ('posted', 'reconciled') and p.payment_balance > 0 and p.payment_date BETWEEN '{date_from}' AND '{date_to}' and p.journal_id in (select aj.id from account_journal as aj where aj.company_id = '{company_id}')
+        </field>
+        <field name="custom_sql_ids">SELECT p.id FROM account_payment AS p WHERE  p.company_code = 'gold' AND p.state in ('posted', 'reconciled') and p.payment_balance > 0 and p.payment_date BETWEEN '{date_from}' AND '{date_to}' and p.journal_id in (select aj.id from account_journal as aj where aj.company_id = '{company_id}')</field>
+        <field name="custom_sql_alias">p</field>
+        <field name="display">1</field>
+        <field name="visibility">med_gold</field>
+        <field name="apply_create_date_filter">0</field>
+        <field name="date_field_name">payment_date</field>
+        <field name="no_append" eval="True"/>
+        <field name="sequence">7</field>
+    </record>
+
+    <!-- <record id="gold_dash_bank" model="dashboard.settings.line">
+        <field name="name">Bank</field>
+        <field name="color">primary</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__id"/>
+        <field name="type">money</field>
+        <field name="custom_sql">SELECT sum(p.amount) AS field FROM account_payment AS p WHERE p.state in ('posted',
+            'reconciled') AND p.journal_id in (8) and p.payment_date BETWEEN '{date_from}' AND '{date_to}' and p.journal_id in (select aj.id from account_journal as aj where aj.company_id = '{company_id}')
+        </field>
+        <field name="custom_sql_alias">p</field>
+        <field name="custom_sql_ids">SELECT p.id FROM account_payment AS p WHERE p.state in ('posted', 'reconciled') AND
+            p.journal_id in (8) and p.payment_date BETWEEN '{date_from}' AND '{date_to}' and p.journal_id in (select aj.id from account_journal as aj where aj.company_id = '{company_id}')
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="no_append" eval="True"/>
+        <field name="sequence">8</field>
+    </record> -->
+
+
+    <record id="gold_dash_common_product_service_sales" model="dashboard.settings.line">
+        <field name="name">Product/Service Sales</field>
+        <field name="color">green</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="medical_app.model_medical_order_line"/>
+        <field name="field_id" ref="medical_app.field_medical_order_line__id"/>
+        <field name="type">money</field>
+        <field name="custom_sql">
+            SELECT SUM(mol.amount_paid) AS field FROM medical_order_line AS mol LEFT JOIN medical_order AS mo ON mo.id = mol.order_id WHERE line_type IN ('product',
+            'service') AND mol.state NOT IN ('cancel', 'no_show') AND mol.amount_paid > 0 AND mo.company_code = 'gold'
+        </field>
+        <field name="custom_sql_alias">mol</field>
+        <field name="custom_sql_ids">
+            SELECT mol.id FROM medical_order_line AS mol LEFT JOIN medical_order AS mo ON mo.id = mol.order_id WHERE line_type IN ('product', 'service') AND mol.state NOT IN
+            ('cancel', 'no_show') AND mol.amount_paid > 0 AND mo.company_code = 'gold'
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_app.action_medical_order_line_all"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">start_time</field>
+        <field name="sequence">9</field>
+    </record>
+
+    <record id="gold_dash_common_appointment_creation" model="dashboard.settings.line">
+        <field name="name">Today Created Appointment</field>
+        <field name="color">primary</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="medical_app.model_medical_order"/>
+        <field name="field_id" ref="medical_app.field_medical_order__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_order AS mo WHERE mo.state NOT IN ('cancel', 'no_show') AND mo.company_code = 'gold'
+        </field>
+        <field name="custom_sql_alias">mo</field>
+        <field name="custom_sql_ids">
+            SELECT mo.id FROM medical_order AS mo WHERE mo.state NOT IN ('cancel', 'no_show') AND mo.company_code = 'gold'
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="med_white_base.gold_action_medical_order_dash"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="True"/>
+        <field name="date_field_name">create_date</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="gold_dash_common_appointment_count" model="dashboard.settings.line">
+        <field name="name">Appointments</field>
+        <field name="color">primary</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="medical_app.model_medical_order"/>
+        <field name="field_id" ref="medical_app.field_medical_order__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_order AS mo WHERE mo.state NOT IN ('cancel', 'no_show') AND mo.company_code = 'gold'
+        </field>
+        <field name="custom_sql_alias">mo</field>
+        <field name="custom_sql_ids">
+            SELECT mo.id FROM medical_order AS mo WHERE mo.state NOT IN ('cancel', 'no_show') AND mo.company_code = 'gold'
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_app.action_medical_order"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">start_time</field>
+        <field name="sequence">11</field>
+    </record>
+
+   <!--  <record id="gold_dash_master_card" model="dashboard.settings.line">
+        <field name="name">Master Card</field>
+        <field name="color">primary</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__id"/>
+        <field name="type">money</field>
+        <field name="custom_sql">SELECT sum(p.amount) AS field FROM account_payment AS p WHERE p.state in ('posted',
+            'reconciled') AND p.journal_id in (9) and p.payment_date BETWEEN '{date_from}' AND '{date_to}' and p.journal_id in (select aj.id from account_journal as aj where aj.company_id = '{company_id}')
+        </field>
+        <field name="custom_sql_alias">p</field>
+        <field name="custom_sql_ids">SELECT p.id FROM account_payment AS p WHERE p.state in ('posted', 'reconciled') AND
+            p.journal_id in (9) and p.payment_date BETWEEN '{date_from}' AND '{date_to}' and p.journal_id in (select aj.id from account_journal as aj where aj.company_id = '{company_id}')
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="no_append" eval="True"/>
+        <field name="sequence">12</field>
+    </record>
+ -->
+    <!-- <record id="gold_dash_link" model="dashboard.settings.line">
+        <field name="name">Link</field>
+        <field name="color">primary</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__id"/>
+        <field name="type">money</field>
+        <field name="custom_sql">SELECT sum(p.amount) AS field FROM account_payment AS p WHERE p.state in ('posted',
+            'reconciled') AND p.journal_id in (11) and p.payment_date BETWEEN '{date_from}' AND '{date_to}' and p.journal_id in (select aj.id from account_journal as aj where aj.company_id = '{company_id}')
+        </field>
+        <field name="custom_sql_alias">p</field>
+        <field name="custom_sql_ids">SELECT p.id FROM account_payment AS p WHERE p.state in ('posted', 'reconciled') AND
+            p.journal_id in (11) and p.payment_date BETWEEN '{date_from}' AND '{date_to}' and p.journal_id in (select aj.id from account_journal as aj where aj.company_id = '{company_id}')
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="no_append" eval="True"/>
+        <field name="sequence">13</field>
+    </record> -->
+
+     <!-- <record id="gold_dash_visa_card" model="dashboard.settings.line">
+        <field name="name">Visa Card</field>
+        <field name="color">primary</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__id"/>
+        <field name="type">money</field>
+        <field name="custom_sql">SELECT sum(p.amount) AS field FROM account_payment AS p WHERE p.state in ('posted',
+            'reconciled') AND p.journal_id in (10) and p.payment_date BETWEEN '{date_from}' AND '{date_to}' and p.journal_id in (select aj.id from account_journal as aj where aj.company_id = '{company_id}')
+        </field>
+        <field name="custom_sql_alias">p</field>
+        <field name="custom_sql_ids">SELECT p.id FROM account_payment AS p WHERE p.state in ('posted', 'reconciled') AND
+            p.journal_id in (10) and p.payment_date BETWEEN '{date_from}' AND '{date_to}' and p.journal_id in (select aj.id from account_journal as aj where aj.company_id = '{company_id}')
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="no_append" eval="True"/>
+        <field name="sequence">14</field>
+    </record> -->
+
+    <record id="gold_dash_cash" model="dashboard.settings.line">
+        <field name="name">Cash</field>
+        <field name="color">green</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__amount"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state IN ('posted', 'reconciled') AND journal_id = 7 AND company_code = 'gold'</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="company_id">1</field>
+        <field name="sequence">15</field>
+    </record>
+
+     <record id="gold_dash_knet" model="dashboard.settings.line">
+        <field name="name">KNet</field>
+        <field name="color">green</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__amount"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state IN ('posted', 'reconciled') AND journal_id = 9 AND company_code = 'gold'</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="company_id">1</field>
+        <field name="sequence">15</field>
+    </record>
+
+     <record id="gold_dash_knet_derma" model="dashboard.settings.line">
+        <field name="name">KNet Derma</field>
+        <field name="color">green</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__amount"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state IN ('posted', 'reconciled') AND journal_id = 9 AND company_code = 'gold'</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="company_id">1</field>
+        <field name="sequence">15</field>
+    </record>
+
+     <record id="gold_dash_visa_master" model="dashboard.settings.line">
+        <field name="name">Visa / Master</field>
+        <field name="color">green</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_id" ref="account.field_account_payment__amount"/>
+        <field name="type">money</field>
+        <field name="custom_sql"></field>
+        <field name="custom_sql_alias"></field>
+        <field name="custom_sql_ids"></field>
+        <field name="filter">state IN ('posted', 'reconciled') AND journal_id = 10 AND company_code = 'gold'</field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="account.action_account_payments"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">payment_date</field>
+        <field name="company_id">1</field>
+        <field name="sequence">12</field>
+    </record>
+
+    <record id="gold_dash_common_appointment_future_count" model="dashboard.settings.line">
+        <field name="name">Guest Future Appointments</field>
+        <field name="color">primary</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="medical_app.model_medical_order"/>
+        <field name="field_id" ref="medical_app.field_medical_order__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">SELECT count(mo.id) AS field FROM medical_order AS mo WHERE mo.state NOT IN ('cancel',
+            'no_show') AND mo.start_time > DATE(NOW()) + interval '1 day' AND mo.company_id = '{company_id}' AND mo.company_code = 'gold'
+        </field>
+        <field name="custom_sql_alias">mo</field>
+        <field name="custom_sql_ids">SELECT mo.id FROM medical_order AS mo WHERE mo.state NOT IN ('cancel', 'no_show')
+            AND mo.start_time > DATE(NOW()) + interval '1 day' AND mo.company_id = '{company_id}' AND mo.company_code = 'gold'
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_app.action_medical_order"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">start_time</field>
+        <field name="no_append" eval="True"/>
+        <field name="sequence">16</field>
+    </record>
+
+    <record id="gold_dash_common_cancelled_appointment_count" model="dashboard.settings.line">
+        <field name="name">Cancelled Appointments</field>
+        <field name="color">primary</field>
+        <field name="visibility">med_gold</field>
+        <field name="model_id" ref="medical_app.model_medical_order"/>
+        <field name="field_id" ref="medical_app.field_medical_order__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_order AS mo WHERE mo.state IN ('cancel', 'no_show') AND mo.company_code = 'gold'
+        </field>
+        <field name="custom_sql_alias">mo</field>
+        <field name="custom_sql_ids">
+            SELECT mo.id FROM medical_order AS mo WHERE mo.state IN ('cancel', 'no_show') AND mo.company_code = 'gold'
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_app.action_medical_order"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">start_time</field>
+        <field name="sequence">17</field>
+    </record>
+</odoo>

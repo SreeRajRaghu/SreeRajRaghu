@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="account_invoice_form_inherit_draft_access">
+        <field name="name">Account Invoice</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='button_draft']" position="attributes">
+                <attribute name="groups">menu_access_right.make_to_draft_invoice_menu_show_or</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_post']" position="attributes">
+                <attribute name="groups">menu_access_right.make_post_in_invoice_menu_show_or</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

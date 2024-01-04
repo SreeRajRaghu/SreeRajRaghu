@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="base.paperformat_euro" model="report.paperformat">
+            <field name="margin_top">48</field>
+            <field name="header_spacing">44</field>
+        </record>
+
+        <template id="medical_header">
+            <div class="header">
+                <t t-set="medical_app.set_med_config" />
+                <div class="row">
+                    <div class="col-6">
+                        <div style="position: absolute; bottom: 0;">
+                            <img class="mt-2" t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 125px;" alt="Logo"/>
+                        </div>
+                    </div>
+                    <div name="company_address" class="col-6 text-right" style="font-size: 11px; color:#0a2463">
+                        <t t-if="med_config and med_config.logo2">
+                            <img class="mt-2" t-att-src="image_data_uri(med_config.logo2)" style="max-height: 45px;" alt="Logo2"/>
+                        </t>
+                        <t t-else="1">
+                            <img class="mt-2" t-if="company.logo2" t-att-src="image_data_uri(company.logo2)" style="max-height: 45px;" alt="Logo"/>
+                        </t>
+
+                        <div class="text-right">
+                            <br />
+                            <span>برج مزايا – حولي قطعة 4 – شارع تونس – قسيمة 127</span>
+                            <br />
+                            <span t-field="company.partner_id.street"/>
+                            <br />
+                            <span t-field="company.partner_id.street2"/>
+                            <br />
+                            Tel: <span t-field="company.partner_id.phone"/>
+                            <br />
+                            <span t-field="company.partner_id.website"/>
+                         </div>
+                    </div>
+                </div>
+                <div t-if="company.logo or company.report_header" class="row zero_min_height">
+                    <div class="col-12">
+                        <div/>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="web.external_layout_standard">
+            <t t-call="medical_report.medical_header" />
+
+            <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <t t-call="web.address_layout"/>
+                <t t-raw="0"/>
+            </div>
+
+            <div class="footer o_standard_footer">
+                <div class="text-left">
+                    <!-- <ul class="list-inline mb4">
+                        <li t-if="company.phone" class="list-inline-item d-inline">Phone: <span t-field="company.phone"/></li>
+                        <li t-if="company.email" class="list-inline-item d-inline">Email: <span t-field="company.email"/></li>
+                        <li t-if="company.website" class="list-inline-item d-inline">Web: <span t-field="company.website"/></li>
+                        <li t-if="company.vat" class="list-inline-item d-inline"><t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/></li>
+                    </ul> -->
+
+                    <div name="financial_infos" t-if="company.report_footer">
+                        <span t-field="company.report_footer"/>
+                    </div>
+
+                    <div t-if="report_type == 'pdf'" class="text-muted text-right">
+                        Page: <span class="page"/> of <span class="topage"/>
+                    </div>
+                    <div>
+                        <img src="/medical_report/static/lab-result-footer.png" style="width:100%;" alt="Footer" />
+                    </div>
+                </div>
+            </div>
+        </template>
+    </data>
+</odoo>

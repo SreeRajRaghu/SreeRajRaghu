@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="external_layout_pcr">
+        <!-- Multicompany -->
+        <t t-if="not o and docs">
+            <t t-set="o" t-value="docs"/>
+        </t>
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"></t>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"></t>
+        </t>
+        <t t-call="medical_pcr.external_layout_header"><t t-raw="0" /></t>
+    </template>
+
+    <template id="external_layout_header">
+        <div class="header">
+           <div class="row col-12">
+                <div  class="col-2">
+                    <img class="mr-auto" width="120px" src="/medical_pcr/static/src/image/logo.png"/>
+                </div>
+                <div class="col-8" style="margin-top: 14%;">
+                    <center><h3>COVID-19 LAB REQUEST FORM</h3></center>
+                </div>
+                <div  class="col-2">
+                    <img class="mr-auto" width="120px" src="/medical_pcr/static/src/image/logo2.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="article o_report_layout_standard"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0"/>
+        </div>
+
+        <div class="footer">
+            <div class="text-center" style="border-top: 1px solid black;">
+                <span t-field="company.report_footer"/>
+            </div>
+            <div class="text-muted text-right">
+                Page:
+                <span class="page"/>
+                of
+                <span class="topage"/>
+            </div>
+        </div>
+    </template>
+
+    <template id="external_layout_vaccination">
+        <!-- Multicompany -->
+        <t t-if="not o and docs">
+            <t t-set="o" t-value="docs"/>
+        </t>
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"></t>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"></t>
+        </t>
+        <t t-call="medical_pcr.external_layout_vaccination_header"><t t-raw="0" /></t>
+    </template>
+
+    <template id="external_layout_vaccination_header">
+        <div class="header">
+           <div class="row col-12">
+                <div  class="col-2">
+                    <img class="mr-auto" width="120px" src="/medical_pcr/static/src/image/logo.png"/>
+                </div>
+                <div class="col-8" style="margin-top: 14%;">
+                    <center><h3>COVID-19 LAB REQUEST FORM</h3></center>
+                </div>
+                <div  class="col-2">
+                    <img class="mr-auto" width="120px" src="/medical_pcr/static/src/image/logo2.png"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="article o_report_layout_standard"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0"/>
+        </div>
+
+        <div class="footer">
+            <div class="text-center" style="border-top: 1px solid black;">
+                <span t-field="company.report_footer"/>
+            </div>
+            <div class="text-muted text-right">
+                Page:
+                <span class="page"/>
+                of
+                <span class="topage"/>
+            </div>
+        </div>
+    </template>
+</odoo>

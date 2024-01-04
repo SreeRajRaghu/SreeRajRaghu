@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<!-- Inherit Form View to Modify it -->
+<record id="branch_hr_contract_view_form" model="ir.ui.view">
+    <field name="name">hr.contract.form.inherit</field>
+    <field name="model">hr.contract</field>
+    <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+    <field name="arch" type="xml">
+
+        <xpath expr="//field[@name='department_id']" position="after">
+            <field name="branch_id"/>
+        </xpath>
+
+    </field>
+</record></odoo>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="base_purchase_req_security_groups">
+        <field name="name">Purchase Request Module Rights</field>
+    </record>
+    <record id="action_check_availability" model="res.groups">
+        <field name="name">Show/Hide Check Availability Button</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="button_purchase_req_ceo_approve" model="res.groups">
+        <field name="name">Show/Hide CEO Approve Button</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="button_purchase_qty_change" model="res.groups">
+        <field name="name">Show/Hide Change Qty Button</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="button_purchase_req_reject" model="res.groups">
+        <field name="name">Show/Hide CEO Reject Button</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="action_to_approve" model="res.groups">
+        <field name="name">Show/Hide Finance Approve Button</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+       <record id="action_forward_to_ceo" model="res.groups">
+        <field name="name">Show/Hide Forward To CEO Button</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="button_purchase_req_forward" model="res.groups">
+        <field name="name">Show/Hide Forward To Finance Button</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="button_purchase_req_issue_product" model="res.groups">
+        <field name="name">Show/Hide Issue Button</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="menu_purchase_req_config_settings" model="res.groups">
+        <field name="name">Show/Hide Settings Menu</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="button_purchase_order_to_finance" model="res.groups">
+        <field name="name">Show/Hide To Finance Button in PO</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="button_purchase_order_finance_reject" model="res.groups">
+        <field name="name">Show/Hide Reject Button for Finance in PO</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="button_purchase_order_ceo_reject" model="res.groups">
+        <field name="name">Show/Hide Reject Button for CEO in PO</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="button_purchase_order_ceo_approval" model="res.groups">
+        <field name="name">Show/Hide To CEO Button in PO</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="button_purchase_order_ceo_approved" model="res.groups">
+        <field name="name">Show/Hide CEO Approved Button in PO</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="group_for_confirm_order_button" model="res.groups">
+        <field name="name">Show/Hide Confirm Order Button</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="group_for_confirm_order_button" model="res.groups">
+        <field name="name">Show/Hide Confirm Order Button</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+    <record id="group_reject_by_finance" model="res.groups">
+        <field name="name">Show/Hide Finance Reject Button</field>
+        <field name="category_id" ref="base_purchase_req_security_groups"/>
+    </record>
+</odoo>

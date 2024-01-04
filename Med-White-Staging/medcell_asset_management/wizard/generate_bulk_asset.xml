@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="generate_bulk_asset_form" model="ir.ui.view">
+        <field name="name">bulk.asset.form</field>
+        <field name="model">generate.bulk.assets</field>
+        <field name="arch" type="xml">
+            <form string="Generate Assets">
+                <sheet>
+                    <separator string="Generate Assets"/>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="group_id" options="{'no_create': True, 'no_edit' : True, 'no_open': True}"/>
+                            <field name="category_id" options="{'no_create': True, 'no_edit' : True, 'no_open': True}"/>
+                            <field name="sub_category_id"
+                                   options="{'no_create': True, 'no_edit' : True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="purchase_date"/>
+                            <field name="brand_id" options="{'no_create': True, 'no_edit' : True, 'no_open': True}"/>
+                            <field name="product_count"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <span groups="base.group_user">
+                        <button class="oe_highlight" name="generate_bulk_products" string="Generate" type="object"/>
+                    </span>
+                    <span groups="base.group_user">
+                        <button special="cancel" string="_Cancel"/>
+                    </span>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_generate_bulk_assets" model="ir.actions.act_window">
+        <field name="name">Generate Assets</field>
+        <field name="res_model">generate.bulk.assets</field>
+        <field name="view_mode">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="generate_bulk_asset_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

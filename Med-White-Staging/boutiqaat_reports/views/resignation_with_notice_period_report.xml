@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="0">
+        <template id="resignation_with_notice_period">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-set="doc" t-value="docs[0]"/>
+                    <t t-set="e" t-value="doc.employee_id"/>
+                    <div class="page" style="font-size:14px;">
+                        <!-- <h3><span t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/></h3> -->
+                        <table style="width: 100%">
+                            <colgroup>
+                                <col width="15%" class="text-left"/>
+                                <col width="30%"/>
+                                <col width="10%"/>
+                                <col width="30%"/>
+                                <col width="15%"/>
+                            </colgroup>
+                            <tr>
+                                <th style="text-align: left;">Date :</th>
+                                <td><t t-esc="doc.print_date.strftime('%d/%m/%Y')"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="doc.print_date.strftime('%d/%m/%Y')"/></td>
+                                <th style="text-align: right;" dir="rtl">التاريخ :</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Employee ID :</th>
+                                <td><t t-esc="e.identification_id"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.identification_id"/></td>
+                                <th style="text-align: right;" dir="rtl">الرقم الوظيفي:</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Name :</th>
+                                <td><t t-esc="e.name"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.arabic_name"/></td>
+                                <th style="text-align: right;" dir="rtl">الإسم:</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Department :</th>
+                                <td><t t-esc="e.department_id.name or ''"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.department_id.arabic_name or ''"/></td>
+                                <th style="text-align: right;" dir="rtl">القســـم:</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Position :</th>
+                                <td><t t-esc="e.job_id.name or ''"/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.job_id.arabic_name or ''"/></td>
+                                <th style="text-align: right;" dir="rtl">الوظيفة:</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Civil ID :</th>
+                                <td><t t-esc="e.civil_id or ''"/><br/><br/></td>
+                                <td></td>
+                                <td style="text-align: right;" dir="rtl"><t t-esc="e.civil_id or ''"/><br/><br/></td>
+                                <th style="text-align: right;" dir="rtl">الرقم المدني:</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align: center;"><u>Subj: Resignation Acceptance</u><br/><br/></th>
+                                <td></td>
+                                <th colspan="2" style="text-align: center;" dir="rtl"><u>الموضوع/ قبول استقالة</u><br/><br/></th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    In reference to the resignation letter submitted, Kindly note that the management has accepted your resignation effective <t t-esc="doc.resignation_acceptance_date.strftime('%A')"/> <t t-esc="doc.resignation_acceptance_date.strftime('%d/%m/%Y')"/> <br/> <br/>
+                                </td>
+                                <td></td>
+                                <td colspan="2" style="text-align: right;" dir="rtl">
+                                    بالإشــارة إلى الموضــوع أعــلاه ، وبناء على كتاب الاستقالة المقدم من قبلكم يرجى العلم بأنه قد تقرر قــبـول الاسـتقــالــه إعتبارا من نهاية يوم <t t-esc="doc.get_arabic_day(doc.resignation_acceptance_date.weekday())"/> المـوافـق  <t t-esc="doc.resignation_acceptance_date.strftime('%d/%m/%Y')"/><br/><br/>
+                                    <br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    The date from <t t-esc="doc.notice_period_start_date.strftime('%d/%m/%Y')"/> till end of day <t t-esc="doc.notice_period_end_date.strftime('%d/%m/%Y')"/> is considered the official notice period as per Kuwait labor law 2010. <br/> <br/>
+                                </td>
+                                <td></td>
+                                <td colspan="2" style="text-align: right;" dir="rtl">
+                                    وتعتبر الفتــرة الممتــدة مــن <t t-esc="doc.notice_period_start_date.strftime('%d/%m/%Y')"/> وحتـى
+                                    <t t-esc="doc.notice_period_end_date.strftime('%d/%m/%Y')"/> وهي فـترة الانذار القانونية حسب قانون العمل
+                                    الكويتي لسنة 2010.<br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    Please refer to the Human Resources Department for the completion of all needed formalities such as clearance form. Transfer/Cancellation of your residency and settlement of your account.<br/> <br/>
+                                </td>
+                                <td></td>
+                                <td colspan="2" style="text-align: right;" dir="rtl">
+                                    وعــليــه يرجـى مــراجــعـة إدارة الــشئــون الإدارية والـــمــوارد البشــرية لإنهاء متعلقاتكم وإبراء ذمتـكم من الشركـة وتحويل/إلغـاء إقامتكم بعد إنهاء كافة الاعمال المكلف
+                                    بها وتسليم ما بعهدتكم.<br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    We thank you for your services rendered to the company and we wish you best of luck in your future. <br/><br/>
+                                </td>
+                                <td></td>
+                                <td colspan="2" style="text-align: right;" dir="rtl">
+                                    شـاكـرين لـكـم كـل جهد بذلــتمـوه فــي خــدمـــة الــشـركــة خلال فتـرة عملكم وخالص تمنياتنا بالتوفيق في المستقبل. <br/><br/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align: center;">
+                                    Best Regards, <br/><br/>
+                                </th>
+                                <td></td>
+                                <th colspan="2" style="text-align: center;" dir="rtl">
+                                    ولكم جزيل الشكر <br/><br/>
+                                </th>
+                            </tr>
+                            <!-- <tr style="text-align: center;">
+                                <th colspan="5">
+                                    <div style="text-align: center;" dir="rtl">مدير الموارد البشرية</div>
+                                    <div>HR &amp; Admin Manager</div>
+                                </th>
+                            </tr> -->
+                            <tr style="text-align: center;">
+                                <th colspan="5" style="padding-top:90px;">
+                                    <div><span t-field="doc.title_id.name"/></div>
+                                    <hr style="margin: 10px 35% 2px 35%; border: 1px solid #929292;"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: center;">
+                                </td>
+                                <td></td>
+                                <td colspan="2" style="text-align: right;padding-top:90px;" dir="rtl">
+                                    نسخة : المدير العام &amp; مدير القسم &amp; الرواتب &amp; الإدارة المالية
+                                </td>
+                            </tr>
+                        </table>
+                        <div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <report
+            id="resignation_with_notice_period_report"
+            string="Print"
+            model="boutiqaat.report.wizarad"
+            report_type="qweb-pdf"
+            name="boutiqaat_reports.resignation_with_notice_period"
+            file="boutiqaat_reports.resignation_with_notice_period"
+            print_report_name="'Resignation with Notice Period'"
+            menu="False"
+        />
+
+    </data>
+</odoo>

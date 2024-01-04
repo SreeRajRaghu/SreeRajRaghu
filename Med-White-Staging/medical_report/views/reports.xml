@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="paper_format_patient_sticker" model="report.paperformat">
+        <field name="name">Patient Sticker</field>
+        <field name="format">custom</field>
+        <field name="page_height">43</field>
+        <field name="page_width">100</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">0.2</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0.2</field>
+        <field name="margin_right">0.2</field>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="base.paperformat_euro" model="report.paperformat">
+        <field name="margin_top">48</field>
+        <field name="header_spacing">44</field>
+    </record>
+
+    <report
+        id="report_patient_sticker_action"
+        model="res.partner"
+        string="Patient Sticker"
+        report_type="qweb-pdf"
+        name="medical_report.report_patient_sticker"
+        file="medical_report.report_patient_sticker"
+        paperformat="paper_format_patient_sticker"
+    />
+
+    <record id="paper_format_patient_file" model="report.paperformat">
+        <field name="name">Patient File</field>
+        <field name="format">A4</field>
+        <!-- <field name="page_height">43</field> -->
+        <!-- <field name="page_width">100</field> -->
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">1</field>
+        <field name="margin_bottom">30</field>
+        <field name="margin_left">1</field>
+        <field name="margin_right">1</field>
+        <field name="header_spacing">1</field>
+        <field name="dpi">90</field>
+    </record>
+
+	<report
+        id="action_report_patient_file"
+        string="Patient File"
+        model="res.partner"
+        report_type="qweb-pdf"
+        file="medical_report.report_patient_file"
+        name="medical_report.report_patient_file"
+        print_report_name="'Patient File %s - %s' % (object.name, object.file_no)"
+        paperformat="paper_format_patient_file"
+    />
+
+    <record id="appointment_resource_details_report" model="ir.actions.report">
+        <field name="name">Appointment Details</field>
+        <field name="model">report.medical_report.resource.details</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">medical_report.medical_resource_report_template</field>
+    </record>
+</odoo>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="asset_branch_transfer_form" model="ir.ui.view">
+        <field name="name">transfer.branch.form</field>
+        <field name="model">transfer.branch</field>
+        <field name="arch" type="xml">
+            <form string="Transfer Asset">
+                <sheet>
+                    <separator string="Transfer Asset"/>
+                    <group>
+                        <group>
+                            <field name="current_branch_id" readonly="1"/>
+                            <field name="current_analytic_account" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="date" readonly="0"/>
+                            <field name="branch_id" readonly="0"/>
+                            <field name="analytic_account" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                        <button class="oe_highlight" name="assets_branch_transfer" string="Issue" type="object"/>
+                        <button special="cancel" string="_Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_asset_branch_transfer" model="ir.actions.act_window">
+        <field name="name">Transfer Branch</field>
+        <field name="res_model">transfer.branch</field>
+        <field name="view_mode">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="asset_branch_transfer_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

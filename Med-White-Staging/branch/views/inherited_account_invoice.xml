@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- journal entry Inherit Form View to Modify it -->
+        <record id="view_move_form_inherit_branch" model="ir.ui.view">
+            <field name="name">view.move.form.inherit.branch</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='journal_id']" position="after">
+                    <field name="type" invisible="1"/>
+                    <field name="branch_id" attrs="{'required': [('type', 'in', ['entry','in_invoice'])]}"/>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']" position="attributes">
+                    <attribute name="context">{'branch_id' : branch_id}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']" position="attributes">
+                    <attribute name="context">{'branch_id' : branch_id}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='account_id']" position="after">
+                    <field name="branch_id"/>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']//tree//field[@name='partner_id']" position="after">
+                    <field name="branch_id"/>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']//tree//field[@name='analytic_account_id']" position="replace">
+<!--                                               domain="[('branch_id', '=',branch_id)]"-->
+
+                    <field name="analytic_account_id" optional="hide"
+                           groups="analytic.group_analytic_accounting"
+                           attrs="{'invisible': [('display_type', 'in', ('line_section', 'line_note'))]}"
+
+                           domain="['&amp;','|', ('company_id', '=', parent.company_id), ('company_id', '=', False),('branch_ids', 'in',branch_id)]"
+                           />
+
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="view_move_line_tree_inherit_branch" model="ir.ui.view">
+            <field name="name">view.move.line.tree.inherit.branch</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="branch_id" attrs="{'readonly' : [('parent_state', '=' , 'posted')]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_move_line_order_filter_inherit_branch11" model="ir.ui.view">
+            <field name="name">move.line.filter.inherit.branch</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group" position="inside">
+                        <filter string="Branch" name="branch" domain="[]" context="{'group_by':'branch_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

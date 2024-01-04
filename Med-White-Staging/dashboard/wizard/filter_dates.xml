@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <record id="view_wizard_filter_dates" model="ir.ui.view">
+        <field name="name">Filter By Dates</field>
+        <field name="model">filter.dates</field>
+        <field name="arch" type="xml">
+        <form string="Filter Dates">
+             <group>
+                <group>
+                    <field name="date_from" />
+                    <field name="date_to"/>
+                    <field name="account_analytic_ids" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                    <field name="day"/>
+                    <field name="month"/>
+                    <field name="user_id" widget="selection"/>
+                </group>
+            </group>
+            <footer>
+                <button name="confirm_filter"  type="object" string="Confirm" class="oe_highlight"/>
+                <button class="oe_link" special="cancel" string="Cancel"/>
+            </footer>
+        </form>
+        </field>
+    </record>
+
+    <record id="wizard_act_filter_dates" model="ir.actions.act_window">
+        <field name="name">Filter Dates</field>
+        <field name="res_model">filter.dates</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_wizard_filter_dates"/>
+        <!-- <field name="auto_refresh" eval="1" /> -->
+        <field name="target">new</field>
+        <field name="context">{'dashboard_dashboard':active_id}</field>
+    </record>
+
+
+</data>
+</odoo>

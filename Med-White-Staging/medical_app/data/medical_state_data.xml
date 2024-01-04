@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="medical_state_draft" model="medical.state">
+            <field name="name">draft</field>
+            <field name="sequence">1</field>
+            <field name="s_color">rgb(128,128,128)</field>
+        </record>
+
+        <record id="medical_state_confirmed" model="medical.state">
+            <field name="name">confirmed</field>
+            <field name="sequence">2</field>
+            <field name="s_color">rgb(0,128,0)</field>
+        </record>
+
+        <record id="medical_state_arrived" model="medical.state">
+            <field name="name">arrived</field>
+            <field name="sequence">3</field>
+            <field name="s_color">rgb(80,128,80)</field>
+        </record>
+
+        <record id="medical_state_late" model="medical.state">
+            <field name="name">late</field>
+            <field name="sequence">4</field>
+            <field name="s_color">rgba(255,0,0,1)</field>
+        </record>
+
+        <record id="medical_state_in" model="medical.state">
+            <field name="name">in</field>
+            <field name="sequence">5</field>
+            <field name="s_color">rgba(171,142,142,0.38)</field>
+        </record>
+
+        <record id="medical_state_out" model="medical.state">
+            <field name="name">out</field>
+            <field name="sequence">6</field>
+            <field name="s_color">rgba(220,202,40,1)</field>
+        </record>
+
+        <record id="medical_state_invoiced" model="medical.state">
+            <field name="name">invoiced</field>
+            <field name="sequence">7</field>
+            <field name="s_color">rgba(220,180,40,1)</field>
+        </record>
+
+        <record id="medical_state_paid" model="medical.state">
+            <field name="name">paid</field>
+            <field name="sequence">8</field>
+            <field name="s_color">rgba(120,180,40,1)</field>
+        </record>
+
+        <record id="medical_state_no_answer" model="medical.state">
+            <field name="name">no_answer</field>
+            <field name="sequence">9</field>
+            <field name="s_color">rgba(171,142,142,0.38)</field>
+        </record>
+
+        <record id="medical_state_no_show" model="medical.state">
+            <field name="name">no_show</field>
+            <field name="sequence">10</field>
+            <field name="s_color">rgba(171,142,142,0.38)</field>
+        </record>
+
+        <record id="medical_state_done" model="medical.state">
+            <field name="name">done</field>
+            <field name="sequence">11</field>
+            <field name="s_color">rgba(171,142,142,0.38)</field>
+        </record>
+
+        <record id="medical_state_cancel" model="medical.state">
+            <field name="name">cancel</field>
+            <field name="sequence">12</field>
+            <field name="s_color">rgba(171,142,142,0.38)</field>
+        </record>
+    </data>
+</odoo>

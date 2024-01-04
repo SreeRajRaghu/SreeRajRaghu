@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_wizard_loan_close" model="ir.ui.view">
+        <field name="name">wizard.loan.close.form</field>
+        <field name="model">wizard.loan.close</field>
+        <field name="arch" type="xml">
+            <form string="Loan Closed">
+                <group>
+                    <group>
+                        <field name="amount_pending" readonly="True"/>
+                        <field name="amount_to_pay" required="True"/>
+                        <field name="remaining_amount" />
+                    </group>
+                    <group>
+                        <field name="installment" attrs="{'invisible': [('remaining_amount', '&lt;=', 0.0)]}"/>
+                        <field name="payment_date" required="True"/>
+                        <field name="reference"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_settlement" string="Settlement" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_loan_close" model="ir.actions.act_window">
+        <field name="name">Loan Close</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wizard.loan.close</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_wizard_loan_close"/>
+        <field name="target">new</field>
+    </record>
+    
+</odoo>

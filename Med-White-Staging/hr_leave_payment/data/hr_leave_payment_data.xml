@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="work_entry_type_payment_leave" model="hr.work.entry.type">
+        <field name="name">Payment Leave</field>
+        <field name="code">WORK100</field>
+        <field name="color">0</field>
+        <field name="sequence">25</field>
+        <field name="round_days">NO</field>
+        <field name="round_days_type">DOWN</field>
+    </record>
+
+</odoo>

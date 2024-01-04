@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="edit_holiday_status_form_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.type.form.inherit</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+        <field name="arch" type="xml">
+
+            <field name="responsible_id" position="attributes">
+                <attribute name="attrs">{'invisible': [('validation_type', 'not in', ['hr', 'both'])], 'required': [('validation_type', 'in', ['hr', 'both'])]}
+                </attribute>
+            </field>
+
+            <field name="validation_type" position="after">
+                <field name="approver_ids" attrs="{'invisible': [ ('validation_type', '!=', 'multiple')]}">
+                    <tree string="Approvers" editable="bottom">
+                        <field name="sequence"/>
+                        <field name="approver_type"/>
+                        <field name="group_id" attrs="{'readonly': [ ('approver_type', '!=', 'hr_group')]}"/>
+                    </tree>
+                    <form string="Approver">
+                        <group>
+                            <group>
+                                <field name="sequence"/>
+                            </group>
+                            <group>
+                                <field name="approver_type"/>
+                                <field name="group_id" attrs="{'readonly': [ ('approver_type', '!=', 'hr_group')]}"/>
+                            </group>
+                        </group>
+                    </form>
+                </field>
+
+                <field name="resumer_ids" attrs="{'invisible': [ ('validation_type', '!=', 'multiple')]}">
+                    <tree string="Resumer" editable="bottom">
+                        <field name="sequence"/>
+                        <field name="approver_type"/>
+                        <field name="group_id" attrs="{'readonly': [ ('approver_type', '!=', 'hr_group')]}"/>
+                    </tree>
+                    <form string="Resumers">
+                        <group>
+                            <group>
+                                <field name="sequence"/>
+                            </group>
+                            <group>
+                                <field name="approver_type"/>
+                                <field name="group_id" attrs="{'readonly': [ ('approver_type', '!=', 'hr_group')]}"/>
+                            </group>
+                        </group>
+                    </form>
+                </field>
+            </field>
+
+            <field name="validity_stop" position="after">
+                <field name="is_resume_date_required"/>
+                <field name="allow_previous_leave"/>
+            </field>
+
+            <field name="allocation_type" position="after">
+                <field name="is_auto_allocate"/>
+                <field name="auto_allocation_date" readonly="1" attrs="{'invisible': [ ('is_auto_allocate', '=', False)]}"  groups="base.group_no_one"/>
+            </field>
+
+        </field>
+    </record>
+
+    <record id="hr_leave_view_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.tree.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_tree"/>
+        <field name="arch" type="xml">
+            <button name="action_approve" position="before">
+                <field name="is_show_approve" invisible="1"/>
+                <field name="can_approve" invisible="1"/>
+            </button>
+            <button name="action_approve" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', '|', ('is_show_approve', '=', False), ('can_approve', '=', False), ('state', '!=', 'confirm')]}</attribute>
+                <attribute name="states"></attribute>
+            </button>
+            <button name="action_validate" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', '|', ('is_show_approve', '=', False), ('can_approve', '=', False), ('state', '!=', 'confirm')]}</attribute>
+                <attribute name="states"></attribute>
+            </button>
+        </field>
+    </record>
+
+    <!-- Leave Approval History -->
+
+    <record id="hr_leave_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.form.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
+            <button name="action_approve" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', '|', ('is_show_approve', '=', False), ('can_approve', '=', False), ('state', '!=', 'confirm')]}</attribute>
+            </button>
+            <button name="action_refuse" position="after">
+                <button string="Resume" name="action_resume" type="object" attrs="{'invisible': ['|', '|', ('is_show_resume', '=', False), ('state', '!=', 'validate'), ('is_resume', '=', True)]}"/>
+            </button>
+            <xpath expr="//div[@name='description']" position="after">
+                <group>
+                    <field name="date_resume" readonly="1" attrs="{'invisible': [('state', '!=', 'validate')]}"/>
+                    <field name="allocation_request_id" readonly="1" attrs="{'invisible': [('state', '!=', 'validate')]}"/>
+                    <field name="leave_request_id" readonly="1" attrs="{'invisible': [('state', '!=', 'validate')]}"/>
+                    <field name="resume_days" attrs="{'invisible': [('state', '!=', 'validate')]}"/>
+                    <field name="leave_reason" attrs="{'invisible': ['|', ('state', '!=', 'validate'), ('resume_days', '=', 0.0)]}"/>
+                    <field name="is_show_approve" invisible="1"/>
+                    <field name="leave_approval_history_ids" force_save="1" attrs="{'invisible': [('leave_approval_history_ids', '=', [])]}">
+                        <tree string="Leave Approval History" create="false" edit="false">
+                            <field name="sequence"/>
+                            <field name="approver_type"/>
+                            <field name="is_approve"/>
+                            <field name="approved_by_id"/>
+                            <field name="approved_time"/>
+                            <field name="group_id"/>
+                        </tree>
+                        <form string="Leave Approval History">
+                            <group>
+                                <group>
+                                    <field name="sequence" readonly="1"/>
+                                    <field name="is_approve" readonly="1"/>
+                                    <field name="group_id"/>
+                                </group>
+                                <group>
+                                    <field name="approver_type" readonly="1"/>
+                                    <field name="approved_by_id"/>
+                                    <field name="approved_time"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                    <field name="is_employee_resume" invisible="1"/>
+                    <field name="is_show_resume" invisible="1"/>
+                    <field name="is_resume" invisible="1"/>
+                    <field name="leave_resume_history_ids" force_save="1" attrs="{'invisible': [('leave_resume_history_ids', '=', [])]}">
+                        <tree string="Leave Resume History" create="false" edit="false">
+                            <field name="sequence"/>
+                            <field name="approver_type"/>
+                            <field name="is_approve"/>
+                            <field name="approved_by_id"/>
+                            <field name="approved_time"/>
+                            <field name="group_id"/>
+                        </tree>
+                        <form string="Leave Resume History">
+                            <group>
+                                <group>
+                                    <field name="sequence" readonly="1"/>
+                                    <field name="is_approve" readonly="1"/>
+                                    <field name="group_id"/>
+                                </group>
+                                <group>
+                                    <field name="approver_type" readonly="1"/>
+                                    <field name="approved_by_id"/>
+                                    <field name="approved_time"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </group>
+            </xpath>
+
+            <field name="user_id" position="before">
+                <field name="is_resume_date_required" invisible="1"/>
+                <field name="leave_resume_date" attrs="{'required': [('is_resume_date_required', '=', True)]}"/>
+            </field>
+
+        </field>
+    </record>
+
+    <!-- hr group form -->
+
+    <record id="view_hr_group_form" model="ir.ui.view">
+        <field name="name">hr.group.form</field>
+        <field name="model">hr.group</field>
+        <field name="arch" type="xml">
+            <form string="HR Group">
+                <sheet>
+                    <label for="name"/>
+                    <h2>
+                        <field name="name" />
+                    </h2>
+                    <group>
+                        <field name="emp_approve_ids" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_group_tree" model="ir.ui.view">
+        <field name="name">hr.group.tree</field>
+        <field name="model">hr.group</field>
+        <field name="arch" type="xml">
+            <tree string="HR Group">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_group" model="ir.actions.act_window">
+        <field name="name">HR Group</field>
+        <field name="res_model">hr.group</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        action="action_hr_group"
+        id="menu_action_hr_group"
+        parent="hr_holidays.menu_hr_holidays_configuration"/>
+
+    <record id="resource_calendar_leave_form" model="ir.ui.view">
+        <field name="name">resource.calendar.leaves.form</field>
+        <field name="model">resource.calendar.leaves</field>
+        <field name="arch" type="xml">
+            <form string="Leave Detail">
+            <sheet>
+                <group>
+                    <group name="leave_details">
+                        <field name="name" string="Reason"/>
+                        <field name="calendar_id"/>
+                        <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company" attrs="{'invisible':[('calendar_id','=',False)]}"/>
+                        <!-- <field name="resource_id"/> -->
+                    </group>
+                    <group name="leave_dates">
+                       <field name="date_from"/>
+                       <field name="date_to"/>
+                    </group>
+                </group>
+            </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="resource_calendar_leave_tree" model="ir.ui.view">
+        <field name="name">resource.calendar.leaves.tree</field>
+        <field name="model">resource.calendar.leaves</field>
+        <field name="arch" type="xml">
+            <tree string="Global Time Off">
+                <field name="name" string="Reason"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="calendar_id" />
+                <field name="date_from" />
+                <field name="date_to" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="resource_calendar_leaves_action" model="ir.actions.act_window">
+        <field name="name">Global Time Off</field>
+        <field name="res_model">resource.calendar.leaves</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="domain">[('resource_id', '=', False)]</field>
+        <field name="search_view_id" ref="resource.view_resource_calendar_leaves_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('resource_calendar_leave_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('resource_calendar_leave_form')})]"/>
+    </record>
+
+    <menuitem
+        action="resource_calendar_leaves_action"
+        id="menu_hr_global_time_off"
+        parent="hr_holidays.menu_hr_holidays_configuration"/>
+
+    <!-- employee -->
+    <record id="view_employee_form_group_inherit" model="ir.ui.view">
+        <field name="name">hr.hr.employee.view.form2</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="group_id"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- log -->
+
+    <record id="att_upload_log_inherit_form" model="ir.ui.view">
+        <field name="name">att.upload.log.more.fields.inherit</field>
+        <field name="model">att.upload.log</field>
+        <field name="inherit_id" ref="hr_attendance_time.att_upload_log_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_button_box']" position="inside">
+                <button name="%(hr_holidays.hr_leave_action_all)s" type="action" class="oe_stat_button" icon="fa-file" context="{'search_default_att_log_id': active_id}" help="Leave Log">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="leave_count"/>
+                        </span>
+                        <span class="o_stat_text">
+                            Uploaded Leaves
+                        </span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- hr allocation -->
+
+    <record id="hr_leave_allocation_view_form_manager_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.view.form.inherit</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_form_manager"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <field name="is_auto_generate" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

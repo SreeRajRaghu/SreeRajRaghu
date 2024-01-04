@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Main Menu -->
+    <menuitem id="menu_medical_app" name="Medical" web_icon="fa fa-medkit,#ffffff,#6d3e3e" sequence="10" groups="medical_app.group_medical_user"/>
+
+    <menuitem id="menu_medical_app_scheduler_lbl" name="Scheduler" parent="medical_app.menu_medical_app" sequence="10" groups="medical_app.group_medical_user"/>
+
+    <!-- Submenus -->
+    <!-- Configuration -->
+    <menuitem id="menu_medical_app_config" name="Configuration" parent="medical_app.menu_medical_app" sequence="100" groups="medical_app.group_medical_admin"/>
+
+    <!-- Order -->
+    <menuitem id="menu_medical_order_menu" name="Appointments" parent="medical_app.menu_medical_app" sequence="20" groups="medical_app.group_medical_user"/>
+
+    <menuitem id="menu_medical_master_data" name="Master Data"
+        parent="medical_app.menu_medical_app" sequence="25"/>
+
+    <menuitem id="menu_medical_misc_menu" name="Misc"
+        groups="medical_app.group_medical_cashier"
+        parent="medical_app.menu_medical_app"
+        sequence="40"/>
+
+    <record id="action_medical_patient" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_type_patient': 1}</field>
+    </record>
+    <menuitem id="menu_medical_patient" name="Patients" parent="medical_app.menu_medical_master_data" action="medical_app.action_medical_patient" sequence="20"/>
+
+    <menuitem id="menu_medical_product" name="Products / Services" action="product.product_template_action_all" parent="medical_app.menu_medical_master_data" sequence="30"/>
+    <menuitem id="menu_medical_product_variant" name="Product Variants" action="product.product_normal_action" parent="medical_app.menu_medical_master_data" sequence="40" groups="product.group_product_variant"/>
+
+    <record id="action_product_pricelists" model="ir.actions.act_window">
+        <field name="name">Pricelists</field>
+        <field name="res_model">product.pricelist</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('insurance_company_id', '=', False)]</field>
+    </record>
+
+    <menuitem id="menu_medical_pricelists" name="Pricelists" action="medical_app.action_product_pricelists" parent="medical_app.menu_medical_master_data" sequence="35"/>
+
+    <!-- Insurance Company -->
+    <record id="action_medical_company" model="ir.actions.act_window">
+        <field name="name">Company</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_insurance_company', '=', True), ('parent_id', '=', False)]</field>
+    </record>
+
+    <record id="action_medical_sub_company" model="ir.actions.act_window">
+        <field name="name">Company</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_insurance_company', '=', True), ('parent_id', '!=', False)]</field>
+    </record>
+
+    <record id="action_medical_scheme" model="ir.actions.act_window">
+        <field name="name">Insurance Schemes</field>
+        <field name="res_model">product.pricelist</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('insurance_company_id', '!=', False)]</field>
+    </record>
+
+    <menuitem id="menu_medical_insurance" name="Insurance" parent="medical_app.menu_medical_misc_menu" sequence="40" groups="medical_app.group_manage_insurance"/>
+    <menuitem id="menu_medical_insurance_company" name="Company" action="medical_app.action_medical_company" parent="medical_app.menu_medical_insurance" sequence="10"/>
+    <menuitem id="menu_medical_insurance_sub_company" name="Sub Company" action="medical_app.action_medical_sub_company" parent="medical_app.menu_medical_insurance" sequence="20"/>
+    <menuitem id="menu_medical_insurance_scheme" name="Insurance Schemes" action="medical_app.action_medical_scheme" parent="medical_app.menu_medical_insurance" sequence="30"/>
+
+    <menuitem id="menu_medical_reporting" name="Reporting" parent="medical_app.menu_medical_app" sequence="60"/>
+</odoo>

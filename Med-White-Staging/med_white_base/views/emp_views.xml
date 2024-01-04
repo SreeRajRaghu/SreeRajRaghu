@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_department_form" model="ir.ui.view">
+        <field name="name">hr.department.form.medical.app</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="arch" type="xml">
+            <field name="company_id" position="after">
+                <field name="analytic_account_id" domain="['|', ('company_id', '=', company_id), ('company_id', '=', False)]" groups="analytic.group_analytic_accounting"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_employee_form_medical_app" model="ir.ui.view">
+        <field name="name">hr.employee.form.medical.app</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="emp_type_id" />
+                <field name="emp_level_id" />
+                <field name="contract_type" />
+            </field>
+            <field name="certificate_level" position="replace">
+                <field name="certificate_level_id" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_employee_filter" model="ir.ui.view">
+        <field name="name">hr.employee.search.medical.app</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter"/>
+        <field name="arch" type="xml">
+            <filter name="group_job" position="after">
+                <filter name="emp_type_id" string="Employee Type" domain="[]" context="{'group_by': 'emp_type_id'}"/>
+                <filter name="emp_level_id" string="Level" domain="[]" context="{'group_by': 'emp_level_id'}"/>
+            </filter>
+        </field>
+    </record>
+
+    <record id="hr_emp_type_tree" model="ir.ui.view">
+        <field name="name">hr.emp.type.form.medical.app</field>
+        <field name="model">hr.emp.type</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_emp_type_action" model="ir.actions.act_window">
+        <field name="name">Employee Type</field>
+        <field name="res_model">hr.emp.type</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem parent="hr.menu_human_resources_configuration"
+        groups="hr.group_hr_manager"
+        id="menu_hr_emp_type"
+        name="Employee Type"
+        action="hr_emp_type_action" sequence="61" />
+
+    <record id="hr_emp_level_tree" model="ir.ui.view">
+        <field name="name">hr.emp.level.form.medical.app</field>
+        <field name="model">hr.emp.level</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_emp_level_action" model="ir.actions.act_window">
+        <field name="name">Employee Level</field>
+        <field name="res_model">hr.emp.level</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem parent="hr.menu_human_resources_configuration"
+        groups="hr.group_hr_manager"
+        id="menu_hr_emp_level"
+        name="Employee Level"
+        action="hr_emp_level_action" sequence="62" />
+
+    <record id="hr_emp_certificate_tree" model="ir.ui.view">
+        <field name="name">hr.certificate.form.medical.app</field>
+        <field name="model">hr.certificate</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_emp_certificate_action" model="ir.actions.act_window">
+        <field name="name">Certificate Level</field>
+        <field name="res_model">hr.certificate</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem parent="hr.menu_human_resources_configuration"
+        groups="hr.group_hr_manager"
+        id="menu_hr_emp_certificate"
+        name="Certificate Level"
+        action="hr_emp_certificate_action" sequence="62" />
+
+</odoo>

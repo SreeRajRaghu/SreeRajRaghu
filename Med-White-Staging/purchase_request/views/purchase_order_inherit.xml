@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="purchase_order_form_inherit_confirm_order" model="ir.ui.view">
+        <field name="name">purchase.order.form.partner.commission</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_rfq_send']" position="before">
+                <button name="action_to_finance" string="To Finance Approval" class="oe_highlight" type="object"
+                        groups="purchase_request.button_purchase_order_to_finance" attrs="{'invisible': [('state','!=', 'draft')]}"/>
+                <button name="action_to_ceo_state" string="Send to ceo" class="oe_highlight" type="object"
+                        groups="purchase_request.button_purchase_order_ceo_approval" attrs="{'invisible': [('state','!=', 'finance')]}"/>
+                <button name="confirm_order_button" string="Confirm Order" class="oe_highlight" type="object"
+                        groups="purchase_request.button_purchase_order_ceo_approved" attrs="{'invisible': [('state','!=', 'ceo_approval')]}"/>
+                <button name="action_to_cancel" string="Reject" class="oe_highlight" type="object"
+                        groups="purchase_request.button_purchase_order_finance_reject" attrs="{'invisible': [('state','not in', ('finance','ceo_approval'))]}"/>
+            <button name="action_to_cancel2" string="Reject" class="oe_highlight" type="object"
+                        groups="purchase_request.button_purchase_order_ceo_reject" attrs="{'invisible': [('state','not in', ('ceo_approval'))]}"/>
+            </xpath>
+            <xpath expr="//header/button[@id='bid_confirm']" position="attributes">
+                <attribute name="groups">purchase_request.group_for_confirm_order_button</attribute>
+            </xpath>
+            <xpath expr="//header/button[@id='draft_confirm']" position="attributes">
+                <attribute name="groups">purchase_request.group_for_confirm_order_button</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="custom_domain_form" model="ir.ui.view">
+        <field name="name">custom.domain.form</field>
+        <field name="model">custom.domain</field>
+        <field name="arch" type="xml">
+            <form string="Custom Domain">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="custom_field"/>
+                            <field name="operator"/>
+                            <field name="custom_value"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="base_notif_form" model="ir.ui.view">
+        <field name="name">notif.trigger.form</field>
+        <field name="model">notif.trigger</field>
+        <field name="arch" type="xml">
+            <form string="Notification Trigger">
+                <header>
+                    <button name="btn_process_notif" string="Force Send Notification"
+                            class="oe_highlight" type="object"/>
+                </header>
+                <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options="{'terminology': {'string_true': 'Production', 'string_false': 'Demo', 'hover_true': 'Demo' , 'hover_false': 'Production'}}"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" class="oe_inline"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="model_id" options="{'no_create': True}"/>
+                            <field name="model_name" invisible="1"/>
+                            <field name="domain" widget="domain" options="{'model': 'model_name'}"/>
+                        </group>
+                        <group>
+                            <field name="custom_domain_ids">
+                                <tree editable="bottom" string="Custom Filter">
+                                    <field name="custom_field"/>
+                                    <field name="operator"/>
+                                    <field name="custom_value"/>
+                                    <field name="duration" />
+                                    <field name="dur_period" attrs="{'required': [('duration', '>', 0)]}"/>
+                                </tree>
+                            </field>
+                            <field name="custom_domain_str" groups="base.group_no_one"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Actions">
+                            <field name="on_action"/>
+                            <field name="send_mail" />
+                            <field name="send_sms" groups="base_notification.group_sms_notification"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="SMS Config" attrs="{'invisible': [('send_sms','=', False)]}" groups="base_notification.group_sms_notification">
+                            <field name="keep_sms_history" />
+                            <field name="sms_config_id"/>
+                            <field name="msg_template_id" class="oe_inline"/>
+                            <field name="trigger_once" />
+                        </group>
+                        <group string="Email Config"
+                               attrs="{'invisible': [('send_mail','=', False)]}">
+                            <field name="template_id" class="oe_inline"
+                                   attrs="{'required':['|',('send_mail','=', True)]}"/>
+                            <field name="is_multiple"/>
+                            <field name="force_send"/>
+                            <field name="auto_delete" string="Auto Delete After Mail Sent?"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Recipients">
+                            <field name="recipient_ids">
+                                <tree editable="top">
+                                    <field name="recipient_type"/>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Scheduled Action" attrs="{'invisible': [('on_action','!=','cron')]}">
+                            <field name="ir_cron_id" attrs="{'invisible': [('on_action','!=', 'cron')],
+                            'required':[('on_action','=', 'cron')]}"/>
+                        </page>
+                        <page string="Help">
+                            <group>
+                                <div class="alert alert-info" role="alert"
+                                     style="margin-bottom:0px;">
+                                    We have predefined variables
+                                    <strong class="alert-link">computed_date</strong>
+                                    and 
+                                    <strong class="alert-link">computed_datetime</strong>
+                                    to use as filter value.
+                                    <br/>
+                                    <h3>Computation</h3>
+                                    <ul>
+                                        <li><strong>computed_date</strong> is the exact date while action and <strong>computed_datetime</strong> is date and time (without seconds).</li>
+                                        <li>The calculations will be computed_date = Current Datetime (By Cron) + after/before X hours/days/month.
+                                        <br />
+                                        e.g due_date + &lt; + computed_date + after 5 days</li>
+                                        ['due_date','&lt;', '2019-04-04']
+                                        <li>All records matching above filter will be fetched.</li>
+                                    </ul>
+                                </div>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="base_notif_tree" model="ir.ui.view">
+        <field name="name">notif.trigger.tree</field>
+        <field name="model">notif.trigger</field>
+        <field name="arch" type="xml">
+            <tree string="Notification">
+                <field name="name"/>
+                <field name="model_id"/>
+                <field name="on_action"/>
+                <field name="send_mail" invisible="1"/>
+                <field name="send_sms" groups="base_notification.group_sms_notification"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="notif_trigger_action" model="ir.actions.act_window">
+        <field name="name">Setup Notification</field>
+        <field name="res_model">notif.trigger</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'active_test': False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a Notification Configuration
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_root_base_notif"
+              name="Notification"
+              action="notif_trigger_action"
+              icon="fa-bell"
+              web_icon="base_notification,static/description/icon.png"
+              groups="group_notification"
+              sequence="1"/>
+
+    <menuitem id="menu_notif_config"
+              name="Notification Trigger"
+              sequence="0"
+              action="notif_trigger_action"
+              parent="menu_root_base_notif" />
+</odoo>

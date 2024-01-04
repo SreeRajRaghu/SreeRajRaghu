@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ASSET FRONTED -->
+    <template id="assets_frontend" inherit_id="website.assets_frontend">
+        <xpath expr="script[last()]" position="after">
+            <script type="text/javascript" src="/medical_lab_website/static/src/js/website_appointment_line.js"/>
+            <link href='/medical_lab_website/static/src/css/style.css' rel='stylesheet' />
+            <link href="/medical_lab_website/static/src/css/font.scss" rel="stylesheet" type="text/scss" />
+            <link rel="stylesheet" type="text/scss" href="/medical_lab_website/static/src/less/theme.scss"/>
+            <!-- <link rel="stylesheet" type="text/scss" href="/medical_lab_website/static/src/css/style.css"/> -->
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_menu_cust_orders" name="Portal layout : Lab Test Requests menu entries" inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'appointment'" t-attf-class="breadcrumb-item active">
+                Lab Test Requests
+                <div class="ml-5 btn btn-secondary btn-sm font-weight-bold" onclick="window.location = '/book_appointment'"> Create New </div>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="account.portal_my_home_invoice" name="Portal My Home : invoice entries" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            &#032;
+<!--            <t t-if="invoice_count" t-call="portal.portal_docs_entry">-->
+<!--                <t t-set="title">Invoices &amp; Bills</t>-->
+<!--                <t t-set="url" t-value="'/my/invoices'"/>-->
+<!--                <t t-set="count" t-value="request.env['account.move'].search_count([-->
+<!--            ('type', 'in', ('out_invoice', 'in_invoice', 'out_refund', 'in_refund', 'out_receipt', 'in_receipt')),-->
+<!--            ('partner_id', '=', request.env.user.partner_id.id),])"/>-->
+<!--            </t>-->
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_appointment_request" name="Show Lab Test Requests" customize_show="True"  inherit_id="portal.portal_my_home" priority="45">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Lab Test Requests</t>
+                <t t-set="url" t-value="'/my/appointment'"/>
+                <t t-set="count" t-value="request.env['medical.order'].sudo().search_count([('resource_id.partner_id','=',request.env.user.partner_id.id)])"/>
+            </t>
+        </xpath>
+        <xpath expr="//div[hasclass('o_portal_my_home')]/h3" position="replace">
+         </xpath>
+    </template>
+    <template id="portal_my_appointment" name="Lab Test Requests">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Lab Test Requests</t>
+            </t>
+            <t t-if="not requests">
+                <div class="alert alert-warning mt8" role="alert">
+                    There are no requests.
+                </div>
+            </t>
+            <t t-if="requests" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Lab Test Requests #</th>
+                        <th>Patient</th>
+                        <th>Lab Test Requests Date</th>
+                        <th>Request Date</th>
+                        <th class="text-center">
+                            State
+                        </th>
+                    </tr>
+                </thead>
+                <t t-foreach="requests" t-as="req">
+                    <tr>
+                        <td><a t-att-href="'/appointment/details/%s' % req.id"><span t-field="req.name"/></a></td>
+                        <td><span t-field="req.partner_id.name"/></td>
+                        <td><span t-field="req.start_time"/></td>
+                        <td><span t-field="req.create_date"/></td>
+                        <td class="text-center">
+                            <span class="badge badge-pill badge-secondary"><i class="fa fa-fw fa-remove"/> <span t-field="req.state"/></span>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_appointment_details" name="MyAppointment">
+        <t t-call="portal.portal_layout">
+            <t t-if="appointment" t-call="portal.portal_table">
+                <tr>
+                    <td>
+                        <span>
+                            <strong>Patient:</strong>
+                        </span>
+                    </td>
+                    <td>
+                        <t t-if="appointment.partner_id">
+                            <span t-field="appointment.partner_id.name"/>
+                        </t>
+                    </td>
+                    <td>
+                        <span>
+                            <strong>Branch:</strong>
+                        </span>
+                    </td>
+                    <td>
+                        <span t-field="appointment.clinic_id.name"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>
+                            <strong>Lab Test Requests:</strong>
+                        </span>
+                    </td>
+                    <td>
+                        <span t-field="appointment.name"/>
+                        <br/>
+                    </td>
+                    <td>
+                        <span>
+                            <strong>Insurance Card:</strong>
+                        </span>
+                    </td>
+                    <td>
+                        <span t-field="appointment.insurance_card_id.name"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>
+                            <strong>Start Date:</strong>
+                        </span>
+                    </td>
+                    <td>
+                        <span t-field="appointment.start_time"/>
+                        <br/>
+                    </td>
+                    <td>
+                        <span>
+                            <strong>End Date:</strong>
+                        </span>
+                    </td>
+                    <td>
+                        <span t-field="appointment.end_time"/>
+                    </td>
+                </tr>
+            </t>
+            <div class="tabcontent mt-3 p-3 bg-white MyAppointment_table">
+                <h3>Services Requested</h3>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Department</th>
+                            <th>Description</th>
+                            <th class="text-right">Quantity</th>
+                            <!-- <th class="text-right">Patient Share</th>
+                            <th class="text-right">Disc.%</th>
+                            <th class="text-right">Subtotal</th> -->
+                            <th class="text-right">
+                                Lab Test
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="appointment.line_ids" t-as="line">
+                            <td>
+                                <span t-field="line.product_id"/>
+                            </td>
+                            <td>
+                                <span t-field="line.product_id.categ_id"/>
+                            </td>
+                            <td>
+                                <span t-field="line.name"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-field="line.qty"/>
+                            </td>
+                            <!-- <td class="text-right">
+                                <span t-field="line.payable_price_unit"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-field="line.discount"/>
+                            </td>
+                            <td class="text-right">
+                                <span class="text-nowrap" t-field="line.subtotal"/>
+                            </td> -->
+                            <td class="text-right">
+                                <span class="text-nowrap" style="text-transform: capitalize;" t-field="line.lab_test_status"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row mt-5">
+                    <div class="col-md-8 col-sm-12">
+                    <h3>Lab Tests</h3>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Ref</th>
+                                <th>Department</th>
+                                <th>Lab Test</th>
+                                <th>Completion Date</th>
+                                <th>Status</th>
+                                <th>
+                                    <span class="bg-beta p-app-print fa fa-print p-2" style="cursor: pointer;" t-att-data-appointment="appointment.id" t-att-data-lab_test_ids="appointment.medical_lab_test_ids.ids">
+                                        <span class="ml-2">Result</span>
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="appointment.medical_lab_test_ids.filtered(lambda r: r.state != 'cancelled')" t-as="line">
+                                <td>
+                                    <span t-esc="line_index + 1"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.name"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.lab_department_id.name"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.test_type_id.name"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.date_completed"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.state"/>
+                                </td>
+                                <td>
+                                    <t t-if="line.state in ['completed','handover']">
+                                        <span class="bg-beta p-lab-print fa fa-print pl-4 pr-4 p-1" style="cursor: pointer;" t-att-data-lab_test_ids="line.id"></span>
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <div class="col-md-4 col-sm-12 text-right" t-if="attachments">
+                        <h3>Attachments</h3>
+                        <table class="table table-sm w-100">
+                            <tr t-foreach="attachments" t-as="attach">
+                                <td>
+                                    <a target="_new"
+                                        t-att-href="attach.local_url and attach.local_url + '&amp;download=true' or '#'">
+                                        <span t-field="attach.name" />
+                                        <span class="fa fa-download" />
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <h3>Note</h3>
+                    <p t-raw="appointment.note" />
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+    <template id="portal_appointment_new">
+          <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Lab Test Requests</t>
+            </t>
+            <!-- <t t-if="not requests">
+                <div class="alert alert-warning mt8" role="alert">
+                    There are no appointment.
+                </div>
+            </t> -->
+            <div class="col-12 container">
+
+                <div class="row mt32 mb32">
+                    <div t-if="order_id" class="col-6 bm-2">
+                        <strong>Patient:</strong>
+                        <span t-field="order_id.partner_id.name"/>
+                    </div>
+                    <div class="col-6 bm-2">
+                        <strong>Branch:</strong>
+                        <span t-field="order_id.clinic_id.name"/>
+                    </div>
+                </div>
+
+                <div class="row mt32 mb32">
+                    <div t-if="order_id.session_id" class="col-6 bm-2">
+                        <strong>Session:</strong>
+                        <span t-field="order_id.session_id.name"/>
+                    </div>
+                    <div class="col-6 bm-2">
+                        <strong>Insurance Card:</strong>
+                        <span t-field="order_id.insurance_card_id.name"/>
+                    </div>
+                </div>
+
+                <div class="row mt32 mb32">
+                    <div t-if="order_id" class="col-6 bm-2">
+                        <strong>Start Date:</strong>
+                        <span t-field="order_id.start_time"/>
+                    </div>
+                    <div  class="col-6 bm-2">
+                        <strong>End Date:</strong>
+                        <span t-field="order_id.end_time"/>
+                    </div>
+                </div>
+            </div>
+
+             <t t-if="order_id.line_ids" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th class="text-center">Product</th>
+                        <th class="text-center">Description</th>
+                        <th class="text-center">Quantity</th>
+                        <!-- <th class="text-center">Patient Share</th>
+                        <th class="text-center">Discount</th>
+                        <th class="text-center">Subtotal</th> -->
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <t t-foreach="order_id.line_ids" t-as="req">
+                    <tr>
+                        <td class="text-center"><span t-field="req.product_id.name"/></td>
+                        <td class="text-center"><span t-field="req.name"/></td>
+                        <td class="text-center"><span t-field="req.qty"/></td>
+                        <!-- <td class="text-center"><span t-field="req.payable_price_unit"/></td>
+                        <td class="text-center"><span t-field="req.discount"/></td>
+                        <td class="text-center"><span t-field="req.subtotal"/></td> -->
+                        <td class="text-center"><span t-field="req.state"/></td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+     <template id="online_request_success">
+        <t t-call="portal.frontend_layout">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 text-center m-xl-5">
+                        <p>
+                            Thank you for your proposal.
+                        </p><p>
+                            Your Request : <t t-esc="req_id.name"/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="contact_address_layout" inherit_id="portal.portal_layout">
+        <xpath expr="//div[hasclass('o_portal_my_details')]/div"   position="replace">
+           <div class="row" t-field="user_id.partner_id" t-options='{"widget": "contact", "fields": ["email", "phone", "address", "name"]}'/>
+        </xpath>
+    </template>
+
+    <template id="portal_user_info_layout"  inherit_id="base.contact" >
+        <xpath expr="//div[@itemprop='address']" position="before">
+            <t t-if="object.function">
+                <span t-field="object.function"/>
+            </t>
+        </xpath>
+        <xpath expr="//div[@itemprop='address']" position="attributes">
+           <attribute name="class" value="col-6 mb-0" />
+        </xpath>
+        <xpath expr="//address"  position="attributes">
+            <attribute name="class" separator=" " add="col-7" />
+        </xpath>
+
+    </template>
+
+
+
+    <template id="website.company_description" name="Company Description">
+    </template>
+
+    <template id="contactus_layout_cust_form" name="Contact Form" inherit_id="website.contactus" customize_show="True">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap">
+                <div class="oe_structure">
+                </div>
+                <div class="container">
+                    <div class="row mt-2">
+                        <div class="col-lg-3" />
+                        <div class="col-lg-7">
+                            <div class="oe_structure">
+                                <section class="s_text_block">
+                                    <div class="container">
+                                        <div class="row s_nb_column_fixed">
+                                            <div class="col-lg-12 s_title pt16 pb16">
+                                                <h1>Contact us</h1>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <p>
+                                                    Contact us about anything related to our company or services.<br/>
+                                                    We'll do our best to get back to you as soon as possible.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <form id="contactus_form" t-ignore="true" action="/website_form/" method="post" data-model_name="mail.mail" class="s_website_form container-fluid mt32" enctype="multipart/form-data" data-success_page="/contactus-thank-you">
+                                <div class="form-group row form-field o_website_form_custom o_website_form_required_custom">
+                                    <div class="col-lg-3 col-md-4">
+                                        <label class="col-form-label" for="Name">Your Name</label>
+                                    </div>
+                                    <div class="col-lg-7 col-md-8">
+                                        <input type="text" class="form-control o_website_form_input" name="Name" required=""/>
+                                    </div>
+                                </div>
+                                <div class="form-group row form-field o_website_form_custom">
+                                    <div class="col-lg-3 col-md-4">
+                                        <label class="col-form-label" for="Phone">Phone Number</label>
+                                    </div>
+                                    <div class="col-lg-7 col-md-8">
+                                        <input type="text" class="form-control o_website_form_input" name="Phone"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row form-field o_website_form_required_custom">
+                                    <div class="col-lg-3 col-md-4">
+                                        <label class="col-form-label" for="email_from">Email</label>
+                                    </div>
+                                    <div class="col-lg-7 col-md-8">
+                                        <input type="email" class="form-control o_website_form_input" name="email_from" required=""/>
+                                    </div>
+                                </div>
+                                <div class="form-group row form-field o_website_form_custom">
+                                    <div class="col-lg-3 col-md-4">
+                                        <label class="col-form-label" for="Partner Name">Your Company</label>
+                                    </div>
+                                    <div class="col-lg-7 col-md-8">
+                                        <input type="text" class="form-control o_website_form_input" name="Partner Name"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row form-field o_website_form_required_custom">
+                                    <div class="col-lg-3 col-md-4">
+                                        <label class="col-form-label" for="subject">Subject</label>
+                                    </div>
+                                    <div class="col-lg-7 col-md-8">
+                                        <input type="text" class="form-control o_website_form_input" name="subject" required=""/>
+                                    </div>
+                                </div>
+                                <div class="form-group row form-field o_website_form_custom o_website_form_required_custom">
+                                    <div class="col-lg-3 col-md-4">
+                                        <label class="col-form-label" for="Description">Your Question</label>
+                                    </div>
+                                    <div class="col-lg-7 col-md-8">
+                                        <textarea class="form-control o_website_form_input" name="Description" required=""></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row form-field d-none">
+                                    <div class="col-lg-3 col-md-4">
+                                        <label class="col-form-label" for="email_to">Email To</label>
+                                    </div>
+                                    <div class="col-lg-7 col-md-8">
+                                        <input type="hidden" class="form-control o_website_form_input" name="email_to" t-att-value="res_company.email"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="offset-lg-3 offset-md-4 col-md-8 col-lg-7">
+                                        <a href="#" class="btn btn-primary v-primary btn-lg o_website_form_send">Send</a>
+                                        <span id="o_website_form_result"></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-lg-3">
+                            <!-- <t t-call="website.company_description"/> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure mt-2"/>
+            </div>
+        </xpath>
+    </template>
+
+
+    <template id="portal_my_home_form_123" name="Contact Form" inherit_id="portal.portal_layout">
+        <xpath expr="//div[hasclass('justify-content-between')]" position="after">
+            <div class="mt-3">
+                <div class="row m-1">
+                    <a class="col-md-3 d-flex justify-content-between list-group-item-action portal-box" href="/my/lab/test/total">Total Lab Requested
+                        <span class="badge badge-secondary badge-pill pull-right" t-esc="lab_test_total"/>
+                    </a>
+                    <a class="col-md-3 d-flex justify-content-between list-group-item-action portal-box" href="/my/lab/test/executed">Executed Lab Tests
+                        <span class="badge badge-secondary badge-pill pull-right" t-esc="lab_test_executed"/>
+                    </a>
+                    <a class="col-md-3 d-flex justify-content-between list-group-item-action portal-box" href="/my/lab/test/progress">In Progress Lab Tests
+                        <span class="badge badge-secondary badge-pill pull-right" t-esc="lab_test_in_progress"/>
+                    </a>
+                <!-- </div>
+                <div class="row col-md-12"> -->
+                    <a class="col-md-3 d-flex justify-content-between list-group-item-action portal-box" href="/my/lab/test/completed">Completed Lab Tests
+                        <span class="badge badge-secondary badge-pill pull-right" t-esc="lab_test_completed"/>
+                    </a>
+                    <a class="col-md-3 d-flex justify-content-between list-group-item-action portal-box" href="/my/appointment?not_attended=1">Not Attended
+                        <span class="badge badge-secondary badge-pill pull-right" t-esc="lab_test_not_attended"/>
+                    </a>
+                </div>
+            </div>
+        </xpath>
+
+        <xpath expr="//div[@id='o_my_sidebar']" position="replace">
+             <div id="o_my_sidebar" class="row o_my_sidebar">
+                <div class="o_my_contact" t-if="sales_user">
+                    <t t-call="portal.portal_contact"/>
+                </div>
+                <div class="o_portal_my_details col-6">
+                    <h4>Details <a role="button" href="/my/account" class="btn btn-sm btn-link"><i class="fa fa-pencil"/> Edit</a></h4>
+                    <hr class="mt-1 mb-0"/>
+                    <div t-field="user_id.partner_id" t-options='{"widget": "contact", "fields": ["email", "phone", "address", "name"]}'/>
+                </div>
+                <div class="col-6 mr-md-0 mt-5 text-right">
+                    <img type="file" t-if="user_id.image_1920" id="image_style" name="image_1920" class=" o_website_form_input" t-attf-src="data:image/*;base64,{{image_1920 or user_id.image_1920}}" data-show-upload="true" style="height: 253px; width: 202px; background-color: #ececec; border: 1px solid #ececec;"/>
+                </div>
+                <div class="o_my_archives" t-if="archive_groups">
+                    <t t-call="portal.portal_archive_groups"/>
+                </div>
+            </div>
+        </xpath>
+
+
+    </template>
+
+
+    <template id="portal_my_lab_test" name="Lab Test">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Lab Test</t>
+            </t>
+            <t t-if="not requests">
+                <div class="alert alert-warning mt8" role="alert">
+                    There are no requests.
+                </div>
+            </t>
+            <t t-if="requests" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Ref #</th>
+                        <th>Patient</th>
+                        <!-- <th>Department</th> -->
+                        <th>Lab Test</th>
+                        <th>Requested Date</th>
+                        <th>Completion Date</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <t t-foreach="requests" t-as="tab_test">
+                    <tr>
+                        <t t-set="appointment" t-value="tab_test.appointment_id" />
+                        <td>
+                            <a t-att-href="'/appointment/details/%s' % appointment.id">
+                                <span t-field="appointment.name"/>
+                            </a>
+                        </td>
+                        <td><span t-field="tab_test.partner_id.name"/></td>
+                        <!-- <td><span t-field="tab_test.lab_department_id.name"/></td> -->
+                        <td><span t-field="tab_test.test_type_id.name"/></td>
+                        <td><span t-field="tab_test.date_requested"/></td>
+                        <td><span t-field="tab_test.date_completed"/></td>
+                        <td class="text-center">
+                            <span class="badge badge-pill badge-secondary"><i class="fa fa-fw fa-remove"/> <span t-field="tab_test.state"/></span>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

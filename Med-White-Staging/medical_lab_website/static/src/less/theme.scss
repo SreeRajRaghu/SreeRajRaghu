@@ -1,0 +1,106 @@
+// Dark : #18255f
+// Light : #efefef
+
+
+// Colors
+$o-theme-color: #18255f;
+
+@odoo-color: #18255f;
+$o-brand-secondary: #18255f;
+
+
+body, h1, h2, h3, h4, h5, h6, div, strong, b, p {
+  font-family: "AdobeArabic", "Roboto", "Odoo Unicode Support Noto", sans-serif;
+}
+
+.v-primary {
+    background-color: #18255f;
+    color: white;
+}
+
+.o_portal {
+    .bg-white {
+        background-color: #efefef !important;
+    }
+}
+
+.o_portal_submenu {
+    .breadcrumb-item {
+        a, .active {
+            color: #18255f !important;
+        }
+        .btn {
+            color: white !important;
+        }
+    }
+
+    .navbar-light .navbar-text {
+        color: #18255f !important;
+    }
+}
+
+
+#wrapwrap {
+    [type='password'] {
+        font-family: "Roboto", "Odoo Unicode Support Noto", sans-serif;
+    }
+
+    .o_portal_wrap {
+        font-family: AdobeArabic;
+
+        .o_portal_navbar {
+            background-color: #eee !important;
+            border-color: #18255f !important;
+
+            a {
+                color: #18255f !important;
+                text-decoration: none;
+                background-color: transparent;
+            }
+        }
+
+        .bg-white {
+            background-color: #efefef !important;
+        }
+
+        .o_portal_my_home {
+            .badge-pill {
+                border-radius: 5px;
+            }
+            .badge {
+                line-height: 2;
+                padding: 0px 6px;
+                padding-bottom: 0px;
+                font-size: 12px;
+            }
+        }
+
+        .o_portal_my_doc_table {
+            a {
+                color: #18255f;
+            }
+        }
+
+        .o_portal_docs .list-group-item, .o_portal_docs .list-group-item:first-child, .o_portal_docs .list-group-item:last-child {
+            border-color: #18255f;
+            border-radius: 10px;
+            background-color: #efefef;
+        }
+    }
+
+    main {
+        background-image: url("/medical_lab_website/static/src/bg.png");
+        background-position: center;
+        background-size: cover;
+    }
+
+    footer {
+        .v-icon {
+            color: #18255f;
+        }
+    }
+}
+
+.o_portal_my_details {
+    margin-top: 60px;
+}

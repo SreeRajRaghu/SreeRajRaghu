@@ -1,0 +1,17 @@
+.pcr-label {
+	margin: auto;
+}
+.v-panel {
+	margin-bottom: 18px;
+}
+.medical-base .popup .pcr-form input {
+	min-height: inherit !important;
+}
+
+.medical-base .popup .pcr-form .card-header {
+	cursor: pointer;
+}
+
+.calendar-screen td.fc-list-event-title a {
+	font-weight: bold;
+}

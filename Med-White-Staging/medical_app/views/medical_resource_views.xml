@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_medical_resource_form" model="ir.ui.view">
+        <field name="name">view.medical.resource.form</field>
+        <field name="model">medical.resource</field>
+        <field name="arch" type="xml">
+            <form string="Resource">
+                <sheet>
+                    <widget name="web_ribbon" text="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <div class="oe_title" id="title">
+                        <label for="name" string="Name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <separator string="Resource"/>
+                    <group>
+                        <group>
+                            <field name="active" invisible="1"/>
+                            <field name="resource_type"/>
+                            <field name="hr_staff_id"/>
+                            <field name="group_id" />
+                            <field name="pricelist_id" />
+                        </group>
+                        <group>
+                            <field name="sequence" />
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="working_hour_id"/>
+                            <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                        </group>
+                    </group>
+                    <separator string="Inventory"/>
+                    <group>
+                        <group>
+                            <field name="stock_location_id"/>
+                            <field name="medical_consumable_location_id"/>
+                        </group>
+                        <group>
+                            <field name="destination_location_id"/>
+                            <field name="picking_type_id"/>
+                        </group>
+                    </group>
+                    <separator string="Misc."/>
+                    <group>
+                        <field name="phone"/>
+                        <field name="note"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Blocked Patients">
+                            <field name="blocked_patient_ids" nolabel="1" options="{'no_create': 1, 'no_edit': 1}">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="civil_code" optional="show"/>
+                                    <field name="phone" optional="show"/>
+                                    <field name="mobile" optional="show"/>
+                                    <field name="email" optional="hide"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Employees">
+                            <field name="emp_ids" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="activity_ids" widget="mail_activity" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_medical_resource_search" model='ir.ui.view'>
+        <field name='name'>view.medical.resource.tree</field>
+        <field name='model'>medical.resource</field>
+        <field name='arch' type='xml'>
+            <search string='Resource'>
+                <field name="name" />
+                <field name="resource_type"/>
+                <field name="hr_staff_id"/>
+                <field name="working_hour_id" />
+                <field name="group_id" />
+                <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                <filter string="Missing Working Schedule" name="no_working_schedule" domain="[('working_hour_id','=',False)]"/>
+                <filter invisible="1" string="Future Activities" name="activities_upcoming_all" domain="[('activity_ids.date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="hr_staff_id" context="{'group_by': 'hr_staff_id'}"/>
+                    <filter string="Working Hours" name="working_hour_id" context="{'group_by': 'working_hour_id'}"/>
+                    <filter string="Group" name="group_id" context="{'group_by': 'group_id'}"/>
+                    <filter string="Analytic Account" groups="analytic.group_analytic_accounting" name="analytic_account_id" context="{'group_by': 'analytic_account_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_medical_resource_tree" model='ir.ui.view'>
+        <field name='name'>view.medical.resource.tree</field>
+        <field name='model'>medical.resource</field>
+        <field name='arch' type='xml'>
+            <tree string='Resource'>
+                <field name="sequence" widget="handle"/>
+                <field name='name'/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="resource_type" optional="hide"/>
+                <field name="hr_staff_id"/>
+                <field name="working_hour_id" />
+                <field name="analytic_account_id" groups="analytic.group_analytic_accounting" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_medical_resource" model="ir.actions.act_window">
+        <field name="name">Resource</field>
+        <field name="res_model">medical.resource</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_medical_resource" name="Resources" parent="medical_app.menu_medical_app_config" action="medical_app.action_medical_resource" sequence="100"/>
+
+    <!-- Resource Group -->
+    <record id="view_medical_resource_group_form" model='ir.ui.view'>
+        <field name='name'>view.medical.resource.group.tree</field>
+        <field name='model'>medical.resource.group</field>
+        <field name='arch' type='xml'>
+            <form string='Resource Group' editable="top">
+                <label for="name" />
+                <h2>
+                    <field name='name'/>
+                </h2>
+                <group>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_medical_resource_group_tree" model='ir.ui.view'>
+        <field name='name'>view.medical.resource.group.tree</field>
+        <field name='model'>medical.resource.group</field>
+        <field name='arch' type='xml'>
+            <tree string='Resource Group' editable="top">
+                <field name='name'/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_medical_resource_group" model="ir.actions.act_window">
+        <field name="name">Resource</field>
+        <field name="res_model">medical.resource.group</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_medical_resource_group" name="Resource Group" parent="medical_app.menu_medical_app_config" action="medical_app.action_medical_resource_group" sequence="100"/>
+</odoo>

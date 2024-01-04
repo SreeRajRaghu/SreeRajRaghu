@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="medical_lab_website.SalesmanOrderLine">
+        <tr class="p-orderline" t-att-id="id" t-att-line_id="line_id">
+            <td>
+                <select class="form-control" name="product">
+                    <option value="0">Select Product</option>
+                    <t t-foreach="products or []" t-as="product">
+                        <t t-if="product_id == product.id">
+                            <option t-att-value="product.id" selected="selected"> <t t-esc="product.name"/> </option>
+                        </t>
+                        <t t-else="">
+                            <option t-att-value="product.id"> <t t-esc="product.name"/> </option>
+                        </t>
+                    </t>
+                </select>
+            </td>
+            <td> <span class="remove_line text-danger v-line-details"> <i class="fa fa-trash"/> </span> </td>
+        </tr>
+    </t>
+</templates>

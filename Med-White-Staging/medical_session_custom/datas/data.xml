@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ir_cron_close_daily_session" model="ir.cron">
+        <field name="name">Session close cron</field>
+        <field name="model_id" ref="medical_app.model_medical_session"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_close_daily_sessions()</field>
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+    </record>
+</odoo>

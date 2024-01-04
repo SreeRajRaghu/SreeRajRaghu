@@ -1,0 +1,25 @@
+<odoo>
+    <template id="product_qr_code_template">
+        <div class="article">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <div style="position:absolute;margin-top:160px;width:100%;text-align:center;">
+                            <b style="padding-right:300px;text-align:center; width:100%; display:block;font-size:20px;font-family:Arial;">
+                                Asset Badge
+                            </b>
+                            <div style="width:100%;">
+                                <div style="width:100%;display: inline-block;">
+                                    <img style="width:6cm;height:6cm;"
+                                         t-att-src="'data:image/png;base64,%s' % to_text( o.qr_product)"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </template>
+
+</odoo>
+

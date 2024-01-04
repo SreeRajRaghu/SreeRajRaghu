@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="dash_dept_total_lab_tests" model="dashboard.settings.line">
+        <field name="name">Lab Tests</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_lab_test AS lab WHERE 1=1
+        </field>
+        <field name="custom_sql_alias">lab</field>
+        <field name="custom_sql_ids">
+            SELECT lab.id FROM medical_lab_test AS lab WHERE 1=1
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="sequence">0</field>
+    </record>
+
+    <record id="dash_dept_sample" model="dashboard.settings.line">
+        <field name="name">In Sample</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_lab_test AS lab WHERE lab.state IN ('draft')
+        </field>
+        <field name="custom_sql_alias">lab</field>
+        <field name="custom_sql_ids">
+            SELECT lab.id FROM medical_lab_test AS lab WHERE lab.state IN ('draft')
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id" eval="False" />
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="dash_dept_progress" model="dashboard.settings.line">
+        <field name="name">In Progress</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_lab_test AS lab WHERE lab.state IN ('inprogress')
+        </field>
+        <field name="custom_sql_alias">lab</field>
+        <field name="custom_sql_ids">
+            SELECT lab.id FROM medical_lab_test AS lab WHERE lab.state IN ('inprogress')
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id" eval="False" />
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="dash_dept_completed" model="dashboard.settings.line">
+        <field name="name">Completed</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_lab_test AS lab WHERE lab.state IN ('completed')
+        </field>
+        <field name="custom_sql_alias">lab</field>
+        <field name="custom_sql_ids">
+            SELECT lab.id FROM medical_lab_test AS lab WHERE lab.state IN ('completed')
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="sequence">3</field>
+        <field name="company_id" eval="False" />
+    </record>
+
+    <record id="dash_dept_handover" model="dashboard.settings.line">
+        <field name="name">Hand Over</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_lab_test AS lab WHERE lab.state IN ('handover')
+        </field>
+        <field name="custom_sql_alias">lab</field>
+        <field name="custom_sql_ids">
+            SELECT lab.id FROM medical_lab_test AS lab WHERE lab.state IN ('handover')
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id" eval="False" />
+        <field name="sequence">4</field>
+    </record>
+
+    <!-- By Department -->
+
+    <record id="dash_dept_3" model="dashboard.settings.line">
+        <field name="name">ENDOCRINOLOGY</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_lab_test AS lab WHERE lab.lab_department_id = 3
+        </field>
+        <field name="custom_sql_alias">lab</field>
+        <field name="custom_sql_ids">
+            SELECT lab.id FROM medical_lab_test AS lab WHERE lab.lab_department_id = 3
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id">1</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="dash_dept_4" model="dashboard.settings.line">
+        <field name="name">CLINICAL CHEMISTRY</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_lab_test AS lab WHERE lab.lab_department_id = 4
+        </field>
+        <field name="custom_sql_alias">lab</field>
+        <field name="custom_sql_ids">
+            SELECT lab.id FROM medical_lab_test AS lab WHERE lab.lab_department_id = 4
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id">1</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="dash_dept_5" model="dashboard.settings.line">
+        <field name="name">HEMATOLOGY</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_lab_test AS lab WHERE lab.lab_department_id = 5
+        </field>
+        <field name="custom_sql_alias">lab</field>
+        <field name="custom_sql_ids">
+            SELECT lab.id FROM medical_lab_test AS lab WHERE lab.lab_department_id = 5
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id">1</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="dash_dept_6" model="dashboard.settings.line">
+        <field name="name">MICROBIOLOGY</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_lab_test AS lab WHERE lab.lab_department_id = 6
+        </field>
+        <field name="custom_sql_alias">lab</field>
+        <field name="custom_sql_ids">
+            SELECT lab.id FROM medical_lab_test AS lab WHERE lab.lab_department_id = 6
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id">1</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="dash_dept_7" model="dashboard.settings.line">
+        <field name="name">VIROLOGY</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_lab_test AS lab WHERE lab.lab_department_id = 7
+        </field>
+        <field name="custom_sql_alias">lab</field>
+        <field name="custom_sql_ids">
+            SELECT lab.id FROM medical_lab_test AS lab WHERE lab.lab_department_id = 7
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id">1</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="dash_dept_8" model="dashboard.settings.line">
+        <field name="name">CYTOPATHOLOGY</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_lab_test AS lab WHERE lab.lab_department_id = 8
+        </field>
+        <field name="custom_sql_alias">lab</field>
+        <field name="custom_sql_ids">
+            SELECT lab.id FROM medical_lab_test AS lab WHERE lab.lab_department_id = 8
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id">1</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="dash_dept_9" model="dashboard.settings.line">
+        <field name="name">HISTOPATHOLOGY</field>
+        <field name="color">primary</field>
+        <field name="visibility">lab_dept</field>
+        <field name="model_id" ref="medical_lab.model_medical_lab_test"/>
+        <field name="field_id" ref="medical_lab.field_medical_lab_test__id"/>
+        <field name="type">qty</field>
+        <field name="custom_sql">
+            SELECT count(id) AS field FROM medical_lab_test AS lab WHERE lab.lab_department_id = 9
+        </field>
+        <field name="custom_sql_alias">lab</field>
+        <field name="custom_sql_ids">
+            SELECT lab.id FROM medical_lab_test AS lab WHERE lab.lab_department_id = 9
+        </field>
+        <field name="dashboard_id" ref="medical_dashboard.setting_object"/>
+        <field name="action_id" ref="medical_lab.medical_lab_test_action_tree"/>
+        <field name="char_groups">base.group_erp_manager</field>
+        <field name="apply_create_date_filter" eval="False"/>
+        <field name="date_field_name">date_requested</field>
+        <field name="company_id">1</field>
+        <field name="sequence">20</field>
+    </record>
+
+</odoo>

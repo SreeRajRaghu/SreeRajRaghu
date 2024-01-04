@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_view_medical_resource_form" model="ir.ui.view">
+        <field name="name">view_medical_resource_form</field>
+        <field name="model">medical.resource</field>
+        <field name="inherit_id" ref="medical_app.view_medical_resource_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='analytic_account_id']" position="after">
+                <field name="commission_inside"/>
+                <field name="commission_outside"/>
+
+                <field name="commission_disc_inside"/>
+                <field name="commission_disc_outside"/>
+            </xpath>
+            <field name="group_id" position="after">
+                <field name="partner_id" />
+            </field>
+        </field>
+    </record>
+</odoo>

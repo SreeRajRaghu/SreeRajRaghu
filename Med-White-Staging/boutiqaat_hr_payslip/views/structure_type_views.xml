@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="payroll_structure_type_form_ot_fields" model="ir.ui.view">
+        <field name="name">hr.payroll.structure.type.form.ot.fields</field>
+        <field name="model">hr.payroll.structure.type</field>
+        <field name="inherit_id" ref="hr_payroll.hr_payroll_structure_type_view_form"/>
+        <field name="arch" type="xml">
+            <field name="default_work_entry_type_id" position="after">
+                <field name="def_rot_work_entry_type_id"/>
+                <field name="def_wot_work_entry_type_id"/>
+                <field name="def_pot_work_entry_type_id"/>
+                <field name="def_got_work_entry_type_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_hr_employee_grade_form_inherit" model="ir.ui.view">
+        <field name="name">hr.payroll.structure</field>
+        <field name="model">hr.payroll.structure</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_employee_grade_form"/>
+        <field name="arch" type="xml">
+            <field name="schedule_pay" position="after">
+                <field name="is_without_attendance"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>
