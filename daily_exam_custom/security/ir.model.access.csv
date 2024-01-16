@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_daily_exam,access_daily_exam,model_daily_exam,,1,1,1,1
-access_student_details,access_student_details,model_student_det,,1,1,1,1
-access_student_daily_exam,access_student_daily_exam,model_student_daily_exam,,1,1,1,1
