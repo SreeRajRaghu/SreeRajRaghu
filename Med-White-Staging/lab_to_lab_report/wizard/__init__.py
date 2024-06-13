@@ -1,1 +1,0 @@
-from . import lab_report_wiz

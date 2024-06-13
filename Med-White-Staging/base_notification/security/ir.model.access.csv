@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_notif_trigger,access_notif_trigger,model_notif_trigger,base.group_user,1,1,1,1
-access_custom_domain,access_custom_domain,model_custom_domain,group_notification,1,1,1,1
-access_notif_recipient,access_notif_recipient,model_notif_recipient,group_notification,1,1,1,1
-access_sms_sms_template,access_sms_sms_template,model_sms_sms_template,group_sms_notification,1,1,1,1

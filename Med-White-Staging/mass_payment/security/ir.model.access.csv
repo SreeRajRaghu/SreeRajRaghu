@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_check_book_cancel,access_check_book_cancel,model_check_book_cancel,base.group_user,1,1,1,1
-access_check_book,access_check_book,model_check_book,base.group_user,1,1,1,1

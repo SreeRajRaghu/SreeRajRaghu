@@ -1,4 +1,0 @@
-id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
-access_sms_config,access_sms_config,model_sms_config,base.group_user,1,1,1,1
-access_sms_history,access_sms_history,model_sms_history,base.group_user,1,1,1,1
-access_sms_history_line,access_sms_history_line,model_sms_history_line,base.group_user,1,1,1,1

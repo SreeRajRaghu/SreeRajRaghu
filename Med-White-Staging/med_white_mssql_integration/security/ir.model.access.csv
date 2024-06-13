@@ -1,3 +1,0 @@
-id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
-access_mssql_config,access_mssql_config,model_mssql_config,base.group_user,1,1,1,1
-access_mssql_log,access_mssql_log,model_mssql_log,base.group_user,1,1,1,1

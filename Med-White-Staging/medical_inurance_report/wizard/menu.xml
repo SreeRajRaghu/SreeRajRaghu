@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<odoo>
-    <menuitem
-        id="menu_insurance_report"
-        name="Insurance Report"
-        parent="medical_app.menu_medical_reporting"
-        groups="medical_app.group_manage_insurance"
-        action="medical_inurance_report.action_insurance_report_wizard"/>
-</odoo>

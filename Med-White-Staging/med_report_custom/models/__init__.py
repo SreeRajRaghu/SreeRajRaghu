@@ -1,1 +1,0 @@
-from . import medical_department_inherit

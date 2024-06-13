@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_airline_selection,airline_selection,model_airline_selection,,1,1,1,1
-access_quarantine_station,quarantine_station,model_quarantine_station,,1,1,1,1
-access_swab_location,swab_location,model_swab_location,,1,1,1,1
-access_medical_contact_list,medical_contact_list,model_medical_contact_list,,1,1,1,1
-access_pcr_appointment_condition,pcr_appointment_condition,model_pcr_appointment_condition,,1,1,1,1
-access_medical_pcr_test,medical_pcr_test,model_medical_pcr_test,,1,1,1,1

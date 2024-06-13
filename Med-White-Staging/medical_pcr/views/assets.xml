@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <template id="assets" inherit_id="medical_js.b4_assets">
-        <xpath expr="." position="inside">
-            <script type="text/javascript" src="/medical_pcr/static/src/js/pcr_request.js"></script>
-	        <link href='/medical_pcr/static/src/css/style.css' rel='stylesheet' />
-        </xpath>
-    </template>
-</odoo>

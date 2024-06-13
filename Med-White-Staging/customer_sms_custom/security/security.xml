@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <data>
-        <record id="group_customers_birth_day" model="res.groups">
-            <field name="name">Customer Wish</field>
-            <field eval="[(4, ref('base.user_root'))]" name="users"/>
-        </record>
-    </data>
-</odoo>
